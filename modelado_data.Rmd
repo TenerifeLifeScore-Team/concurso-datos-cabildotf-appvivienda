@@ -6,11 +6,11 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = T, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(sf)
 library(janitor) # Para limpiar nombres de columnas sucios
-
+library(mapview)
 
 
 # asociamos funciones a determinadas librerías para evitar posibles errores 
@@ -27,3 +27,130 @@ slice<- dplyr::slice # Selecciona filas por posición
 relocate<- dplyr::relocate # Reordena columnas
 ```
 
+En este documento documentaremos el proceso ETL (Extracción, Transformación y Carga) de los datasets públicos del Cabildo.
+
+# Movilidad (Guaguas y tranvía)
+
+Vamos a unificar ambos datasets con la información de las paradas, y limpiar las columnas irrelevantes.
+
+```{r limpieza-movilidad}
+# 1. Cargar datos brutos
+raw_guaguas <- st_read("data-raw/paradas-de-guagua.geojson", quiet = TRUE)
+raw_tranvia <- st_read("data-raw/paradas-de-tranvia.geojson", quiet = TRUE)
+
+# 2. Limpieza Guaguas
+clean_guaguas <- raw_guaguas %>%
+  clean_names() %>%  # Pone todo en minúsculas y quita espacios
+  select(nombre = parada_nombre, geometry) %>% # Nos quedamos solo con el nombre y la pos
+  mutate(tipo = "Guagua")
+
+# 3. Limpieza Tranvía
+clean_tranvia <- raw_tranvia %>%
+  clean_names() %>%
+  select(nombre = parada_nombre, geometry) %>%
+  mutate(tipo = "Tranvia")
+```
+
+```{r unificación-movilidad}
+# 4. Unificación
+movilidad_unificada <- bind_rows(clean_guaguas, clean_tranvia)
+
+# 5. Verificación de Coordenadas (CRÍTICO)
+# Aseguramos que sea WGS84 (EPSG:4326) para la web
+movilidad_unificada <- st_transform(movilidad_unificada, crs = 4326)
+
+# Visualización rápida
+plot(st_geometry(movilidad_unificada), main = "Red de Transporte Unificada")
+```
+
+# Salud
+
+Dividiremos los distintos sectores en grupos, para poder otorgar pesos distintos a centros más importantes que otro a la hora de buscar un lugar en el que vivir.  
+Los distintos sevicios que se recogen en el dataset de salud son:
+```{r, echo=F}
+raw_salud <- st_read("data-raw/centros-medicos-farmacias-y-servicios-sanitarios-en-tenerife.geojson", quiet = TRUE)
+
+unique(raw_salud$actividad_tipo)
+```
+
+#### Exclusión
+
+Se han eliminado registros que, aunque presentes en el dataset original, introducen ruido o no aportan valor a la decisión de residencia. Se descartan categorías erróneas como "banca servicios financieros" y "servicios profesionales limpieza" (inconsistencias del proveedor de datos). Asimismo, se excluyen "farmacia cooperativa" (almacenes logísticos sin venta al público), "centro reconocimiento conductores" (baja frecuencia de uso) y "terapias alternativas" (por subjetividad en la percepción de valor sanitario).
+
+#### Jerarquización y ponderación
+
+Los servicios restantes se han agrupado en clústeres funcionales con pesos iniciales diferenciados:
+
+- Grupo 1 - Infraestructura Vital (Peso 10): Incluye Hospitales y Centros de Salud. Son activos críticos que garantizan la seguridad y la atención de urgencias, elevando significativamente el valor de la zona.
+
+- Grupo 2 - Necesidad Recurrente (Peso 8): Incluye exclusivamente Farmacias. Su alta frecuencia de uso y necesidad inmediata las convierte en un servicio esencial de proximidad ("barrio de 15 minutos").
+
+- Grupo 3 - Asistencia Intermedia (Peso 6): Categoría asignada a "Servicios Asistenciales". Representa un nivel de cobertura importante (mutuas, soporte), pero sin la criticidad de un hospital ni la inmediatez de una farmacia.
+
+- Grupo 4 - Especialistas y Bienestar (Peso 4): Incluye fisioterapia, odontología, psicología, etc. Son servicios de valor añadido que funcionan bajo cita previa; su cercanía es positiva pero no determinante para la elección de vivienda.
+
+- Grupo 5 - Servicios Veterinarios (Peso Dinámico): Se segrega esta categoría para permitir una personalización dinámica en la aplicación (activable solo para usuarios con mascotas).
+
+```{r transformacion-salud}
+clean_salud <- raw_salud %>%
+  # Limpiamos nombres de columnas por si acaso (quita acentos, espacios -> guiones bajos)
+  janitor::clean_names() %>%
+  
+  # SELECCIÓN: Nos quedamos solo con lo útil y renombramos para que sea más claro
+  select(
+    nombre,
+    actividad_tipo,
+    municipio = municipio_nombre,
+    calle = direccion_nombre_via,
+    numero = direccion_numero,
+    telefono,   # Mantenemos esto para la funcionalidad de 'Llamada rápida'
+    geometry    # Nunca quites esto, es la ubicación
+  ) %>%
+  
+  # --- 2. FILTRADO (Excluir lo inútil) ---
+  filter(
+    !actividad_tipo %in% c(
+      "banca servicios financieros", 
+      "servicios profesionales limpieza", 
+      "terapias alternativas", 
+      "centro reconocimiento conductores", 
+      "farmacia cooperativa"
+    )
+  ) %>%
+  
+  # --- 3. CREACIÓN DE GRUPOS Y PESOS (Feature Engineering) ---
+  mutate(
+    # Unificamos dirección para que quede bonito en la App: "Calle Castillo, 23"
+    direccion_completa = paste(calle, numero, sep = ", "),
+    
+    # Creamos la categoría simplificada
+    grupo_salud = case_when(
+      actividad_tipo %in% c("servicios hospitalarios", "centro de salud") ~ "Vital",
+      actividad_tipo == "farmacia" ~ "Farmacia",
+      actividad_tipo == "servicios asistenciales" ~ "Asistencial",
+      actividad_tipo == "servicios veterinarios" ~ "Veterinario",
+      # Todo lo demás va al grupo especialistas (dentistas, fisios, etc.)
+      TRUE ~ "Especialista"
+    ),
+    
+    # Asignamos el peso numérico para el algoritmo
+    peso_inicial = case_when(
+      grupo_salud == "Vital" ~ 10,
+      grupo_salud == "Farmacia" ~ 8,
+      grupo_salud == "Asistencial" ~ 6,
+      grupo_salud == "Especialista" ~ 4,
+      grupo_salud == "Veterinario" ~ NA, # Peso 0 por defecto (se activa si usuario tiene mascota)
+      TRUE ~ 1
+    )
+  ) 
+
+# --- 4. CHEQUEO FINAL ---
+# Vemos cómo ha quedado la estructura
+glimpse(clean_salud)
+
+# Comprobamos que los grupos tienen lógica
+table(clean_salud$grupo_salud, clean_salud$peso_inicial)
+
+# Visualización rápida para comprobar
+mapview(clean_salud, zcol = "grupo_salud", layer.name = "Salud por Categoría")
+```
