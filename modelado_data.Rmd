@@ -67,7 +67,7 @@ plot(st_geometry(movilidad_unificada), main = "Red de Transporte Unificada")
 
 Dividiremos los distintos sectores en grupos, para poder otorgar pesos distintos a centros más importantes que otro a la hora de buscar un lugar en el que vivir.  
 Los distintos sevicios que se recogen en el dataset de salud son:
-```{r, echo=F}
+```{r salud-inicial, echo=F}
 raw_salud <- st_read("data-raw/centros-medicos-farmacias-y-servicios-sanitarios-en-tenerife.geojson", quiet = TRUE)
 
 unique(raw_salud$actividad_tipo)
@@ -154,3 +154,115 @@ table(clean_salud$grupo_salud, clean_salud$peso_inicial)
 # Visualización rápida para comprobar
 mapview(clean_salud, zcol = "grupo_salud", layer.name = "Salud por Categoría")
 ```
+
+# Centros educativos y culturales
+
+Los distintos tipos de actividades que encontramos en este dataset son:
+
+```{r edu-inicial, echo=F}
+raw_edu <- st_read("data-raw/centros-educativos-y-culturales-en-tenerife.geojson", quiet = TRUE) %>% 
+  janitor::clean_names()
+
+unique(raw_edu$actividad_tipo)
+```
+
+Siguiendo la metodología aplicada en el bloque sanitario, se ha procesado el dataset de Centros educativos y culturales para distinguir entre servicios de escolarización obligatoria, formación superior y oferta cultural. Esta distinción es fundamental para adaptar el algoritmo a diferentes perfiles demográficos (familias con niños vs. estudiantes universitarios).
+
+#### Depuración de Datos: 
+
+Se han eliminado registros inconsistentes con la finalidad del dataset, tales como "café" (error de categorización), "centro comercial..." (duplicidad con el dataset de comercio) y "enseñanza a distancia" (cuya ubicación física es irrelevante para el cálculo de proximidad residencial).
+
+#### Categorización Funcional: 
+
+Los activos restantes se han segmentado en tres niveles de prioridad base:
+
+- Grupo 1 - Escolarización Básica (Peso 10): Incluye centros de enseñanza infantil, primaria y secundaria/obligatoria. Representa el factor de mayor peso para familias, dado que determina la logística diaria de transporte escolar.
+
+- Grupo 2 - Formación Específica y Superior (Peso 6): Agrupa la enseñanza universitaria, profesional, idiomas, adultos y educación especial. Aunque vitales, su público objetivo es más segmentado o dispone de mayor autonomía de movilidad que el alumnado de educación básica.
+
+- Grupo 3 - Cultura y Ocio (Peso 4): Bibliotecas, centros culturales y museos. Se consideran activos de valor añadido ("Barrio Culto") que mejoran la calidad de vida general pero no constituyen una necesidad logística diaria estricta.
+
+```{r}
+# --- LIMPIEZA DE EDUCACIÓN Y CULTURA ---
+
+# 1. DEFINICIÓN DE LISTAS (Taxonomía)
+
+# Grupo 1: Colegios (Básica y Obligatoria) -> Peso 10
+cat_colegios <- c("enseñanza infantil y primaria", "enseñanza secundaria", 
+                  "enseñanza obligatoria", "guarderias centros infantiles", 
+                  "enseñanza infantil")
+
+# Grupo 2: Formación (Superior, Especializada y Adultos) -> Peso 6
+# Nota: 'enseñanza especial' movida aquí por decisión de diseño.
+cat_formacion <- c("enseñanza universitaria", "enseñanza profesional", 
+                   "enseñanza idiomas", "enseñanza adultos", 
+                   "enseñanza especializada", "enseñanza especial")
+
+# Grupo 3: Cultura -> Peso 4
+cat_cultura   <- c("biblioteca ludoteca", "centro cultural", 
+                   "museos salas de arte", "asociacion cultural")
+
+# Blacklist (A eliminar)
+cat_borrar_edu <- c("café", "centro comercial hogar informatica telecomunicaciones", 
+                    "enseñanza a distancia", "enseñanza profesorado", 
+                    "residencia educativa")
+
+# 2. PROCESAMIENTO
+
+clean_edu <- raw_edu %>%
+  janitor::clean_names() %>% # Asegura que los nombres estén limpios (actividad_tipo, etc.)
+  
+  # Selección de columnas (Usando los nombres que me has confirmado)
+  select(
+    nombre, 
+    actividad_tipo,          # Esta contiene la categoría ("enseñanza...", "biblioteca...")
+    municipio = municipio_nombre,
+    calle = direccion_nombre_via,
+    numero = direccion_numero,
+    web,                     # Conservamos web por si acaso
+    geometry
+  ) %>%
+  
+  # Filtrado de basura
+  filter(!actividad_tipo %in% cat_borrar_edu) %>%
+  
+  # Creación de Grupos y Pesos Base
+  mutate(
+    # Dirección legible para el popup del mapa
+    direccion_completa = paste(calle, numero, sep = ", "),
+    
+    # Asignación de Grupo
+    grupo_edu = case_when(
+      actividad_tipo %in% cat_colegios  ~ "Colegio",
+      actividad_tipo %in% cat_formacion ~ "Formacion",
+      actividad_tipo %in% cat_cultura   ~ "Cultura",
+      TRUE ~ "Otros"
+    ),
+    
+    # Peso Inicial (Por defecto)
+    peso_inicial = case_when(
+      grupo_edu == "Colegio"   ~ 10,
+      grupo_edu == "Formacion" ~ 6,
+      grupo_edu == "Cultura"   ~ 4,
+      TRUE ~ 1
+    )
+  )
+
+# --- 3. VERIFICACIÓN Y MAPA ---
+
+# Tabla resumen para ver cuántos hay de cada tipo
+print("Resumen de Centros Educativos por Grupo:")
+table(clean_edu$grupo_edu)
+
+# MAPA INTERACTIVO (Para visualización)
+library(mapview)
+
+# Definimos colores para cada grupo:
+# Colegio (Rojo/Naranja), Formación (Azul), Cultura (Verde)
+mapview(clean_edu, 
+        zcol = "grupo_edu", 
+        layer.name = "Educación y Cultura",
+        col.regions = c("orange", "green", "blue"))
+```
+
+
