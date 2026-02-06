@@ -1,0 +1,29 @@
+---
+title: "modelado_data"
+author: "Alejandro D., Aythami L., Tomás S."
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(sf)
+library(janitor) # Para limpiar nombres de columnas sucios
+
+
+
+# asociamos funciones a determinadas librerías para evitar posibles errores 
+filter <- dplyr::filter # Filtra filas según condiciones
+select <- dplyr::select # Selecciona columnas
+mutate <- dplyr::mutate # Crea o modifica columnas
+arrange <- dplyr::arrange # Ordena filas
+group_by <- dplyr::group_by # Agrupa datos
+summarise <- dplyr::summarise # Resume variables (por ejemplo, con medias, conteos)
+summarize <- dplyr::summarize # Lo mismo que summarise
+rename <- dplyr::rename # Cambia nombres de columnas
+distinct <- dplyr::distinct # Elimina filas duplicadas
+slice<- dplyr::slice # Selecciona filas por posición
+relocate<- dplyr::relocate # Reordena columnas
+```
+
