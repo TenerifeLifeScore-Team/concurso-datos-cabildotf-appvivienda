@@ -164,14 +164,14 @@ clean_tranvia <- raw_tranvia %>%
 
 ```{r unificación-movilidad}
 # 4. Unificación
-movilidad_unificada <- bind_rows(clean_guaguas, clean_tranvia)
+clean_movilidad <- bind_rows(clean_guaguas, clean_tranvia)
 
 # 5. Verificación de Coordenadas (CRÍTICO)
 # Aseguramos que sea WGS84 (EPSG:4326) para la web
-movilidad_unificada <- st_transform(movilidad_unificada, crs = 4326)
+clean_movilidad <- st_transform(clean_movilidad, crs = 4326)
 
 # Visualización rápida
-plot(st_geometry(movilidad_unificada), main = "Red de Transporte Unificada")
+plot(st_geometry(clean_movilidad), main = "Red de Transporte Unificada")
 ```
 
 # Salud
@@ -572,5 +572,15 @@ mapview(clean_restauracion,
             "black",   # Nocturno
             "blue"     # Restaurante
         ))
+```
+
+```{r}
+# saveRDS(transport_master, "data-clean/clean_movilidad.rds")
+
+st_write(clean_movilidad, "data-clean/clean_movilidad.geojson", delete_dsn = TRUE, quiet = TRUE)
+st_write(clean_salud, "data-clean/clean_salud.geojson", delete_dsn = TRUE, quiet = TRUE)
+st_write(clean_edu, "data-clean/clean_edu.geojson", delete_dsn = TRUE, quiet = TRUE)
+st_write(clean_comercio, "data-clean/clean_comercio.geojson", delete_dsn = TRUE, quiet = TRUE)
+st_write(clean_restauracion, "data-clean/clean_restauracion.geojson", delete_dsn = TRUE, quiet = TRUE)
 ```
 
