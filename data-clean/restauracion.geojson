@@ -1,6 +1,6 @@
 {
 "type": "FeatureCollection",
-"name": "clean_restauracion",
+"name": "restauracion",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
 { "type": "Feature", "properties": { "nombre": "¡¡¡Ñoo Que Rico!!!", "actividad": "tasca", "municipio": "Candelaria", "direccion": "Maritima", "numero": "9", "direccion_completa": "Maritima, 9", "grupo_restauracion": "Local_Tapeo", "peso_inicial": 5.0 }, "geometry": { "type": "Point", "coordinates": [ -16.36841411, 28.35915748 ] } },
