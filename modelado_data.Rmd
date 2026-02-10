@@ -11,6 +11,7 @@ library(tidyverse)
 library(sf)
 library(janitor) # Para limpiar nombres de columnas sucios
 library(mapview)
+library(dplyr)
 
 
 # asociamos funciones a determinadas librerías para evitar posibles errores 
@@ -153,13 +154,20 @@ raw_tranvia <- st_read("data-raw/paradas-de-tranvia.geojson", quiet = TRUE)
 clean_guaguas <- raw_guaguas %>%
   clean_names() %>%  # Pone todo en minúsculas y quita espacios
   select(nombre = parada_nombre, geometry) %>% # Nos quedamos solo con el nombre y la pos
-  mutate(tipo = "Guagua")
+  mutate(tipo = "Guagua",
+         ponderacion = 10,
+         max_acumulable = 4,
+         grupo = "Parada")
 
 # 3. Limpieza Tranvía
 clean_tranvia <- raw_tranvia %>%
   clean_names() %>%
   select(nombre = parada_nombre, geometry) %>%
-  mutate(tipo = "Tranvia")
+  mutate(tipo = "Tranvia",
+         ponderacion = 10,
+         max_acumulable = 2,
+         grupo = "Parada")
+         
 ```
 
 ```{r unificación-movilidad}
@@ -211,11 +219,7 @@ clean_salud <- raw_salud %>%
   select(
     nombre,
     actividad_tipo,
-    municipio = municipio_nombre,
-    calle = direccion_nombre_via,
-    numero = direccion_numero,
-    telefono,   # Mantenemos esto para la funcionalidad de 'Llamada rápida'
-    geometry    # Nunca quites esto, es la ubicación
+    geometry    
   ) %>%
   
   # --- 2. FILTRADO (Excluir lo inútil) ---
@@ -225,45 +229,57 @@ clean_salud <- raw_salud %>%
       "servicios profesionales limpieza", 
       "terapias alternativas", 
       "centro reconocimiento conductores", 
-      "farmacia cooperativa"
+      "farmacia cooperativa",
+      "servicios veterinarios"
     )
   ) %>%
   
   # --- 3. CREACIÓN DE GRUPOS Y PESOS (Feature Engineering) ---
   mutate(
-    # Unificamos dirección para que quede bonito en la App: "Calle Castillo, 23"
-    direccion_completa = paste(calle, numero, sep = ", "),
-    
     # Creamos la categoría simplificada
     grupo_salud = case_when(
       actividad_tipo %in% c("servicios hospitalarios", "centro de salud") ~ "Vital",
-      actividad_tipo == "farmacia" ~ "Farmacia",
-      actividad_tipo == "servicios asistenciales" ~ "Asistencial",
-      actividad_tipo == "servicios veterinarios" ~ "Veterinario",
+      actividad_tipo %in% c("farmacia") ~ "Farmacia",
+      actividad_tipo %in% c("servicios asistenciales") ~ "Asistencial",
       # Todo lo demás va al grupo especialistas (dentistas, fisios, etc.)
       TRUE ~ "Especialista"
     ),
     
-    # Asignamos el peso numérico para el algoritmo
-    peso_inicial = case_when(
-      grupo_salud == "Vital" ~ 10,
-      grupo_salud == "Farmacia" ~ 8,
-      grupo_salud == "Asistencial" ~ 6,
-      grupo_salud == "Especialista" ~ 4,
-      grupo_salud == "Veterinario" ~ NA, # Peso 0 por defecto (se activa si usuario tiene mascota)
-      TRUE ~ 1
+    # Asignación de ponderaciones
+    
+    ponderacion = case_when(
+        actividad_tipo %in% c('centro de salud', 'servicios hospitalarios', 'clinica dental') ~ 10,
+        actividad_tipo %in% c('farmacia', 'servicios profesionales medicos', 
+        'fisioterapia rehabilitacion') ~ 9,
+        actividad_tipo %in% c("servicios profesionales psicologia", "servicios asistenciales") ~ 7,
+        actividad_tipo %in% c("laboratorio analisis clinicos", "servicios profesionales logopedia") ~ 6,
+        actividad_tipo %in% c('servicios profesionales podologia') ~ 5
+    ),
+    
+    # Asignación máximo acumulable
+    
+    max_acumulable = case_when(
+        actividad_tipo %in% c("centro de salud", "servicios hospitalarios", "servicios profesionales podologia") ~ 1,
+        actividad_tipo %in% c("servicios profesionales medicos", "fisioterapia rehabilitacion", "laboratorio analisis clinicos", "servicios profesionales logopedia", "clinica dental", "servicios profesionales psicologia", "servicios asistenciales") ~ 2,
+        actividad_tipo %in% c('farmacia') ~ 3
     )
+    
   ) 
+
+ clean_salud <- clean_salud %>% 
+     rename(grupo = grupo_salud,
+            tipo = actividad_tipo)
+
 
 # --- 4. CHEQUEO FINAL ---
 # Vemos cómo ha quedado la estructura
 glimpse(clean_salud)
 
 # Comprobamos que los grupos tienen lógica
-table(clean_salud$grupo_salud, clean_salud$peso_inicial)
+table(clean_salud$grupo, clean_salud$ponderacion)
 
 # Visualización rápida para comprobar
-mapview(clean_salud, zcol = "grupo_salud", layer.name = "Salud por Categoría")
+mapview(clean_salud, zcol = "grupo", layer.name = "Salud por Categoría")
 ```
 
 # Centros educativos y culturales
@@ -327,10 +343,6 @@ clean_edu <- raw_edu %>%
   select(
     nombre, 
     actividad_tipo,          # Esta contiene la categoría ("enseñanza...", "biblioteca...")
-    municipio = municipio_nombre,
-    calle = direccion_nombre_via,
-    numero = direccion_numero,
-    web,                     # Conservamos web por si acaso
     geometry
   ) %>%
   
@@ -339,9 +351,7 @@ clean_edu <- raw_edu %>%
   
   # Creación de Grupos y Pesos Base
   mutate(
-    # Dirección legible para el popup del mapa
-    direccion_completa = paste(calle, numero, sep = ", "),
-    
+      
     # Asignación de Grupo
     grupo_edu = case_when(
       actividad_tipo %in% cat_colegios  ~ "Colegio",
@@ -350,20 +360,36 @@ clean_edu <- raw_edu %>%
       TRUE ~ "Otros"
     ),
     
-    # Peso Inicial (Por defecto)
-    peso_inicial = case_when(
-      grupo_edu == "Colegio"   ~ 10,
-      grupo_edu == "Formacion" ~ 6,
-      grupo_edu == "Cultura"   ~ 4,
-      TRUE ~ 1
+    # Asignación ponderación
+    
+    ponderacion = case_when(
+        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "biblioteca ludoteca") ~ 10,
+        actividad_tipo %in% c("enseñanza secundaria") ~ 9,
+        actividad_tipo %in% c("enseñanza universitaria", "enseñanza profesional", "enseñanza especial") ~ 8,
+        actividad_tipo %in% c("centro cultural") ~ 7,
+        actividad_tipo %in% c("enseñanza adultos", "enseñanza especializada", "enseñanza idiomas", "museos salas de arte") ~ 6,
+        actividad_tipo %in% c("asociacion cultural") ~ 5
+    ),
+    
+    # Asignacion acumulacion maxima
+    
+    max_acumulable = case_when(
+        actividad_tipo %in% c("enseñanza idiomas") ~ 3,
+        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "enseñanza secundaria", "enseñanza adultos", "enseñanza profesional", "enseñanza especializada", "biblioteca ludoteca", "centro cultural", "museos salas de arte") ~ 2,
+        actividad_tipo %in% c("enseñanza universitaria", "enseñanza especial", "asociacion cultural") ~ 1
     )
+    
   )
+
+clean_edu <- clean_edu %>% 
+    rename(grupo = grupo_edu,
+           tipo = actividad_tipo)
 
 # --- 3. VERIFICACIÓN Y MAPA ---
 
 # Tabla resumen para ver cuántos hay de cada tipo
 print("Resumen de Centros Educativos por Grupo:")
-table(clean_edu$grupo_edu)
+table(clean_edu$grupo)
 
 # MAPA INTERACTIVO (Para visualización)
 library(mapview)
@@ -371,7 +397,7 @@ library(mapview)
 # Definimos colores para cada grupo:
 # Colegio (Rojo/Naranja), Formación (Azul), Cultura (Verde)
 mapview(clean_edu, 
-        zcol = "grupo_edu", 
+        zcol = "grupo", 
         layer.name = "Educación y Cultura",
         col.regions = c("orange", "green", "blue"))
 ```
@@ -495,7 +521,7 @@ Depuración: Se han eliminado registros erróneos detectados en la fuente origin
 
 ```{r restaur-transformacion}
 # --- LIMPIEZA DE RESTAURACIÓN ---
-library(stringr)
+# library(stringr)
 library(mapview)
 
 # 1. CARGA (Si no lo tienes cargado ya)
