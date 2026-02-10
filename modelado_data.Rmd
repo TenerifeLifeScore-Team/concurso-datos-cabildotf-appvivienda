@@ -165,7 +165,7 @@ clean_tranvia <- raw_tranvia %>%
   select(nombre = parada_nombre, geometry) %>%
   mutate(tipo = "Tranvia",
          ponderacion = 10,
-         max_acumulable = 2,
+         max_acumulable = 1,
          grupo = "Transporte publico")
          
 ```
@@ -180,6 +180,7 @@ clean_movilidad <- st_transform(clean_movilidad, crs = 4326)
 
 # Visualización rápida
 plot(st_geometry(clean_movilidad), main = "Red de Transporte Unificada")
+
 ```
 
 # Salud
@@ -257,8 +258,8 @@ clean_salud <- raw_salud %>%
     # Asignación máximo acumulable
     
     max_acumulable = case_when(
-        actividad_tipo %in% c("centro de salud", "servicios hospitalarios", "servicios profesionales podologia") ~ 1,
-        actividad_tipo %in% c("servicios profesionales medicos", "fisioterapia rehabilitacion", "laboratorio analisis clinicos", "servicios profesionales logopedia", "clinica dental", "servicios profesionales psicologia", "servicios asistenciales") ~ 2,
+        actividad_tipo %in% c("centro de salud", "servicios hospitalarios", "laboratorio analisis clinicos", "servicios profesionales logopedia", "servicios profesionales podologia") ~ 1,
+        actividad_tipo %in% c("servicios profesionales medicos", "fisioterapia rehabilitacion", "clinica dental", "servicios profesionales psicologia", "servicios asistenciales") ~ 2,
         actividad_tipo %in% c('farmacia') ~ 3
     )
     
@@ -278,6 +279,7 @@ table(clean_salud$grupo, clean_salud$ponderacion)
 
 # Visualización rápida para comprobar
 mapview(clean_salud, zcol = "grupo", layer.name = "Salud por Categoría")
+
 ```
 
 # Centros educativos y culturales
@@ -360,20 +362,20 @@ clean_edu <- raw_edu %>%
     # Asignación ponderación
     
     ponderacion = case_when(
-        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "biblioteca ludoteca") ~ 10,
+        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "enseñanza universitaria", "biblioteca ludoteca") ~ 10,
         actividad_tipo %in% c("enseñanza secundaria") ~ 9,
-        actividad_tipo %in% c("enseñanza universitaria", "enseñanza profesional", "enseñanza especial") ~ 8,
-        actividad_tipo %in% c("centro cultural") ~ 7,
-        actividad_tipo %in% c("enseñanza adultos", "enseñanza especializada", "enseñanza idiomas", "museos salas de arte") ~ 6,
-        actividad_tipo %in% c("asociacion cultural") ~ 5
+        actividad_tipo %in% c("enseñanza profesional", "enseñanza especial") ~ 8,
+        actividad_tipo %in% c("centro cultural", "museos salas de arte") ~ 7,
+        actividad_tipo %in% c("enseñanza adultos", "enseñanza especializada", "enseñanza idiomas") ~ 6,
+        actividad_tipo %in% c("asociacion cultural") ~ 4
     ),
     
     # Asignacion acumulacion maxima
     
     max_acumulable = case_when(
         actividad_tipo %in% c("enseñanza idiomas") ~ 3,
-        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "enseñanza secundaria", "enseñanza adultos", "enseñanza profesional", "enseñanza especializada", "biblioteca ludoteca", "centro cultural", "museos salas de arte") ~ 2,
-        actividad_tipo %in% c("enseñanza universitaria", "enseñanza especial", "asociacion cultural") ~ 1
+        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "enseñanza secundaria", "enseñanza universitaria", "enseñanza adultos", "enseñanza profesional", "enseñanza especializada", "biblioteca ludoteca", "centro cultural", "museos salas de arte") ~ 2,
+        actividad_tipo %in% c("enseñanza especial", "asociacion cultural") ~ 1
     )
     
   )
@@ -397,6 +399,7 @@ mapview(clean_edu,
         zcol = "grupo", 
         layer.name = "Educación y Cultura",
         col.regions = c("orange", "green", "blue"))
+
 ```
 
 # Comercio
@@ -431,9 +434,6 @@ clean_comercio <- raw_comercio %>%
   select(
     nombre,
     actividad = actividad_tipo, 
-    municipio = municipio_nombre,
-    direccion = direccion_nombre_via, # A veces es 'direccion_via'
-    numero = direccion_numero,
     geometry
   ) %>%
   
@@ -455,26 +455,19 @@ clean_comercio <- raw_comercio %>%
   
   # 3. CATEGORIZACIÓN SIMPLIFICADA
   mutate(
-    # Unificar dirección
-    direccion_completa = paste(direccion, numero, sep = ", "),
     
     # Lógica de Grupos
     grupo_comercio = case_when(
-      # GRUPO 1: ALIMENTACIÓN Y CENTROS COMERCIALES (Lo Vital)
-      actividad %in% c("alimentacion supermercados", 
-                       "mercados y ferias", 
-                       "bazar multitienda estanco", # Conveniencia
-                       "alimentacion productos especializados herbolario",
-                       "alimentacion vinoteca") ~ "Esencial",
+      actividad %in% c("alimentacion productos especializados herbolario", "alimentacion supermercados", "alimentacion vinoteca", "bazar multitienda estanco", "mercados y ferias", "kiosco prensa", "tabaqueria licoreria") ~ "Alimentacion y despensa",
       
-      # Detectamos cualquier cosa que empiece o contenga "centro comercial"
-      str_detect(actividad, "centro comercial") ~ "Esencial",
+      actividad %in% c("optica ortopedia audicion", "parafarmacia productos naturales", "peluqueria estetica", "perfumeria estetica complementos") ~ "Cuidado personal y salud",
       
-      # GRUPO 2: RESTO DE TIENDAS (Ropa, Hogar, Peluquería...)
-      TRUE ~ "Tienda" 
+      actividad  %in% c("centro comercial hogar construccion", "electricidad electronica", "ferreteria", "floristeria", "hogar muebles electrodomesticos decoracion", "hogar textil") ~ "Hogar y bricolaje"
+      
+      # SIGUE AQUÍ TOMÁS, PON LO QUE FALTAN, PONDERACIONES Y MAX ACUM, CAMBIA LOS NOMBRES DE LAS VARIABLES TAMBIÉN.
     ),
     
-    # Asignación de Pesos
+    # Asignación de Pesos (esto hay que quitarlo, es de lo antiguo)
     peso_inicial = case_when(
       grupo_comercio == "Esencial" ~ 10,
       grupo_comercio == "Tienda"   ~ 5,
