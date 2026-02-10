@@ -157,7 +157,7 @@ clean_guaguas <- raw_guaguas %>%
   mutate(tipo = "Guagua",
          ponderacion = 10,
          max_acumulable = 4,
-         grupo = "Parada")
+         grupo = "Transporte publico")
 
 # 3. Limpieza Tranvía
 clean_tranvia <- raw_tranvia %>%
@@ -166,7 +166,7 @@ clean_tranvia <- raw_tranvia %>%
   mutate(tipo = "Tranvia",
          ponderacion = 10,
          max_acumulable = 2,
-         grupo = "Parada")
+         grupo = "Transporte publico")
          
 ```
 
@@ -238,11 +238,9 @@ clean_salud <- raw_salud %>%
   mutate(
     # Creamos la categoría simplificada
     grupo_salud = case_when(
-      actividad_tipo %in% c("servicios hospitalarios", "centro de salud") ~ "Vital",
-      actividad_tipo %in% c("farmacia") ~ "Farmacia",
-      actividad_tipo %in% c("servicios asistenciales") ~ "Asistencial",
+      actividad_tipo %in% c("servicios hospitalarios", "centro de salud", "farmacia") ~ "Vital",
       # Todo lo demás va al grupo especialistas (dentistas, fisios, etc.)
-      TRUE ~ "Especialista"
+      TRUE ~ "Salud especializada"
     ),
     
     # Asignación de ponderaciones
@@ -354,8 +352,7 @@ clean_edu <- raw_edu %>%
       
     # Asignación de Grupo
     grupo_edu = case_when(
-      actividad_tipo %in% cat_colegios  ~ "Colegio",
-      actividad_tipo %in% cat_formacion ~ "Formacion",
+      actividad_tipo %in% c(cat_colegios, cat_formacion)  ~ "Educacion",
       actividad_tipo %in% cat_cultura   ~ "Cultura",
       TRUE ~ "Otros"
     ),
