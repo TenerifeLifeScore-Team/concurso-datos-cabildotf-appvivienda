@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # --- CONFIGURACIÓN ---
 radio_hexagono = 500  # Metros (Cuanto más pequeño, más precisión, pero más lento)
-archivo_municipios = "data/municipios-tenerife.geojson"
+archivo_municipios = "data-raw/municipios-tenerife.geojson"
 
 def calcular_grid_hexagonal(gdf, radio):
     """
