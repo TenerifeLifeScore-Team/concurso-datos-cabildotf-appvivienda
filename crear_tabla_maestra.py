@@ -75,10 +75,10 @@ if len(todos_los_puntos) > 0:
     df_global = pd.concat(todos_los_puntos, ignore_index=True)
     
     # Contamos cuántos elementos hay por hexágono y por grupo_slider
-    conteos = df_global.groupby(['hex_id', 'grupo']).size().reset_index(name='cantidad')
+    conteos = df_global.groupby(['hex_id', 'tipo']).size().reset_index(name='cantidad')
     
     # Pivotamos: Pasamos de filas a columnas
-    tabla_pivote = conteos.pivot(index='hex_id', columns='grupo', values='cantidad').fillna(0)
+    tabla_pivote = conteos.pivot(index='hex_id', columns='tipo', values='cantidad').fillna(0)
     
     # Añadimos un prefijo para que quede claro (ej: q_Farmacias)
     # Le pongo 'q_' porque en vuestra fórmula la cantidad real se llama q_j
