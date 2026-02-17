@@ -19,7 +19,7 @@ logging.basicConfig(
 def main():
     logging.info("=== INICIANDO PIPELINE DE DATOS LIFESCORE ===")
 
-    # 2. DEFINIR LAS RUTAS (Automáticas e indestructibles)
+    # 2. Definir las rutas
     RAIZ = Path(__file__).parent
     CARPETA_CLEAN = RAIZ / "data-clean"
     CARPETA_RAW = RAIZ / "data-raw"
@@ -43,28 +43,28 @@ def main():
         "educacion": str(CARPETA_CLEAN / "educacion.geojson")
     }
 
-    # ========================================================
-    # LA EJECUCIÓN PASO A PASO
-    # ========================================================
-    # ========================================================
+    # =================
+    # --- EJECUCIÓN ---
+    # =================
+
     # PASO 0: Crear el Grid Hexagonal
-    # ========================================================
+    print()
     logging.info("--- FASE 0: CREANDO TABLERO HEXAGONAL ---")
     
     # Cargamos el mapa base de los municipios
     logging.info("Cargando mapa base de municipios...")
     gdf_municipios = gpd.read_file(ruta_municipios)
     
-    # Ejecutamos tu función con radio de 500 metros
-    grid_resultante = calcular_grid_hexagonal(gdf=gdf_municipios, radio=500)
+    # Ejecutamos la función con los parámetros consensuados (MODIFICAR AQUÍ SI NECESARIO)
+    grid_resultante = calcular_grid_hexagonal(gdf=gdf_municipios, radio=500, porcentaje_tierra=0.45)
     
-    # Guardamos el resultado en la ruta para que el Paso 2 lo encuentre
+    # Guardamos el resultado en la ruta
     grid_resultante.to_file(ruta_grid, driver="GeoJSON")
     logging.info(f"✅ Grid generado y guardado en: {ruta_grid}")
 
-    # ========================================================
+
     # PASO 1: Generar Diccionario desde Excel
-    # ========================================================
+    print()
     logging.info("--- FASE 1: CONSTRUYENDO DICCIONARIO DESDE EXCEL ---")
     
     # Ejecutamos tu función que lee las pestañas del Excel
@@ -75,7 +75,9 @@ def main():
         json.dump(diccionario, f, ensure_ascii=False, indent=4)
     logging.info(f"✅ Diccionario guardado en: {ruta_diccionario}")
 
+
     # PASO 2: Cruzar Puntos con Hexágonos
+    print()
     logging.info("--- FASE 2: CREANDO TABLA MAESTRA ---")
     generar_tabla_maestra(
         ruta_grid=str(ruta_grid),
@@ -83,7 +85,9 @@ def main():
         carpeta_salida=str(CARPETA_CLEAN)
     )
 
+
     # PASO 3: Aplicar Saturación
+    print()
     logging.info("--- FASE 3: APLICANDO LÍMITES MATEMÁTICOS ---")
     aplicar_limites(
         ruta_maestra=str(ruta_tabla_maestra),
@@ -91,7 +95,7 @@ def main():
         ruta_salida=str(ruta_tabla_saturada)
     )
 
-    logging.info("=== PIPELINE COMPLETADO CON ÉXITO ✅ ===")
+    logging.info("======== PIPELINE COMPLETADO CON ÉXITO ========")
 
 if __name__ == "__main__":
     main()

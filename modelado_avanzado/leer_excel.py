@@ -1,9 +1,9 @@
 import pandas as pd
-import json
+import logging
 
 
 def generar_diccionario_desde_excel(ruta_excel):
-    print(f"[INFO] Abriendo Excel: {ruta_excel}")
+    logging.info(f"Abriendo Excel: {ruta_excel}")
     
     # Leemos todas las hojas de golpe teniendo en cuenta donde están los registros
     xls = pd.read_excel(ruta_excel, sheet_name=None, header=1, usecols="B:E")
@@ -11,7 +11,7 @@ def generar_diccionario_desde_excel(ruta_excel):
     diccionario_maestro = {}
     
     for nombre_hoja, df in xls.items():
-        print(f"[INFO] Procesando hoja: {nombre_hoja}...")
+        logging.info(f"Procesando hoja: {nombre_hoja}...")
         
         # 1. Eliminar la fila de "descripciones" 
         df = df.drop(index=0).reset_index(drop=True)

@@ -9,7 +9,7 @@ def generar_tabla_maestra(ruta_grid, rutas_datasets, carpeta_salida):
     """
     os.makedirs(carpeta_salida, exist_ok=True)
     
-    logging.info("[INFO] Cargando el grid de hexágonos...")
+    logging.info("Cargando el grid de hexágonos...")
     grid = gpd.read_file(ruta_grid)
     grid = grid.to_crs(epsg=4326) # Aseguramos sistema de coordenadas estándar
 
@@ -17,10 +17,10 @@ def generar_tabla_maestra(ruta_grid, rutas_datasets, carpeta_salida):
 
     for nombre, ruta in rutas_datasets.items():
         if not os.path.exists(ruta):
-            logging.warning(f"[WARNING] No se encontró '{ruta}'. Revisa el nombre.")
+            logging.warning(f"No se encontró '{ruta}'. Revisa el nombre.")
             continue
             
-        logging.info(f"[INFO] Procesando capa: {nombre}...")
+        logging.info(f"Procesando capa: {nombre}...")
         
         gdf_puntos = gpd.read_file(ruta)
         gdf_puntos = gdf_puntos.to_crs(epsg=4326)
@@ -38,7 +38,7 @@ def generar_tabla_maestra(ruta_grid, rutas_datasets, carpeta_salida):
         todos_los_puntos.append(puntos_con_hex)
 
     if len(todos_los_puntos) > 0:
-        logging.info("[INFO] Construyendo la Tabla Maestra...")
+        logging.info("Construyendo la Tabla Maestra...")
         
         df_global = pd.concat(todos_los_puntos, ignore_index=True)
         conteos = df_global.groupby(['hex_id', 'tipo']).size().reset_index(name='cantidad')
@@ -54,9 +54,9 @@ def generar_tabla_maestra(ruta_grid, rutas_datasets, carpeta_salida):
         
         ruta_maestra = f"{carpeta_salida}/tabla_maestra.geojson"
         tabla_maestra.to_file(ruta_maestra, driver="GeoJSON")
-        logging.info(f"[SUCCESS] Tabla Maestra generada en: {ruta_maestra}")
+        logging.info(f"✅ Tabla Maestra generada en: {ruta_maestra}")
         
         return tabla_maestra
     else:
-        logging.error("[ERROR] No se procesó ningún archivo.")
+        logging.error("No se procesó ningún archivo.")
         return None

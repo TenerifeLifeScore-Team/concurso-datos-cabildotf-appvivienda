@@ -2,12 +2,10 @@ import geopandas as gpd
 from shapely.geometry import Polygon
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
 
-# --- CONFIGURACIÓN ---
-radio_hexagono = 500  # Metros
-porcentaje_minimo_tierra = 0.45  # 45% -> Si tiene menos de un 45% de tierra, lo elimina
 
-def calcular_grid_hexagonal(gdf, radio):
+def calcular_grid_hexagonal(gdf, radio=500, porcentaje_tierra=0.45):
     """
     Genera una malla de hexágonos ajustada perfectamente a la isla,
     eliminando los que caen mayoritariamente en el mar.
@@ -32,7 +30,7 @@ def calcular_grid_hexagonal(gdf, radio):
     filas = int((ymax - ymin) / alto) + 1
     
     poligonos = []
-    print(f"Generando grid base de aprox {cols}x{filas} celdas...")
+    logging.info(f"Generando grid base de aprox {cols}x{filas} celdas...")
     
     for c in range(cols):
         for f in range(filas):
@@ -55,7 +53,7 @@ def calcular_grid_hexagonal(gdf, radio):
     isla = gdf_utm.dissolve() 
     isla_geom = isla.geometry.iloc[0] # Geometría pura de la isla
     
-    print("Filtrando celdas oceánicas")
+    logging.info("Filtrando celdas oceánicas (este proceso puede tardar varios segundos)")
     
     # A) Filtro rápido: Nos quedamos solo con los que al menos tocan la isla
     grid_toca = grid[grid.intersects(isla_geom)].copy()
@@ -67,11 +65,13 @@ def calcular_grid_hexagonal(gdf, radio):
     grid_toca['area_tierra'] = grid_toca.geometry.intersection(isla_geom).area
     
     # C) Aplicamos el umbral
-    umbral_area = area_total_hex * porcentaje_minimo_tierra
+    umbral_area = area_total_hex * porcentaje_tierra
     grid_final = grid_toca[grid_toca['area_tierra'] >= umbral_area].copy()
     
     # Limpiamos columnas extra
     grid_final = grid_final[['geometry']].reset_index(drop=True)
+
+    grid_final['hex_id'] = [f"HEX_{str(i).zfill(4)}" for i in range(len(grid_final))]
     
     # Volvemos a GPS (Lat/Lon)
     return grid_final.to_crs(epsg=4326)

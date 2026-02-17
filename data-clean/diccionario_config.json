@@ -671,7 +671,7 @@
         "peso": 10.0,
         "limite": 4.0
     },
-    "Tranvía": {
+    "Tranvia": {
         "macro_categoria": "Movilidad",
         "grupo_slider": "Transporte público",
         "peso": 10.0,
