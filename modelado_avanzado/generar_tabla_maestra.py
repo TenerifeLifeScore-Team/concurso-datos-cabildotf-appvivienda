@@ -30,10 +30,6 @@ def generar_tabla_maestra(ruta_grid, rutas_datasets, carpeta_salida):
         
         if 'index_right' in puntos_con_hex.columns:
             puntos_con_hex = puntos_con_hex.drop(columns=['index_right'])
-            
-        # Guardar dataset intermedio actualizado
-        ruta_salida_puntos = f"{carpeta_salida}/{nombre}_hex.geojson"
-        puntos_con_hex.to_file(ruta_salida_puntos, driver="GeoJSON")
         
         todos_los_puntos.append(puntos_con_hex)
 

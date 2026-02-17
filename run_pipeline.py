@@ -22,17 +22,19 @@ def main():
     # 2. Definir las rutas
     RAIZ = Path(__file__).parent
     CARPETA_CLEAN = RAIZ / "data-clean"
+    CARPETA_PRO = RAIZ / "data-proccesed"
     CARPETA_RAW = RAIZ / "data-raw"
     CARPETA_REC = RAIZ / "recursos"
 
-    
-    # Rutas específicas de archivos
-    ruta_grid = CARPETA_CLEAN / "grid_tenerife.geojson"
-    ruta_diccionario = CARPETA_CLEAN / "diccionario_config.json"
-    ruta_tabla_maestra = CARPETA_CLEAN / "tabla_maestra.geojson"
-    ruta_tabla_saturada = CARPETA_CLEAN / "tabla_saturada.geojson"
-    ruta_municipios = CARPETA_RAW / "municipios-tenerife.geojson"
+    # Rutas de archivos que ccamos a usar
     ruta_excel = CARPETA_REC / "Tipos de actividades - TenerifeLifeScore.xlsx"
+    ruta_municipios = CARPETA_RAW / "municipios-tenerife.geojson"
+
+    # Rutas específicas de archivos que vamos a guardar
+    ruta_grid = CARPETA_PRO / "grid_tenerife.geojson"
+    ruta_diccionario = CARPETA_PRO / "diccionario_config.json"
+    ruta_tabla_maestra = CARPETA_PRO / "tabla_maestra.geojson"
+    ruta_tabla_saturada = CARPETA_PRO / "tabla_saturada.geojson"
 
     # Diccionario de datasets limpios para pasarle al Script 2
     rutas_datasets = {
@@ -82,7 +84,7 @@ def main():
     generar_tabla_maestra(
         ruta_grid=str(ruta_grid),
         rutas_datasets=rutas_datasets,
-        carpeta_salida=str(CARPETA_CLEAN)
+        carpeta_salida=str(CARPETA_PRO)
     )
 
 
