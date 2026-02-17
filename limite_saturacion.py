@@ -63,18 +63,8 @@ if actividades_no_encontradas:
 # 4. LIMPIEZA Y GUARDADO
 # ==========================================
 # Guardamos la tabla con las nuevas columnas 'sat_'
-ruta_salida = f"{CARPETA_SALIDA}/TABLA_SATURADA.geojson"
+ruta_salida = f"{CARPETA_SALIDA}/tabla_saturada.geojson"
 gdf.to_file(ruta_salida, driver="GeoJSON")
 
 print(f"\n🚀 ¡ÉXITO! Se han saturado {actividades_procesadas} actividades.")
 print(f"💾 Tabla saturada guardada en: {ruta_salida}")
-
-# --- MINI RESUMEN ESTADÍSTICO PARA EL PROFESOR ---
-print("\n📊 Resumen de comprobación para la tutoría (Valores Máximos en la isla):")
-# Mostramos un par de ejemplos rápidos
-for col_q in columnas_q[:5]: # Solo los 5 primeros para no saturar la consola
-    actividad = col_q.replace('q_', '')
-    if f"sat_{actividad}" in gdf.columns:
-        max_real = gdf[col_q].max()
-        max_saturado = gdf[f"sat_{actividad}"].max()
-        print(f"   - {actividad}: Máximo Real ($q_j$) = {max_real} | Saturado ($sat_j$) = {max_saturado}")
