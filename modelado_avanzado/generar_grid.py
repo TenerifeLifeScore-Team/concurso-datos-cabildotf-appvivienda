@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 # --- CONFIGURACIÓN ---
 radio_hexagono = 500  # Metros
-archivo_municipios = "data-raw/municipios-tenerife.geojson"
 porcentaje_minimo_tierra = 0.45  # 45% -> Si tiene menos de un 45% de tierra, lo elimina
 
 def calcular_grid_hexagonal(gdf, radio):
@@ -16,7 +15,7 @@ def calcular_grid_hexagonal(gdf, radio):
     # 1. Convertimos a sistema métrico (UTM zona 28N)
     gdf_utm = gdf.to_crs(epsg=32628)
     
-    # 2. Obtenemos los límites y añadimos MARGEN (Soluciona la columna este desaparecida)
+    # 2. Obtenemos los límites y añadimos margen
     xmin, ymin, xmax, ymax = gdf_utm.total_bounds
     margen = radio * 4
     xmin -= margen
@@ -24,7 +23,7 @@ def calcular_grid_hexagonal(gdf, radio):
     xmax += margen
     ymax += margen
     
-    # 3. Generamos los hexágonos matemáticamente
+    # 3. Generamos los hexágonos
     ancho = radio * 2
     alto = np.sqrt(3) * radio
     
@@ -52,11 +51,11 @@ def calcular_grid_hexagonal(gdf, radio):
     # 4. Crear GeoDataFrame base
     grid = gpd.GeoDataFrame({'geometry': poligonos}, crs="EPSG:32628")
     
-    # 5. FILTRADO AVANZADO: Quitar mar (Soluciona los hexágonos residuales)
+    # 5. Filtramos hexágonos con un alto porcentaje de mar
     isla = gdf_utm.dissolve() 
     isla_geom = isla.geometry.iloc[0] # Geometría pura de la isla
     
-    print("Filtrando celdas oceánicas (esto puede tardar unos segundos)...")
+    print("Filtrando celdas oceánicas")
     
     # A) Filtro rápido: Nos quedamos solo con los que al menos tocan la isla
     grid_toca = grid[grid.intersects(isla_geom)].copy()
@@ -64,10 +63,10 @@ def calcular_grid_hexagonal(gdf, radio):
     # B) Filtro fino: Calculamos cuánto del hexágono es tierra firme
     area_total_hex = grid_toca.geometry.area.iloc[0]
     
-    # La magia ocurre aquí: calculamos la intersección real
+    # Calculamos la intersección real
     grid_toca['area_tierra'] = grid_toca.geometry.intersection(isla_geom).area
     
-    # C) Aplicamos el umbral (Nos quedamos con los >= 30% tierra)
+    # C) Aplicamos el umbral
     umbral_area = area_total_hex * porcentaje_minimo_tierra
     grid_final = grid_toca[grid_toca['area_tierra'] >= umbral_area].copy()
     
@@ -76,34 +75,3 @@ def calcular_grid_hexagonal(gdf, radio):
     
     # Volvemos a GPS (Lat/Lon)
     return grid_final.to_crs(epsg=4326)
-
-# --- EJECUCIÓN ---
-try:
-    print("Cargando mapa de municipios...")
-    municipios = gpd.read_file(archivo_municipios)
-    
-    # Generar el grid
-    mi_grid = calcular_grid_hexagonal(municipios, radio_hexagono)
-    
-    mi_grid['hex_id'] = [f"HEX_{str(i).zfill(4)}" for i in range(len(mi_grid))]
-    print("   ✅ Columna 'hex_id' generada y guardada en el grid.")
-
-    print(f"[EXITO] Hemos dividido Tenerife en {len(mi_grid)} sectores hexagonales válidos.")
-    
-    # Guardar el resultado
-    ruta_salida = "data-clean/grid_tenerife.geojson"
-    mi_grid.to_file(ruta_salida, driver="GeoJSON")
-    print(f"Guardado en '{ruta_salida}'")
-
-    # --- VISUALIZACIÓN RÁPIDA ---
-    print("Generando imagen previa...")
-    fig, ax = plt.subplots(figsize=(10, 10))
-    # Ponemos la isla de fondo para comprobar que el recorte es perfecto
-    municipios.plot(ax=ax, color='lightgreen', edgecolor='white')
-    # Pintamos los hexágonos encima
-    mi_grid.plot(ax=ax, facecolor="none", edgecolor="black", linewidth=0.5)
-    plt.title(f"Tenerife dividido en {len(mi_grid)} sectores (Filtro Mar: {porcentaje_minimo_tierra*100}%)")
-    plt.show()
-
-except Exception as e:
-    print(f"[ERROR] {e}")

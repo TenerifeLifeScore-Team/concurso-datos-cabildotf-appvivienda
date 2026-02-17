@@ -1,0 +1,97 @@
+import logging
+from pathlib import Path
+import geopandas as gpd
+import json
+
+# Importamos las funciones puras desde la carpeta modelado_avanzado
+from modelado_avanzado.generar_tabla_maestra import generar_tabla_maestra
+from modelado_avanzado.aplicar_limites import aplicar_limites
+from modelado_avanzado.generar_grid import calcular_grid_hexagonal
+from modelado_avanzado.leer_excel import generar_diccionario_desde_excel
+
+# 1. Configurar el Logging global
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%H:%M:%S'
+)
+
+def main():
+    logging.info("=== INICIANDO PIPELINE DE DATOS LIFESCORE ===")
+
+    # 2. DEFINIR LAS RUTAS (Automáticas e indestructibles)
+    RAIZ = Path(__file__).parent
+    CARPETA_CLEAN = RAIZ / "data-clean"
+    CARPETA_RAW = RAIZ / "data-raw"
+    CARPETA_REC = RAIZ / "recursos"
+
+    
+    # Rutas específicas de archivos
+    ruta_grid = CARPETA_CLEAN / "grid_tenerife.geojson"
+    ruta_diccionario = CARPETA_CLEAN / "diccionario_config.json"
+    ruta_tabla_maestra = CARPETA_CLEAN / "tabla_maestra.geojson"
+    ruta_tabla_saturada = CARPETA_CLEAN / "tabla_saturada.geojson"
+    ruta_municipios = CARPETA_RAW / "municipios-tenerife.geojson"
+    ruta_excel = CARPETA_REC / "Tipos de actividades - TenerifeLifeScore.xlsx"
+
+    # Diccionario de datasets limpios para pasarle al Script 2
+    rutas_datasets = {
+        "movilidad": str(CARPETA_CLEAN / "movilidad.geojson"),
+        "comercio": str(CARPETA_CLEAN / "comercio.geojson"),
+        "salud": str(CARPETA_CLEAN / "salud.geojson"),
+        "restauracion": str(CARPETA_CLEAN / "restauracion.geojson"),
+        "educacion": str(CARPETA_CLEAN / "educacion.geojson")
+    }
+
+    # ========================================================
+    # LA EJECUCIÓN PASO A PASO
+    # ========================================================
+    # ========================================================
+    # PASO 0: Crear el Grid Hexagonal
+    # ========================================================
+    logging.info("--- FASE 0: CREANDO TABLERO HEXAGONAL ---")
+    
+    # Cargamos el mapa base de los municipios
+    logging.info("Cargando mapa base de municipios...")
+    gdf_municipios = gpd.read_file(ruta_municipios)
+    
+    # Ejecutamos tu función con radio de 500 metros
+    grid_resultante = calcular_grid_hexagonal(gdf=gdf_municipios, radio=500)
+    
+    # Guardamos el resultado en la ruta para que el Paso 2 lo encuentre
+    grid_resultante.to_file(ruta_grid, driver="GeoJSON")
+    logging.info(f"✅ Grid generado y guardado en: {ruta_grid}")
+
+    # ========================================================
+    # PASO 1: Generar Diccionario desde Excel
+    # ========================================================
+    logging.info("--- FASE 1: CONSTRUYENDO DICCIONARIO DESDE EXCEL ---")
+    
+    # Ejecutamos tu función que lee las pestañas del Excel
+    diccionario = generar_diccionario_desde_excel(ruta_excel=str(ruta_excel))
+    
+    # Guardamos el diccionario en formato JSON para que el Paso 3 lo pueda leer
+    with open(ruta_diccionario, 'w', encoding='utf-8') as f:
+        json.dump(diccionario, f, ensure_ascii=False, indent=4)
+    logging.info(f"✅ Diccionario guardado en: {ruta_diccionario}")
+
+    # PASO 2: Cruzar Puntos con Hexágonos
+    logging.info("--- FASE 2: CREANDO TABLA MAESTRA ---")
+    generar_tabla_maestra(
+        ruta_grid=str(ruta_grid),
+        rutas_datasets=rutas_datasets,
+        carpeta_salida=str(CARPETA_CLEAN)
+    )
+
+    # PASO 3: Aplicar Saturación
+    logging.info("--- FASE 3: APLICANDO LÍMITES MATEMÁTICOS ---")
+    aplicar_limites(
+        ruta_maestra=str(ruta_tabla_maestra),
+        ruta_diccionario=str(ruta_diccionario),
+        ruta_salida=str(ruta_tabla_saturada)
+    )
+
+    logging.info("=== PIPELINE COMPLETADO CON ÉXITO ✅ ===")
+
+if __name__ == "__main__":
+    main()
