@@ -24,13 +24,6 @@ RUTAS_DATASETS = {
 print("🗺️ Cargando el grid de hexágonos...")
 grid = gpd.read_file(ARCHIVO_GRID)
 
-# Creamos la columna ID
-if 'hex_id' not in grid.columns:
-    grid['hex_id'] = [f"HEX_{str(i).zfill(4)}" for i in range(len(grid))]
-    # Guardamos el grid actualizado con los IDs para no perderlos
-    grid.to_file(ARCHIVO_GRID, driver="GeoJSON")
-    print("   ✅ Columna 'hex_id' generada y guardada en el grid.")
-
 # Aseguramos sistema de coordenadas estándar
 grid = grid.to_crs(epsg=4326)
 

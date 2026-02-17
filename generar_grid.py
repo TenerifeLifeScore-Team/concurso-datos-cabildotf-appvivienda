@@ -85,6 +85,9 @@ try:
     # Generar el grid
     mi_grid = calcular_grid_hexagonal(municipios, radio_hexagono)
     
+    mi_grid['hex_id'] = [f"HEX_{str(i).zfill(4)}" for i in range(len(mi_grid))]
+    print("   ✅ Columna 'hex_id' generada y guardada en el grid.")
+
     print(f"[EXITO] Hemos dividido Tenerife en {len(mi_grid)} sectores hexagonales válidos.")
     
     # Guardar el resultado
