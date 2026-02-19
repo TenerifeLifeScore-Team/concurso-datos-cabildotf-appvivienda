@@ -30,15 +30,6 @@ st.markdown(
             padding-bottom: 0rem !important;
             max-height: 100vh;
         }
-        /* Aniquilar el espacio superior oculto de la barra lateral */
-        [data-testid="stSidebarHeader"] {
-            padding: 0 !important;
-            height: 2rem !important;
-            min-height: 0 !important;
-        }
-        [data-testid="stSidebarUserContent"] {
-            padding-top: 0 !important; 
-        }
     </style>
     """,
     unsafe_allow_html=True,
