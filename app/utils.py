@@ -2,11 +2,15 @@ import streamlit as st
 import json
 import pandas as pd
 import geopandas as gpd
+from pathlib import Path
+
+RAIZ = Path(__file__).parent.parent
 
 @st.cache_data
 def cargar_configuracion():
     """Carga el diccionario en caché para no leer el JSON constantemente."""
-    with open("data-proccesed/diccionario_config.json", "r", encoding="utf-8") as f:
+    ruta_json = RAIZ / "data-proccesed" / "diccionario_config.json"
+    with open(ruta_json, "r", encoding="utf-8") as f:
         diccionario = json.load(f)
     return diccionario
 
