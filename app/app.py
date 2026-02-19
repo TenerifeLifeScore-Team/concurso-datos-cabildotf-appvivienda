@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
+from utils import cargar_configuracion, obtener_jerarquia_categorias
 
 # ==========================================
 # 1. CONFIGURACIÓN DE LA PÁGINA Y CSS
@@ -10,6 +11,10 @@ st.set_page_config(
     layout="wide", 
     initial_sidebar_state="expanded"
 )
+
+# Cargamos el diccionario y la jerarquía desde utils.py
+diccionario_config = cargar_configuracion()
+jerarquia = obtener_jerarquia_categorias(diccionario_config)
 
 # CSS INYECTADO: Sidebar 33%, sin scroll en main, y ajustando márgenes
 st.markdown(
@@ -38,27 +43,34 @@ st.markdown(
 # ==========================================
 # 2. BARRA LATERAL (SIDEBAR) - Personalización
 # ==========================================
-# [NOTA] Ver como ordenamos esto, que sea scrolleable, y capaz dividirlo por 
-# categorías para que no sea un menú muy largo.
-with st.sidebar:
-    # --- EJEMPLO DE UN GRUPO (Salud) ---
-    st.subheader("🏥 Salud Vital")
-    
-    peso_salud = st.slider(
-        "Importancia de la Salud", 
-        min_value=1, max_value=10, value=8, step=1,
-        help="1 = Nada importante, 10 = Imprescindible"
-    )
-    
-    with st.expander("Ver opciones avanzadas 🔽"):
-        st.markdown("<small>Desmarca lo que no necesites:</small>", unsafe_allow_html=True)
-        chk_farmacia = st.checkbox("Farmacias", value=True)
-        chk_centro_salud = st.checkbox("Centros de Salud", value=True)
-        chk_hospital = st.checkbox("Servicios Hospitalarios", value=True)
 
-    st.divider()
-    #  [NOTA] MÁS TARDE TODO ESTO SE HARÁ AUTOMÁTICAMENTE, LEYENDO diccionario_config.json
-    st.button("Calcular LifeScore 🚀", use_container_width=True, type="primary")
+with st.sidebar:
+
+    st.title("⚙️ Personaliza tu LifeScore")
+
+    # Abrimos el formulario para que no recalcule hasta pulsar el botón
+    with st.form("formulario_parametros"):
+        sliders_subgrupos = {}
+        checks_actividades = {}
+
+        # Generación dinámica leyendo la jerarquía importada
+        for macro_categoria, grupos in jerarquia.items():
+            st.markdown(f"### {macro_categoria}")
+            for grupo_slider, lista_actividades in grupos.items():
+                sliders_subgrupos[grupo_slider] = st.slider(
+                    f"Importancia de: {grupo_slider}", 
+                    min_value=1, max_value=10, value=5, step=1
+                )
+
+                with st.expander(f"Filtros de {grupo_slider} 🔽"):
+                    st.markdown("<small>Desmarca lo que no necesites:</small>", unsafe_allow_html=True)
+                    for actividad in lista_actividades:
+                        checks_actividades[actividad] = st.checkbox(actividad.title(), value=True)
+        
+            st.divider()
+
+        boton_calcular = st.form_submit_button("Calcular LifeScore 🚀", use_container_width=True, type="primary")
+
 
 # ==========================================
 # 3. NAVEGACIÓN SUPERIOR HORIZONTAL
