@@ -30,6 +30,10 @@ st.markdown(
             padding-bottom: 0rem !important;
             max-height: 100vh;
         }
+        /* Ocultar la cabecera superior de Streamlit (Deploy, menú, etc.) */
+        [data-testid="stHeader"] {
+            display: none;
+        }
     </style>
     """,
     unsafe_allow_html=True,
