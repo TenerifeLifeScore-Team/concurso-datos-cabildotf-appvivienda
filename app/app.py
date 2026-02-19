@@ -38,11 +38,9 @@ st.markdown(
 # ==========================================
 # 2. BARRA LATERAL (SIDEBAR) - Personalización
 # ==========================================
+# [NOTA] Ver como ordenamos esto, que sea scrolleable, y capaz dividirlo por 
+# categorías para que no sea un menú muy largo.
 with st.sidebar:
-    st.title("⚙️ Personalización")
-    st.markdown("Ajusta tus preferencias para encontrar tu zona ideal.")
-    st.divider()
-
     # --- EJEMPLO DE UN GRUPO (Salud) ---
     st.subheader("🏥 Salud Vital")
     
@@ -59,13 +57,13 @@ with st.sidebar:
         chk_hospital = st.checkbox("Servicios Hospitalarios", value=True)
 
     st.divider()
-    
+    #  [NOTA] MÁS TARDE TODO ESTO SE HARÁ AUTOMÁTICAMENTE, LEYENDO diccionario_config.json
     st.button("Calcular LifeScore 🚀", use_container_width=True, type="primary")
 
 # ==========================================
 # 3. NAVEGACIÓN SUPERIOR HORIZONTAL
 # ==========================================
-# Esto crea el menú bonito arriba del todo
+# Esto crea el menú bonito arriba del todo, usando la librería option_menu
 seleccion_menu = option_menu(
     menu_title=None,  # No necesitamos título para el menú en sí
     options=["Visión general del modelo", "Zona específica"], 
@@ -75,7 +73,7 @@ seleccion_menu = option_menu(
 )
 
 # ==========================================
-# 4. CONTENIDO PRINCIPAL (Lógica del Menú)
+# 4. CONTENIDO PRINCIPAL
 # ==========================================
 # En lugar de "with tab:", ahora usamos if/elif según lo que elija el usuario
 if seleccion_menu == "Visión general del modelo":
