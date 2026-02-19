@@ -1,7 +1,8 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
 
 # ==========================================
-# 1. CONFIGURACIÓN DE LA PÁGINA
+# 1. CONFIGURACIÓN DE LA PÁGINA Y CSS
 # ==========================================
 st.set_page_config(
     page_title="Tenerife LifeScore",
@@ -14,20 +15,18 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-        /* 1. Sidebar al 33% del ancho de la pantalla (vw = viewport width) */
+        /* Sidebar al 33% del ancho de la pantalla */
         [data-testid="stSidebar"][aria-expanded="true"] {
             min-width: 33vw;
             max-width: 33vw;
         }
-
-        /* 2. Eliminar el scroll vertical solo de la parte principal (derecha) */
+        /* Eliminar el scroll vertical solo de la parte principal (derecha) */
         [data-testid="stMain"] {
             overflow: hidden !important;
         }
-        
-        /* 3. Reducir el espacio en blanco de arriba para aprovechar la pantalla completa */
+        /* Reducir el espacio en blanco de arriba */
         .block-container {
-            padding-top: 2rem !important;
+            padding-top: 44px !important;
             padding-bottom: 0rem !important;
             max-height: 100vh;
         }
@@ -64,27 +63,33 @@ with st.sidebar:
     st.button("Calcular LifeScore 🚀", use_container_width=True, type="primary")
 
 # ==========================================
-# 3. CONTENIDO PRINCIPAL (TABS)
+# 3. NAVEGACIÓN SUPERIOR HORIZONTAL
 # ==========================================
-# Fíjate que hemos borrado el st.title() y el st.markdown() que había aquí.
+# Esto crea el menú bonito arriba del todo
+seleccion_menu = option_menu(
+    menu_title=None,  # No necesitamos título para el menú en sí
+    options=["Visión general del modelo", "Zona específica"], 
+    icons=["map", "pin-map-fill"],  # Iconos de Bootstrap
+    default_index=0, 
+    orientation="horizontal"
+)
 
-# Creamos las dos pestañas superiores
-tab1, tab2 = st.tabs(["🗺️ Visión general del modelo", "📍 Zona específica"])
+# ==========================================
+# 4. CONTENIDO PRINCIPAL (Lógica del Menú)
+# ==========================================
+# En lugar de "with tab:", ahora usamos if/elif según lo que elija el usuario
+if seleccion_menu == "Visión general del modelo":
+    st.container(height=300, border=True)
+    st.info("👆 Aquí se pintará el mapa interactivo completo de Tenerife.")
 
-with tab1:
-    # Ajustamos la altura del contenedor para que ocupe casi toda la pantalla visible
-    # Cuando metamos el mapa real (ej. Folium o Pydeck), le diremos que use el 100% del alto
-    st.info("👈 El panel izquierdo ocupa ahora un 33%. Intenta hacer scroll hacia abajo aquí: ¡está bloqueado! Como una app real.")
-    st.container(height=650, border=True)
-
-with tab2:
-    st.header("Análisis de tu Zona")
+elif seleccion_menu == "Zona específica":
     st.write("Introduce una dirección para ver qué servicios tienes a tu alrededor.")
     
     col1, col2 = st.columns([3, 1])
     with col1:
         st.text_input("📍 Buscar dirección o barrio...")
     with col2:
-        # Añadimos un poco de margen para alinear el botón con la caja de texto
         st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
         st.button("Buscar", use_container_width=True)
+        
+    st.info("👆 Aquí saldrán las métricas específicas del hexágono seleccionado.")
