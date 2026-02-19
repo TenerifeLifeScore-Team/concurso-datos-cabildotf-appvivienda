@@ -26,13 +26,18 @@ st.markdown(
         }
         /* Reducir el espacio en blanco de arriba */
         .block-container {
-            padding-top: 44px !important;
+            padding-top: 3rem !important;
             padding-bottom: 0rem !important;
             max-height: 100vh;
         }
-        /* Ocultar la cabecera superior de Streamlit (Deploy, menú, etc.) */
-        [data-testid="stHeader"] {
-            display: none;
+        /* Aniquilar el espacio superior oculto de la barra lateral */
+        [data-testid="stSidebarHeader"] {
+            padding: 0 !important;
+            height: 2rem !important;
+            min-height: 0 !important;
+        }
+        [data-testid="stSidebarUserContent"] {
+            padding-top: 0 !important; 
         }
     </style>
     """,
