@@ -1,678 +1,678 @@
 {
     "centro de salud": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud vital",
         "peso": 10.0,
         "limite": 1.0
     },
     "servicios hospitalarios": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud vital",
         "peso": 10.0,
         "limite": 1.0
     },
     "farmacia": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud vital",
         "peso": 9.0,
         "limite": 3.0
     },
     "servicios profesionales medicos": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 9.0,
         "limite": 2.0
     },
     "fisioterapia rehabilitacion": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 9.0,
         "limite": 2.0
     },
     "laboratorio analisis clinicos": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 6.0,
         "limite": 1.0
     },
     "servicios profesionales logopedia": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 6.0,
         "limite": 1.0
     },
     "clinica dental": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 10.0,
         "limite": 2.0
     },
     "servicios profesionales podologia": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 5.0,
         "limite": 1.0
     },
     "servicios profesionales psicologia": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 7.0,
         "limite": 2.0
     },
     "servicios asistenciales": {
-        "macro_categoria": "Salud",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Salud especializada",
         "peso": 7.0,
         "limite": 2.0
     },
     "guarderias centros infantiles": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 10.0,
         "limite": 2.0
     },
     "enseñanza infantil": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 10.0,
         "limite": 2.0
     },
     "enseñanza infantil y primaria": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 10.0,
         "limite": 2.0
     },
     "enseñanza obligatoria": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 10.0,
         "limite": 2.0
     },
     "enseñanza secundaria": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 9.0,
         "limite": 2.0
     },
     "enseñanza universitaria": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 10.0,
         "limite": 2.0
     },
     "enseñanza adultos": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 6.0,
         "limite": 2.0
     },
     "enseñanza profesional": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 8.0,
         "limite": 2.0
     },
     "enseñanza especial": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 8.0,
         "limite": 1.0
     },
     "enseñanza especializada": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 6.0,
         "limite": 2.0
     },
     "enseñanza idiomas": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Educación",
         "peso": 6.0,
         "limite": 3.0
     },
     "asociacion cultural": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Cultura",
         "peso": 4.0,
         "limite": 1.0
     },
     "biblioteca ludoteca": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Cultura",
         "peso": 10.0,
         "limite": 2.0
     },
     "centro cultural": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Cultura",
         "peso": 7.0,
         "limite": 2.0
     },
     "museos salas de arte": {
-        "macro_categoria": "Educación",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Cultura",
         "peso": 7.0,
         "limite": 2.0
     },
     "alimentacion productos especializados herbolario": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Alimentación y Despensa",
         "peso": 5.0,
         "limite": 2.0
     },
     "alimentacion supermercados": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Alimentación y Despensa",
         "peso": 10.0,
         "limite": 3.0
     },
     "alimentacion vinoteca": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Alimentación y Despensa",
         "peso": 4.0,
         "limite": 2.0
     },
     "bazar multitienda estanco": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Alimentación y Despensa",
         "peso": 8.0,
         "limite": 3.0
     },
     "mercados y ferias": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Alimentación y Despensa",
         "peso": 8.0,
         "limite": 2.0
     },
     "kiosco prensa": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Alimentación y Despensa",
         "peso": 5.0,
         "limite": 2.0
     },
     "tabaqueria licoreria": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Alimentación y Despensa",
         "peso": 5.0,
         "limite": 2.0
     },
     "optica ortopedia audicion": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Cuidado Personal y Salud",
         "peso": 7.0,
         "limite": 2.0
     },
     "parafarmacia productos naturales": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Cuidado Personal y Salud",
         "peso": 7.0,
         "limite": 2.0
     },
     "peluqueria estetica": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Cuidado Personal y Salud",
         "peso": 10.0,
         "limite": 2.0
     },
     "perfumeria estetica complementos": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Cuidado Personal y Salud",
         "peso": 7.0,
         "limite": 2.0
     },
     "centro comercial hogar construccion": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Hogar y Bricolaje",
         "peso": 9.0,
         "limite": 1.0
     },
     "electricidad electronica": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Hogar y Bricolaje",
         "peso": 8.0,
         "limite": 2.0
     },
     "ferreteria": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Hogar y Bricolaje",
         "peso": 10.0,
         "limite": 2.0
     },
     "floristeria": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Hogar y Bricolaje",
         "peso": 5.0,
         "limite": 2.0
     },
     "hogar muebles electrodomesticos decoracion": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Hogar y Bricolaje",
         "peso": 8.0,
         "limite": 2.0
     },
     "hogar textil": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Hogar y Bricolaje",
         "peso": 6.0,
         "limite": 2.0
     },
     "centro comercial": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 10.0,
         "limite": 1.0
     },
     "centro comercial hogar moda": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 9.0,
         "limite": 1.0
     },
     "artesania y productos tradicionales": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 4.0,
         "limite": 2.0
     },
     "bisuteria complementos": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 5.0,
         "limite": 2.0
     },
     "joyeria relojeria": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 7.0,
         "limite": 2.0
     },
     "joyeria relojeria taller": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 6.0,
         "limite": 2.0
     },
     "merceria textil": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 5.0,
         "limite": 2.0
     },
     "moda complementos": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 9.0,
         "limite": 4.0
     },
     "moda complementos infantil": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 9.0,
         "limite": 4.0
     },
     "moda complementos taller": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 6.0,
         "limite": 2.0
     },
     "zapateria calzado": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 8.0,
         "limite": 4.0
     },
     "zapateria calzado taller": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Consumo y vida diaria",
         "grupo_slider": "Moda y Shopping",
         "peso": 5.0,
         "limite": 2.0
     },
     "centro comercial deportes": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 9.0,
         "limite": 1.0
     },
     "centro comercial hogar informatica telecomunicaciones": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 9.0,
         "limite": 1.0
     },
     "articulos deportivos": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 10.0,
         "limite": 3.0
     },
     "articulos musicales": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 6.0,
         "limite": 2.0
     },
     "bazar electronica": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 7.0,
         "limite": 3.0
     },
     "comercio otro tipo": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 5.0,
         "limite": 3.0
     },
     "concesionario exposicion automocion": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 3.0,
         "limite": 1.0
     },
     "estudio fotografia": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 4.0,
         "limite": 2.0
     },
     "informatica telecomunicaciones": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 10.0,
         "limite": 3.0
     },
     "jugueteria": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 8.0,
         "limite": 2.0
     },
     "libreria papeleria discoteca": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 9.0,
         "limite": 4.0
     },
     "locutorio": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 6.0,
         "limite": 2.0
     },
     "telefonia": {
-        "macro_categoria": "Comercio",
+        "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Ocio, Hobbies y Tecnología",
         "peso": 8.0,
         "limite": 3.0
     },
     "mascotas": {
-        "macro_categoria": "Comercio",
-        "grupo_slider": "Mascotas (*)",
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Mascotas",
         "peso": 6.0,
         "limite": 2.0
     },
     "servicios veterinarios": {
-        "macro_categoria": "Comercio",
-        "grupo_slider": "Mascotas (*)",
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Mascotas",
         "peso": 10.0,
         "limite": 2.0
     },
     "cafeteria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 10.0,
         "limite": 3.0
     },
     "café": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 10.0,
         "limite": 2.0
     },
     "heladeria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 8.0,
         "limite": 2.0
     },
     "heladeria pasteleria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 9.0,
         "limite": 2.0
     },
     "bar cafeteria zumeria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 8.0,
         "limite": 2.0
     },
     "bar churreria chocolateria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 8.0,
         "limite": 2.0
     },
     "bar croissanteria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 8.0,
         "limite": 2.0
     },
     "bar pasteleria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 9.0,
         "limite": 2.0
     },
     "barcafeteriachurreria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 9.0,
         "limite": 2.0
     },
     "barcafeteriapasteleria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 9.0,
         "limite": 2.0
     },
     "barchurreria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 8.0,
         "limite": 2.0
     },
     "bardulceria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Cafeterías y Mañaneo",
         "peso": 8.0,
         "limite": 2.0
     },
     "cibercafe": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 5.0,
         "limite": 2.0
     },
     "autobar": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 4.0,
         "limite": 1.0
     },
     "bar": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 10.0,
         "limite": 3.0
     },
     "bar cafeteria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 10.0,
         "limite": 2.0
     },
     "bar cafeteria arepera": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 7.0,
         "limite": 2.0
     },
     "bar cafeteria creperia": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 7.0,
         "limite": 2.0
     },
     "bar cafeteria hamburgueseria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 9.0,
         "limite": 2.0
     },
     "bar cibercafe": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 5.0,
         "limite": 2.0
     },
     "bar kiosco": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 6.0,
         "limite": 2.0
     },
     "bar terraza": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 9.0,
         "limite": 2.0
     },
     "barhamburgueseria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Casual, Fast Food y Bares de Paso",
         "peso": 9.0,
         "limite": 2.0
     },
     "bar taberna": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 8.0,
         "limite": 2.0
     },
     "bartasca": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 9.0,
         "limite": 2.0
     },
     "guachinche": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 10.0,
         "limite": 2.0
     },
     "restaurante bodega": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 9.0,
         "limite": 2.0
     },
     "restaurante tasca": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 9.0,
         "limite": 2.0
     },
     "tasca": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 9.0,
         "limite": 2.0
     },
     "restaurante": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 10.0,
         "limite": 3.0
     },
     "restaurante buffet": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 7.0,
         "limite": 2.0
     },
     "restaurante meson": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 8.0,
         "limite": 2.0
     },
     "restaurante pizzeria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Gastronomía y Guachinches",
         "peso": 8.0,
         "limite": 2.0
     },
     "salon recreativo": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 7.0,
         "limite": 2.0
     },
     "bar cafeteria pub": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 8.0,
         "limite": 3.0
     },
     "bar cerveceria": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 8.0,
         "limite": 3.0
     },
     "barclub": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 9.0,
         "limite": 2.0
     },
     "discoteca": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 10.0,
         "limite": 3.0
     },
     "discoteca club": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 10.0,
         "limite": 3.0
     },
     "pub": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 9.0,
         "limite": 3.0
     },
     "sala de fiestas": {
-        "macro_categoria": "Restauración",
+        "macro_categoria": "Restauración y socialización",
         "grupo_slider": "Vida Nocturna y Copas",
         "peso": 8.0,
         "limite": 2.0
     },
     "Guagua": {
-        "macro_categoria": "Movilidad",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Transporte público",
         "peso": 10.0,
         "limite": 4.0
     },
     "Tranvia": {
-        "macro_categoria": "Movilidad",
+        "macro_categoria": "Servicios básicos",
         "grupo_slider": "Transporte público",
         "peso": 10.0,
         "limite": 1.0

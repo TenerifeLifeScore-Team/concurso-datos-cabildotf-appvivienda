@@ -53,22 +53,41 @@ with st.sidebar:
         sliders_subgrupos = {}
         checks_actividades = {}
 
-        # Generación dinámica leyendo la jerarquía importada
-        for macro_categoria, grupos in jerarquia.items():
-            st.markdown(f"### {macro_categoria}")
-            for grupo_slider, lista_actividades in grupos.items():
-                sliders_subgrupos[grupo_slider] = st.slider(
-                    f"Importancia de: {grupo_slider}", 
-                    min_value=1, max_value=10, value=5, step=1
-                )
+        # 1. Sacamos los nombres de las categorías para crear las pestañas
+        lista_macros = list(jerarquia.keys())
+        tabs = st.tabs(lista_macros)
 
-                with st.expander(f"Filtros de {grupo_slider} 🔽"):
-                    st.markdown("<small>Desmarca lo que no necesites:</small>", unsafe_allow_html=True)
-                    for actividad in lista_actividades:
-                        checks_actividades[actividad] = st.checkbox(actividad.title(), value=True)
-        
-            st.divider()
+        # 2. Iteramos simultáneamente sobre las pestañas creadas y las categorías
+        for i, tab in enumerate(tabs):
+            nombre_macro = lista_macros[i]
+            grupos_de_esta_macro = jerarquia[nombre_macro]
 
+            # Todo lo que esté indentado aquí dentro irá dentro de la pestaña
+            with tab:
+                st.caption(f"Ajustes de {nombre_macro}") # Opcional: un subtítulo pequeño
+                
+                # Aquí empieza tu bucle original de grupos/sliders
+                for grupo_slider, lista_actividades in grupos_de_esta_macro.items():
+                    
+                    # Tu slider
+                    sliders_subgrupos[grupo_slider] = st.slider(
+                        f"{grupo_slider}", 
+                        min_value=1, max_value=10, value=5, step=1,
+                        key=f"slider_{grupo_slider}" # Importante añadir key única
+                    )
+
+                    # Tu expander
+                    with st.expander(f"Filtros {grupo_slider}"):
+                        st.markdown("<small>Desmarca lo que no necesites:</small>", unsafe_allow_html=True)
+                        for actividad in lista_actividades:
+                            checks_actividades[actividad] = st.checkbox(
+                                actividad.title(), 
+                                value=True,
+                                key=f"check_{actividad}" # Importante añadir key única
+                            )                    
+                    st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+
+        st.divider()
         boton_calcular = st.form_submit_button("Calcular LifeScore 🚀", use_container_width=True, type="primary")
 
 
