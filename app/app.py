@@ -79,12 +79,34 @@ with st.sidebar:
                     # Tu expander
                     with st.expander(f"Filtros {grupo_slider}"):
                         st.markdown("<small>Desmarca lo que no necesites:</small>", unsafe_allow_html=True)
-                        for actividad in lista_actividades:
-                            checks_actividades[actividad] = st.checkbox(
-                                actividad.title(), 
+                        
+                        # A. Agrupamos actividades por su 'nombre_ui'
+                        agrupacion_visual = {}
+                        for act_key in lista_actividades:
+                            # Sacamos el nombre bonito del diccionario (si existe)
+                            if act_key in diccionario_config:
+                                nombre_visual = diccionario_config[act_key].get('nombre_ui', act_key)
+                            else:
+                                nombre_visual = act_key # Por seguridad
+                            
+                            if nombre_visual not in agrupacion_visual:
+                                agrupacion_visual[nombre_visual] = []
+                            agrupacion_visual[nombre_visual].append(act_key)
+                        
+                        # B. Pintamos SOLO un checkbox por cada nombre visual
+                        for nombre_ui, actividades_reales in agrupacion_visual.items():
+                            
+                            # Checkbox maestro
+                            estado_checkbox = st.checkbox(
+                                nombre_ui, 
                                 value=True,
-                                key=f"check_{actividad}" # Importante añadir key única
-                            )                    
+                                key=f"check_group_{nombre_ui}_{grupo_slider}"
+                            )
+                            
+                            # C. Propagamos el True/False a todas las actividades "hijas"
+                            for act_real in actividades_reales:
+                                checks_actividades[act_real] = estado_checkbox
+
                     st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
 
         st.divider()
