@@ -31,7 +31,7 @@ def generar_diccionario_desde_excel(ruta_excel):
             mapa_grupo_a_pestana[grupo] = pestana
     
     # Leemos todas las hojas de golpe
-    xls = pd.read_excel(ruta_excel, sheet_name=None, header=1, usecols="B:E")
+    xls = pd.read_excel(ruta_excel, sheet_name=None, header=1, usecols="B:F")
     
     diccionario_maestro = {}
     
@@ -40,7 +40,7 @@ def generar_diccionario_desde_excel(ruta_excel):
         
         # Limpieza básica del DataFrame
         df = df.drop(index=0).reset_index(drop=True)
-        df.columns = ['grupo', 'actividad', 'peso', 'limite']
+        df.columns = ['grupo', 'actividad', 'peso', 'limite', 'nombre_web']
         df['grupo'] = df['grupo'].ffill()
         df = df.dropna(subset=['actividad'])
         
@@ -51,11 +51,19 @@ def generar_diccionario_desde_excel(ruta_excel):
             # Comprobación solo de seguridad (no va a pasar)
             macro_asignada = mapa_grupo_a_pestana.get(grupo_actual, "Otros")
             
+            nombre_visual_raw = fila['nombre_web']
+            if pd.isna(nombre_visual_raw) or str(nombre_visual_raw).strip() == "":
+                # Si se te olvidó ponerle nombre en el Excel, usa el nombre técnico
+                nombre_visual = actividad 
+            else:
+                nombre_visual = str(nombre_visual_raw).strip()
+                
             diccionario_maestro[actividad] = {
                 "macro_categoria": macro_asignada, # Ahora esto es 'Servicios básicos', etc.
                 "grupo_slider": grupo_actual,
                 "peso": float(fila['peso']),
-                "limite": float(fila['limite'])
+                "limite": float(fila['limite']),
+                "nombre_ui": nombre_visual
             }
             
     return diccionario_maestro
