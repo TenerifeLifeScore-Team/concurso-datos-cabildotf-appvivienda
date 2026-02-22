@@ -14,7 +14,7 @@ st.set_page_config(
 
 # Cargamos el diccionario y la jerarquía desde utils.py
 diccionario_config = cargar_configuracion()
-jerarquia = obtener_jerarquia_categorias(diccionario_config)
+jerarquia, mapa_traductor = obtener_jerarquia_categorias(diccionario_config)
 
 # CSS INYECTADO: Sidebar 33%, sin scroll en main, y ajustando márgenes
 st.markdown(
@@ -46,72 +46,51 @@ st.markdown(
 
 with st.sidebar:
 
-    st.title("⚙️ Personaliza tu LifeScore")
-
-    # Abrimos el formulario para que no recalcule hasta pulsar el botón
+    st.title("Tenerife LifeScore")
+    
     with st.form("formulario_parametros"):
         sliders_subgrupos = {}
         checks_actividades = {}
 
-        # 1. Sacamos los nombres de las categorías para crear las pestañas
+        # ["Servicios básicos", "Consumo y vida diaria", "Ocio y estilo de vida", "Restauración y socialización"]
         lista_macros = list(jerarquia.keys())
         tabs = st.tabs(lista_macros)
 
-        # 2. Iteramos simultáneamente sobre las pestañas creadas y las categorías
         for i, tab in enumerate(tabs):
             nombre_macro = lista_macros[i]
             grupos_de_esta_macro = jerarquia[nombre_macro]
 
-            # Todo lo que esté indentado aquí dentro irá dentro de la pestaña
             with tab:
-                st.caption(f"Ajustes de {nombre_macro}") # Opcional: un subtítulo pequeño
-                
-                # Aquí empieza tu bucle original de grupos/sliders
-                for grupo_slider, lista_actividades in grupos_de_esta_macro.items():
+
+                for grupo_slider, lista_nombres_ui in grupos_de_esta_macro.items():
                     
-                    # Tu slider
+                    # Slider del subgrupo
                     sliders_subgrupos[grupo_slider] = st.slider(
-                        f"{grupo_slider}", 
+                        grupo_slider, 
                         min_value=1, max_value=10, value=5, step=1,
-                        key=f"slider_{grupo_slider}" # Importante añadir key única
+                        key=f"slider_{grupo_slider}"
                     )
 
-                    # Tu expander
-                    with st.expander(f"Filtros {grupo_slider}"):
+                    # Desplegable de checks
+                    with st.expander(f"Filtros de {grupo_slider}"):
                         st.markdown("<small>Desmarca lo que no necesites:</small>", unsafe_allow_html=True)
-                        
-                        # A. Agrupamos actividades por su 'nombre_ui'
-                        agrupacion_visual = {}
-                        for act_key in lista_actividades:
-                            # Sacamos el nombre bonito del diccionario (si existe)
-                            if act_key in diccionario_config:
-                                nombre_visual = diccionario_config[act_key].get('nombre_ui', act_key)
-                            else:
-                                nombre_visual = act_key # Por seguridad
-                            
-                            if nombre_visual not in agrupacion_visual:
-                                agrupacion_visual[nombre_visual] = []
-                            agrupacion_visual[nombre_visual].append(act_key)
-                        
-                        # B. Pintamos SOLO un checkbox por cada nombre visual
-                        for nombre_ui, actividades_reales in agrupacion_visual.items():
-                            
-                            # Checkbox maestro
-                            estado_checkbox = st.checkbox(
-                                nombre_ui, 
-                                value=True,
-                                key=f"check_group_{nombre_ui}_{grupo_slider}"
-                            )
-                            
-                            # C. Propagamos el True/False a todas las actividades "hijas"
-                            for act_real in actividades_reales:
-                                checks_actividades[act_real] = estado_checkbox
 
-                    st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
+                        for nombre_ui in lista_nombres_ui:
+                            # Pintamos un único check por nombre agrupado (Ej: "Cafeterías")
+                            estado_check = st.checkbox(
+                                nombre_ui, 
+                                value=True, 
+                                key=f"check_{nombre_ui}_{grupo_slider}"
+                            )
+
+                            # TRADUCCIÓN: Propagamos el estado (True/False) a todas las actividades reales ocultas bajo ese nombre
+                            for act_real in mapa_traductor[nombre_ui]:
+                                checks_actividades[act_real] = estado_check
+                    
+                    st.markdown("<div style='margin-bottom: 15px;'></div>", unsafe_allow_html=True)
 
         st.divider()
         boton_calcular = st.form_submit_button("Calcular LifeScore 🚀", use_container_width=True, type="primary")
-
 
 # ==========================================
 # 3. NAVEGACIÓN SUPERIOR HORIZONTAL
