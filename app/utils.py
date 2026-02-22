@@ -40,7 +40,4 @@ def obtener_jerarquia_categorias(diccionario_config):
         for grupo in jerarquia_web[macro]:
             jerarquia_web[macro][grupo] = sorted(list(jerarquia_web[macro][grupo]))
 
-    return jerarquia_web, mapa_traductor
-
-jerarquia = obtener_jerarquia_categorias(cargar_configuracion())
-print(jerarquia[0])        
+    return jerarquia_web, mapa_traductor     
