@@ -16,22 +16,31 @@ def cargar_configuracion():
 
 @st.cache_data
 def obtener_jerarquia_categorias(diccionario_config):
-    """
-    Toma el diccionario plano y lo organiza en: 
-    Macro Categoría -> Grupo Slider -> Lista de Actividades
-    """
-    categorias_agrupadas = {}
-    
-    for actividad, valores in diccionario_config.items():
-        macro = valores["macro_categoria"]
-        grupo = valores["grupo_slider"]
-        
-        if macro not in categorias_agrupadas:
-            categorias_agrupadas[macro] = {}
-            
-        if grupo not in categorias_agrupadas[macro]:
-            categorias_agrupadas[macro][grupo] = []
-            
-        categorias_agrupadas[macro][grupo].append(actividad)
-        
-    return categorias_agrupadas
+
+    jerarquia_web = {}
+    mapa_traductor = {}
+
+    for actividad, valor in diccionario_config.items():
+
+        macro = valor["macro_categoria"]
+        grupo_slider = valor["grupo_slider"]
+        nombre_ui = valor["nombre_ui"]
+
+        if macro not in jerarquia_web:
+            jerarquia_web[macro] = {}
+        if grupo_slider not in jerarquia_web[macro]:
+            jerarquia_web[macro][grupo_slider] = set()
+        jerarquia_web[macro][grupo_slider].add(nombre_ui)
+
+        if nombre_ui not in mapa_traductor:
+            mapa_traductor[nombre_ui] = []
+        mapa_traductor[nombre_ui].append(actividad)
+
+    for macro in jerarquia_web:
+        for grupo in jerarquia_web[macro]:
+            jerarquia_web[macro][grupo] = sorted(list(jerarquia_web[macro][grupo]))
+
+    return jerarquia_web, mapa_traductor
+
+jerarquia = obtener_jerarquia_categorias(cargar_configuracion())
+print(jerarquia[0])        
