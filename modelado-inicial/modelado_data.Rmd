@@ -368,6 +368,58 @@ mapview(
 )
 ```
 
+
+## Centros deportivos y Ocio
+
+- **Fuente:** `centros-deportivos-y-de-ocio-en-tenerife.geojson`
+
+- **Estrategia de Agrupación (Sliders):** Hemos sintetizado las actividades físicas y de recreo en dos categorías principales que definen el dinamismo de un barrio:
+
+    - *Centros deportivos* (Gimnasios, artes marciales, puertos deportivos y actividades de ocio activo).
+    
+    - *Parques* (Parques infantiles para familias y parques de deporte urbano/calistenia).
+
+- **Criterio de Valoración (Algoritmo):**
+
+    - *Limpieza y reestructuración:* Se eliminaron registros administrativos que no aportan valor de ocio directo (como "administración pública juzgado" o "asociación cultural", que ya se evalúan en otros datasets). 
+    
+    - *Cambio de ubicación para Mascotas:* Se extrajeron las categorías "playa mascotas" y "parque mascotas" de este dataset para integrarlas junto con los servicios veterinarios en la sección de *Comercio*, creando así un único filtro integral ("Mascotas") para los usuarios con animales de compañía.
+
+
+    
+```{r, centros_deportivos_y_ocio-inicial}
+
+raw_centrosdeportivos_ocio <- st_read("../data-raw/centros-deportivos-y-de-ocio-en-tenerife.geojson", quiet = TRUE) %>% 
+  janitor::clean_names()
+
+```
+
+
+```{r centros_deportivos_y_ocio-transformacion}
+
+clean_centrosdeportivos_y_ocio <- raw_centrosdeportivos_ocio %>% 
+    select(nombre,
+           tipo = actividad_tipo,
+           geometry) %>% 
+    
+    filter(!tipo %in% c("administracion publica juzgado", "asociacion cultural", "parque mascotas", "playa mascotas")) %>%
+    
+    mutate(nombre = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo),
+           grupo = case_when(tipo %in% c("actividades deporte ocio", "puerto deportivo", "gimnasio artes marciales") ~ "Centros deportivos",
+                             tipo %in% c("parques infantiles", "parque deporte urbano") ~ "Parques"))
+
+
+mapview(
+  clean_centrosdeportivos_y_ocio, 
+  zcol = "grupo", 
+  layer.name = "Centros deportivos y Ocio",
+  col.regions = c("orange", "blue")
+)
+```
+
+
+
+
 ## Comercio
 
 - **Fuente:** `locales-comerciales-en-tenerife.geojson`
@@ -392,6 +444,8 @@ mapview(
     
 - **Cambio de ubicación para los veterinarios:**  Se han trasladado todos los "servicios veterinarios" al dataset de *comercio*, para poder juntarlo con "tiendas de mascotas", y agrupar estas dos características para poder segmentizar por usuarios con mascotas.
 
+- **Cambio de ubicación para las instalaciones de mascotas:**  Se han trasladado todos las instalaciones y puntos de interés relacionados con mascotas al dataset de *comercio*, para poder juntarlo con 'tiendas de mascotas' y 'veterinarios', y agrupar estas características para poder segmentizar por usuarios con mascotas.
+
 ```{r comercio-inicial}
 raw_comercio <- st_read("../data-raw/locales-comerciales-en-tenerife.geojson", quiet = TRUE) %>% 
   janitor::clean_names()
@@ -408,16 +462,17 @@ temp <- raw_salud %>%
   relocate(nombre, grupo, tipo, geometry)
 ```
 
-```{r mascotasocio-a-comercio}
-
+```{r mascotas-a-comercio}
 temp2 <- raw_centrosdeportivos_ocio %>% 
-    
-    select(nombre,
+    select(nombre, 
            tipo = actividad_tipo,
            geometry) %>% 
+    mutate(grupo = "Mascotas") %>% 
     
-    filter(tipo %in% c("playa mascotas", "parque mascotas")) 
+    filter(tipo %in% c("parque mascotas", "playa mascotas"))
+
 ```
+
 
 
 ```{r comercio-transformacion, fig.align="center", out.width="100%", fig.height=6}
@@ -557,32 +612,26 @@ mapview(
 )
 ```
 
-## Centros deportivos y Ocio
-
-```{r, centros_deportivos_y_ocio-inicial}
-raw_centrosdeportivos_ocio <- st_read("../data-raw/centros-deportivos-y-de-ocio-en-tenerife.geojson", quiet = TRUE) %>% 
-  janitor::clean_names()
-
-```
-
-
-```{r centros_deportivos_y_ocio-transformacion}
-
-clean_centrosdeportivos_y_ocio <- raw_centrosdeportivos_ocio %>% 
-    select(nombre,
-           tipo = actividad_tipo,
-           geometry) %>% 
-    
-    filter(!tipo %in% c("administracion publica juzgado", "asociacion cultural")) %>%
-    
-    mutate(nombre = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo),
-           grupo = case_when(tipo %in% c("actividades deporte ocio", "puerto deportivo", "gimnasio artes marciales") ~ "Centros deportivos",
-                             tipo %in% c("parques infantiles", "parque deporte urbano") ~ "Parques"))
-
-
-```
 
 ## Naturaleza
+
+- **Fuente:** `naturaleza.geojson`
+
+- **Estrategia de Agrupación (Sliders):** Se ha clasificado el entorno natural según el tipo de uso que le daría un residente local frente a un turista:
+
+    - *Ocio y picnic* (Áreas recreativas y de descanso para fines de semana).
+
+    - *Paisaje y vistas* (Miradores y centros de visitantes).
+
+    - *Educación ambiental* (Aulas en la naturaleza, ideal para familias y centros educativos).
+
+    - *Camping* (Zonas de acampada para casetas, caravanas, campamentos y vivac).
+
+- **Criterio de Valoración (Algoritmo):**
+
+    - *Filtro de ruido:* Se han eliminado infraestructuras vacías como la "Zona de aparcamiento" que no representan un servicio por sí mismas.
+    
+    - *Ponderación:* Las subcategorías de "Ocio y picnic" y "Paisaje y vistas" añaden un gran valor a la habitabilidad residencial (entorno verde y esparcimiento). El grupo de "Camping", al ser más esporádico o turístico, se segmenta para que el usuario decida si le resulta un plus o un factor irrelevante en su día a día.
 
 ```{r naturaleza-inicial}
 raw_naturaleza <- st_read("../data-raw/naturaleza.geojson", quiet = TRUE) %>% 
