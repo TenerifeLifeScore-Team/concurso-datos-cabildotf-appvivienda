@@ -661,9 +661,34 @@ clean_centrosdeportivos_y_ocio <- raw_centrosdeportivos_ocio %>%
     
     filter(!tipo %in% c("administracion publica juzgado", "asociacion cultural")) %>%
     
-    mutate(nombre = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo))
+    mutate(nombre = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo),
+           grupo = case_when(tipo %in% c("actividades deporte ocio", "puerto deportivo", "gimnasio artes marciales") ~ "Centros deportivos",
+                             tipo %in% c("parques infantiles", "parque deporte urbano") ~ "Parques"))
 
 
+```
+
+## Naturaleza
+
+```{r naturaleza-inicial}
+raw_naturaleza <- st_read("../data-raw/naturaleza.geojson", quiet = TRUE) %>% 
+  janitor::clean_names()
+```
+
+```{r naturaleza-transformacion}
+
+clean_naturaleza <- raw_naturaleza %>% 
+    
+    select(nombre = equipamiento_nombre,
+           tipo = equipamiento_tipo,
+           geometry) %>% 
+    
+    filter(tipo %in% c("Área recreativa", "Mirador")) %>% 
+    
+    mutate(tipo = ifelse((tipo == "Área recreativa"), "Area recreativa", tipo),
+           grupo = case_when(tipo %in% c("Area recreativa") ~ "Ocio y picnic",
+                             tipo %in% c("Mirador") ~ "Paisaje y vistas")) 
+    
 ```
 
 
@@ -677,4 +702,5 @@ st_write(clean_edu, "../data-clean/educacion.geojson", delete_dsn = TRUE, quiet 
 st_write(clean_comercio, "../data-clean/comercio.geojson", delete_dsn = TRUE, quiet = TRUE)
 st_write(clean_restauracion, "../data-clean/restauracion.geojson", delete_dsn = TRUE, quiet = TRUE)
 st_write(clean_centrosdeportivos_y_ocio, "../data-clean/deportes_y_ocio.geojson", delete_dsn = TRUE, quiet = TRUE)
+st_write(clean_naturaleza, "../data-clean/naturaleza.geojson", delete_dsn = TRUE, quiet = TRUE)
 ```

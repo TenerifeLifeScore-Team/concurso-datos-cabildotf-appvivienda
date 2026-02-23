@@ -1,0 +1,32 @@
+{
+"type": "FeatureCollection",
+"name": "naturaleza",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "nombre": "Chanajiga", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.584813574160847, 28.344125621979895 ] } },
+{ "type": "Feature", "properties": { "nombre": "El Contador", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.539027066446359, 28.208188474558479 ] } },
+{ "type": "Feature", "properties": { "nombre": "Hoya del Abade", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.443030240511639, 28.415247895230177 ] } },
+{ "type": "Feature", "properties": { "nombre": "La Tahona", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.630195283272322, 28.351607677474572 ] } },
+{ "type": "Feature", "properties": { "nombre": "Ramón Caminero", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.532775283266147, 28.329747850136783 ] } },
+{ "type": "Feature", "properties": { "nombre": "Las Hayas", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.67752930278526, 28.334598400165621 ] } },
+{ "type": "Feature", "properties": { "nombre": "La Quebrada", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.300710533935487, 28.532069688519201 ] } },
+{ "type": "Feature", "properties": { "nombre": "Llano de los Viejos", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.283237552741145, 28.527378126849854 ] } },
+{ "type": "Feature", "properties": { "nombre": "Los Pedregales", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.856714480070281, 28.342197546801305 ] } },
+{ "type": "Feature", "properties": { "nombre": "El Lagar", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.653895881748419, 28.342426934778292 ] } },
+{ "type": "Feature", "properties": { "nombre": "Lomo de La Jara", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.403516797210031, 28.455687831378416 ] } },
+{ "type": "Feature", "properties": { "nombre": "Lagunetilla Chica", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.482502844742697, 28.393813410247269 ] } },
+{ "type": "Feature", "properties": { "nombre": "Los Frailes", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.438180018190437, 28.354750890899417 ] } },
+{ "type": "Feature", "properties": { "nombre": "Arenas Negras", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.756614991252356, 28.31952060789466 ] } },
+{ "type": "Feature", "properties": { "nombre": "Chío", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.747075071857108, 28.266693425598067 ] } },
+{ "type": "Feature", "properties": { "nombre": "Las Lajas", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.666189070865894, 28.190284639134635 ] } },
+{ "type": "Feature", "properties": { "nombre": "La Caldera", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.501577919398144, 28.35734937977324 ] } },
+{ "type": "Feature", "properties": { "nombre": "Las Raíces", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.378396304565399, 28.420138543210193 ] } },
+{ "type": "Feature", "properties": { "nombre": "San José de los Llanos", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.783797606319169, 28.32765133670598 ] } },
+{ "type": "Feature", "properties": { "nombre": "Las Calderetas", "tipo": "Area recreativa", "grupo": "Ocio y picnic" }, "geometry": { "type": "Point", "coordinates": [ -16.411745834451818, 28.446904879312385 ] } },
+{ "type": "Feature", "properties": { "nombre": "Chipeque", "tipo": "Mirador", "grupo": "Paisaje y vistas" }, "geometry": { "type": "Point", "coordinates": [ -16.463869589794584, 28.373979052677988 ] } },
+{ "type": "Feature", "properties": { "nombre": "Chimague", "tipo": "Mirador", "grupo": "Paisaje y vistas" }, "geometry": { "type": "Point", "coordinates": [ -16.459592988734332, 28.373158503163875 ] } },
+{ "type": "Feature", "properties": { "nombre": "Roques de García / La Ruleta", "tipo": "Mirador", "grupo": "Paisaje y vistas" }, "geometry": { "type": "Point", "coordinates": [ -16.630873242625576, 28.223190480883254 ] } },
+{ "type": "Feature", "properties": { "nombre": "Los Poleos", "tipo": "Mirador", "grupo": "Paisaje y vistas" }, "geometry": { "type": "Point", "coordinates": [ -16.768004879427561, 28.280967295997037 ] } },
+{ "type": "Feature", "properties": { "nombre": "Samara", "tipo": "Mirador", "grupo": "Paisaje y vistas" }, "geometry": { "type": "Point", "coordinates": [ -16.726016995012113, 28.266640815958617 ] } }
+]
+}
