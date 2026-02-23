@@ -1,6 +1,9 @@
 import streamlit as st
+import pydeck as pdk
 from streamlit_option_menu import option_menu
-from utils import cargar_configuracion, obtener_jerarquia_categorias
+from utils import *
+from loaders import cargar_datos_mapa
+from engine import calcular_lifescore_vectorial
 
 # ==========================================
 # 1. CONFIGURACIÓN DE LA PÁGINA Y CSS
@@ -34,6 +37,20 @@ st.markdown(
             padding-top: 3rem !important;
             padding-bottom: 0rem !important;
             max-height: 100vh;
+        }
+        /* FORZAR ALTURA RESPONSIVA EN EL MAPA */
+        /* Buscamos el contenedor específico de PyDeck en Streamlit */
+        div[data-testid="stDeckGlJsonChart"] {
+            /* Calcula: 100% de la altura de la ventana MENOS 180px (título + margen sup) */
+            height: calc(100vh - 180px) !important; 
+            
+            /* Un mínimo por si acaso la pantalla es muy bajita */
+            min-height: 500px !important;
+        }
+        
+        /* Aseguramos que el 'canvas' interno también se estire */
+        div[data-testid="stDeckGlJsonChart"] > div {
+            height: 100% !important;
         }
     </style>
     """,
@@ -109,8 +126,80 @@ seleccion_menu = option_menu(
 # ==========================================
 # En lugar de "with tab:", ahora usamos if/elif según lo que elija el usuario
 if seleccion_menu == "Visión general del modelo":
-    st.container(height=300, border=True)
-    st.info("👆 Aquí se pintará el mapa interactivo completo de Tenerife.")
+    # 1. Cargar Datos (Cacheado)
+    gdf_hexagons = cargar_datos_mapa()
+    
+    # Verificación de seguridad
+    if gdf_hexagons.empty:
+        st.error("⚠️ No se pudo cargar el mapa base (GeoJSON). Revisa 'loaders.py'.")
+        st.stop()
+
+    # Contenedor principal
+    # Botón de calcular del sidebar
+    if boton_calcular:
+        with st.spinner("Calculando LifeScore para toda la isla... 🧮"):
+            
+            # A. PREPARAR INPUTS
+            # Los diccionarios 'sliders_subgrupos' y 'checks_actividades' ya vienen rellenos del sidebar
+            
+            # B. LLAMAR AL MOTOR (ENGINE)
+            # Esto nos devuelve el GeoDataFrame con la columna 'score_final'
+            gdf_resultado = calcular_lifescore_vectorial(
+                gdf_hexagons, 
+                diccionario_config, 
+                sliders_subgrupos, 
+                checks_actividades
+            )
+            
+            # C. PREPARAR COLORES PARA PYDECK
+            # PyDeck necesita una columna con lista [R, G, B]. La creamos al vuelo.
+            # Usamos una lambda para aplicar la función de colores fila a fila.
+            gdf_resultado["fill_color"] = gdf_resultado["score_final"].apply(obtener_color_por_score)
+            
+            # D. CONFIGURAR EL MAPA (PYDECK)
+            view_state = pdk.ViewState(
+                latitude=28.30,     # Centro aprox de Tenerife
+                longitude=-16.55,
+                zoom=9,
+                pitch=0,            # 0 para vista cenital (2D), 45 para 3D
+            )
+
+            layer_hexagonos = pdk.Layer(
+                "GeoJsonLayer",
+                data=gdf_resultado,
+                opacity=0.8,
+                stroked=False,      # Sin bordes negros para que se vea más limpio
+                filled=True,
+                extruded=False,     # Ponlo a True si quieres que los hexágonos tengan altura
+                get_fill_color="fill_color", # Usamos la columna que acabamos de crear
+                pickable=True,      # Para que funcione el tooltip al pasar el ratón
+            )
+
+            # Tooltip: Qué sale al pasar el ratón
+            tooltip = {
+                "html": "<b>LifeScore:</b> {score_final}/100",
+                "style": {"backgroundColor": "steelblue", "color": "white"}
+            }
+
+            r = pdk.Deck(
+                layers=[layer_hexagonos],
+                initial_view_state=view_state,
+                tooltip=tooltip,
+                map_style="mapbox://styles/mapbox/light-v9" # O 'road', 'dark', etc.
+            )
+
+            # E. PINTAR FINALMENTE
+            st.pydeck_chart(r, use_container_width=True)
+            
+            # F. Métrica resumen (Opcional pero útil)
+            # mejor_zona = gdf_resultado['score_final'].max()
+            # st.success(f"✅ Mapa actualizado. La puntuación máxima encontrada es **{mejor_zona}/100**.")
+            
+    else:
+        st.info("👈 Ajusta tus preferencias en el menú lateral y pulsa 'Calcular LifeScore'.")
+
+
+
 
 elif seleccion_menu == "Zona específica":
     st.write("Introduce una dirección para ver qué servicios tienes a tu alrededor.")

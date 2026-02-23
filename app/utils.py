@@ -41,3 +41,20 @@ def obtener_jerarquia_categorias(diccionario_config):
             jerarquia_web[macro][grupo] = sorted(list(jerarquia_web[macro][grupo]))
 
     return jerarquia_web, mapa_traductor     
+
+
+def obtener_color_por_score(score):
+    """
+    Devuelve un color RGB según la nota (0-100).
+    Rojo (0) -> Amarillo (50) -> Verde (100)
+    """
+    if score < 20:
+        return [255, 0, 0, 160]      # Rojo fuerte
+    elif score < 40:
+        return [255, 128, 0, 160]    # Naranja
+    elif score < 60:
+        return [255, 255, 0, 160]    # Amarillo
+    elif score < 80:
+        return [128, 255, 0, 160]    # Verde claro
+    else:
+        return [0, 255, 0, 160]      # Verde puro
