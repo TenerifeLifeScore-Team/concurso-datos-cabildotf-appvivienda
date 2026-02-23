@@ -8,6 +8,7 @@ from modelado_avanzado.generar_tabla_maestra import generar_tabla_maestra
 from modelado_avanzado.aplicar_limites import aplicar_limites
 from modelado_avanzado.generar_grid import calcular_grid_hexagonal
 from modelado_avanzado.leer_excel import generar_diccionario_desde_excel
+from modelado_avanzado.suavizado_espacial import aplicar_suavizado_espacial
 
 # 1. Configurar el Logging global
 logging.basicConfig(
@@ -35,6 +36,7 @@ def main():
     ruta_diccionario = CARPETA_PRO / "diccionario_config.json"
     ruta_tabla_maestra = CARPETA_PRO / "tabla_maestra.geojson"
     ruta_tabla_saturada = CARPETA_PRO / "tabla_saturada.geojson"
+    ruta_tabla_suavizada = CARPETA_PRO / "tabla_saturada_suavizada.geojson"
 
     # Diccionario de datasets limpios para pasarle al Script 2
     rutas_datasets = {
@@ -97,6 +99,14 @@ def main():
         ruta_salida=str(ruta_tabla_saturada)
     )
 
+    # PASO 4: Suavizado Espacial (Gaussiano)
+    print()
+    logging.info("--- FASE 4: APLICANDO SUAVIZADO ESPACIAL (VECINOS) ---")
+    aplicar_suavizado_espacial(
+        ruta_entrada=str(ruta_tabla_saturada), # Leemos el output de la fase anterior
+        ruta_salida=str(ruta_tabla_suavizada)  # Guardamos el archivo definitivo
+    )
+    
     logging.info("======== PIPELINE COMPLETADO CON ÉXITO ========")
 
 if __name__ == "__main__":
