@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import geopandas as gpd
 
+
 def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuario, checks_usuario):
     """
     Calcula el LifeScore sobre un GeoDataFrame.
@@ -15,7 +16,7 @@ def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuar
     Returns:
         gpd.GeoDataFrame: Copia con columna 'score_final' y geometría lista para pintar.
     """
-    # 1. Trabajamos sobre copia para no alterar el caché
+    # 1. Copia de seguridad
     gdf_result = gdf_saturado.copy()
     
     # Vector de ceros para acumular puntos
@@ -35,32 +36,46 @@ def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuar
         
         # 2. ¿Existe esa columna 'sat_...' en el archivo?
         if columna_geojson not in gdf_result.columns:
-            # Si no existe, la saltamos silenciosamente (o loggeamos warning)
             continue
             
-        # C. Obtenemos factores (Peso * Slider)
-        peso_base = config['peso']       # Ponderación del experto
-        grupo = config['grupo_slider']   # Ej: "Salud vital"
-        val_slider = sliders_usuario.get(grupo, 3) # Valor por si acaso
+        # --- DATOS CRUDOS ---
+        columna_datos = gdf_result[columna_geojson]
         
-        # Normalizamos slider (1 -> 0.1, 5 -> 1.0)
+        # === EL TRUCO MAESTRO: NORMALIZACIÓN ===
+        # Buscamos el valor máximo de ESTA actividad en toda la isla
+        max_valor_columna = columna_datos.max()
+        
+        # Si nadie en toda la isla tiene esta actividad, pasamos
+        if max_valor_columna == 0:
+            continue
+            
+        # Convertimos los datos a una escala 0.0 - 1.0
+        # Ahora 1 museo vale tanto como 200 cafeterías (ambos son el "máximo" en su categoría)
+        columna_normalizada = columna_datos / max_valor_columna
+        
+        # --- FACTORES ---
+        peso_base = config['peso']       # Importancia fija (Excel)
+        grupo = config['grupo_slider']
+        val_slider = sliders_usuario.get(grupo, 3) 
+        
+        # Hacemos que el slider sea más agresivo (potencia)
+        # Slider 1 -> x0.2 | Slider 5 -> x1.0
         factor_usuario = val_slider / 5.0
         
-        # D. CÁLCULO VECTORIAL
-        # Sumamos: (Cantidad Saturada * Peso * Importancia)
-        score_acumulado += gdf_result[columna_geojson] * peso_base * factor_usuario
-
-    # 3. Normalización (0 - 10)
-    max_score = score_acumulado.max()
-    
-    if max_score > 0:
-        score_final = (score_acumulado / max_score) * 10
-    else:
-        score_final = score_acumulado # Todo ceros
+        # --- CÁLCULO VECTORIAL ---
+        # Usamos la columna NORMALIZADA en vez de la original
+        puntos_actividad = columna_normalizada * peso_base * factor_usuario
         
-    # Añadimos la columna al GeoDataFrame
-    gdf_result['score_final'] = score_final.round(2)
+        score_acumulado += puntos_actividad
+
+    # 3. Normalización Final (0 - 10)
+    max_score_total = score_acumulado.max()
     
-    # Devolvemos el GeoDataFrame completo (con geometry)
-    # para que PyDeck o Folium puedan pintarlo.
+    if max_score_total > 0:
+        score_final = (score_acumulado / max_score_total) * 10
+    else:
+        score_final = score_acumulado 
+
+    gdf_result['score_final'] = score_final.round(2) # 2 decimales para más precisión
+    
     return gdf_result
