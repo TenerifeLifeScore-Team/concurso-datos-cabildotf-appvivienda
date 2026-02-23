@@ -177,7 +177,7 @@ if seleccion_menu == "Visión general del modelo":
 
             # Tooltip: Qué sale al pasar el ratón
             tooltip = {
-                "html": "<b>LifeScore:</b> {score_final}/100",
+                "html": "<b>LifeScore:</b> {score_final}/10",
                 "style": {"backgroundColor": "steelblue", "color": "white"}
             }
 

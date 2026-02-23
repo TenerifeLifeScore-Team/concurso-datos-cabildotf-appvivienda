@@ -50,16 +50,16 @@ def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuar
         # Sumamos: (Cantidad Saturada * Peso * Importancia)
         score_acumulado += gdf_result[columna_geojson] * peso_base * factor_usuario
 
-    # 3. Normalización (0 - 100)
+    # 3. Normalización (0 - 10)
     max_score = score_acumulado.max()
     
     if max_score > 0:
-        score_final = (score_acumulado / max_score) * 100
+        score_final = (score_acumulado / max_score) * 10
     else:
         score_final = score_acumulado # Todo ceros
         
     # Añadimos la columna al GeoDataFrame
-    gdf_result['score_final'] = score_final.round(1)
+    gdf_result['score_final'] = score_final.round(2)
     
     # Devolvemos el GeoDataFrame completo (con geometry)
     # para que PyDeck o Folium puedan pintarlo.
