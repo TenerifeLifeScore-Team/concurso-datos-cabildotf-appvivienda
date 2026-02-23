@@ -189,7 +189,7 @@ if seleccion_menu == "Visión general del modelo":
             )
 
             # E. PINTAR FINALMENTE
-            st.pydeck_chart(r, use_container_width=True)
+            st.pydeck_chart(r, width='stretch')
             
             # F. Métrica resumen (Opcional pero útil)
             # mejor_zona = gdf_resultado['score_final'].max()
