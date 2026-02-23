@@ -69,11 +69,11 @@ def obtener_color_por_score(score):
     val = max(0, min(10, float(score)))
 
     # 2. Definimos los colores clave [R, G, B]
-    # Puedes ajustar estos números si quieres tonos más pastel o neón
-    c_rojo     = [255, 60, 60]    # 0.0 (Malo)
-    c_amarillo = [255, 210, 0]    # 3.3 (Regular)
-    c_verde    = [50, 200, 80]    # 6.6 (Bueno)
-    c_azul     = [0, 110, 255]    # 10.0 (Excelente)
+    c_rojo     = [255, 60, 60]    # 0.0 (Crítico)
+    c_naranja  = [255, 160, 0]    # 1.5 (Ya tienes algo)
+    c_amarillo = [255, 220, 0]    # 4.0 (Aceptable)
+    c_verde    = [50, 200, 80]    # 7.0 (Bueno)
+    c_azul     = [0, 110, 255]    # 10.0 (Top)
 
     # 3. Función auxiliar para mezclar dos colores
     def mezclar(color_inicio, color_fin, factor):
@@ -86,19 +86,25 @@ def obtener_color_por_score(score):
     # 4. Lógica de tramos (Interpolación)
     rgb = [0, 0, 0]
 
-    if val <= 3.33:
-        # Tramo: Rojo -> Amarillo
-        factor = val / 3.33
-        rgb = mezclar(c_rojo, c_amarillo, factor)
+    # TRAMO 1: Salida rápida del rojo (0.0 a 1.5)
+    # En cuanto tienes un poco de puntuación, te vas al naranja
+    if val <= 1.5:
+        factor = val / 1.5
+        rgb = mezclar(c_rojo, c_naranja, factor)
+    
+    # TRAMO 2: Naranja a Amarillo (1.5 a 4.0)
+    elif val <= 4.0:
+        factor = (val - 1.5) / 2.5
+        rgb = mezclar(c_naranja, c_amarillo, factor)
         
-    elif val <= 6.66:
-        # Tramo: Amarillo -> Verde
-        factor = (val - 3.33) / 3.33
+    # TRAMO 3: Amarillo a Verde (4.0 a 7.0)
+    elif val <= 7.0:
+        factor = (val - 4.0) / 3.0
         rgb = mezclar(c_amarillo, c_verde, factor)
         
+    # TRAMO 4: Verde a Azul (7.0 a 10.0)
     else:
-        # Tramo: Verde -> Azul
-        factor = (val - 6.66) / 3.34
+        factor = (val - 7.0) / 3.0
         rgb = mezclar(c_verde, c_azul, factor)
 
     # 5. Añadimos transparencia (Alpha) al final
