@@ -21,6 +21,7 @@ def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuar
     
     # Vector de ceros para acumular puntos
     score_acumulado = np.zeros(len(gdf_result))
+    max_posible_teorico = 0.0  # <--- AQUÍ ACUMULAREMOS LA PUNTUACIÓN PERFECTA
     
     # 2. Iteramos sobre las actividades del DICCIONARIO (nuestra verdad)
     for actividad_tecnica, config in diccionario_config.items():
@@ -40,39 +41,38 @@ def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuar
             
         # --- DATOS CRUDOS ---
         columna_datos = gdf_result[columna_geojson]
+        max_valor_real = columna_datos.max()
         
-        # === EL TRUCO MAESTRO: NORMALIZACIÓN ===
-        # Buscamos el valor máximo de ESTA actividad en toda la isla
-        max_valor_columna = columna_datos.max()
-        
-        # Si nadie en toda la isla tiene esta actividad, pasamos
-        if max_valor_columna == 0:
+        # Si nadie en la isla tiene esto, no suma puntos a nadie, 
+        # PERO tampoco debería sumar al teórico (porque es imposible conseguirlo)
+        if max_valor_real == 0:
             continue
             
-        # Convertimos los datos a una escala 0.0 - 1.0
-        # Ahora 1 museo vale tanto como 200 cafeterías (ambos son el "máximo" en su categoría)
-        columna_normalizada = columna_datos / max_valor_columna
+        # --- NORMALIZACIÓN INTERNA (0.0 a 1.0) ---
+        # El mejor hexágono en ESTA actividad tendrá un 1.0
+        columna_normalizada = columna_datos / max_valor_real
         
         # --- FACTORES ---
         peso_base = config['peso']       # Importancia fija (Excel)
         grupo = config['grupo_slider']
         val_slider = sliders_usuario.get(grupo, 3) 
         
-        # Hacemos que el slider sea más agresivo (potencia)
-        # Slider 1 -> x0.2 | Slider 5 -> x1.0
+        # Factor usuario (1 a 5) -> (0.2 a 1.0)
         factor_usuario = val_slider / 5.0
         
-        # --- CÁLCULO VECTORIAL ---
-        # Usamos la columna NORMALIZADA en vez de la original
+        # --- CÁLCULO DE PUNTOS REALES ---
         puntos_actividad = columna_normalizada * peso_base * factor_usuario
-        
         score_acumulado += puntos_actividad
+        
+        # --- CÁLCULO DEL MÁXIMO TEÓRICO ---
+        # Si un hexágono tuviera un 1.0 en esta actividad, sumaría esto:
+        puntos_perfectos_actividad = 1.0 * peso_base * factor_usuario
+        max_posible_teorico += puntos_perfectos_actividad
 
-    # 3. Normalización Final (0 - 10)
-    max_score_total = score_acumulado.max()
-    
-    if max_score_total > 0:
-        score_final = (score_acumulado / max_score_total) * 10
+    # 3. Normalización Final ABSOLUTA (0 - 10)
+    # Dividimos lo que tiene el hexágono entre lo MÁXIMO que se podría tener
+    if max_posible_teorico > 0:
+        score_final = (score_acumulado / max_posible_teorico) * 10
     else:
         score_final = score_acumulado 
 
