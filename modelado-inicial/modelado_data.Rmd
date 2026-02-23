@@ -590,19 +590,31 @@ raw_naturaleza <- st_read("../data-raw/naturaleza.geojson", quiet = TRUE) %>%
 ```
 
 ```{r naturaleza-transformacion}
-
 clean_naturaleza <- raw_naturaleza %>% 
     
     select(nombre = equipamiento_nombre,
            tipo = equipamiento_tipo,
            geometry) %>% 
     
-    filter(tipo %in% c("Área recreativa", "Mirador")) %>% 
+    filter(!tipo %in% c("Zona de aparcamiento")) %>% 
     
     mutate(tipo = ifelse((tipo == "Área recreativa"), "Area recreativa", tipo),
-           grupo = case_when(tipo %in% c("Area recreativa") ~ "Ocio y picnic",
-                             tipo %in% c("Mirador") ~ "Paisaje y vistas")) 
-    
+           grupo = case_when(tipo %in% c("Area recreativa", "Área de descanso") ~ "Ocio y picnic",
+                             tipo %in% c("Mirador", "Centro de visitantes") ~ "Paisaje y vistas",
+                             tipo %in% c("Aula en la Naturaleza") ~ "Educacion ambiental",
+                             tipo %in% c("Zona de acampada (caravanas)", "Zona de acampada (casetas)", "Campamento", "Zona vivac") ~ "Camping",
+                             ))
+
+clean_naturaleza <- clean_naturaleza %>% 
+    mutate(tipo = ifelse((tipo == "Área de descanso"), "Area de descanso", tipo))
+
+
+mapview(
+  clean_naturaleza, 
+  zcol = "grupo", 
+  layer.name = "Naturaleza",
+  col.regions = c("orange", "blue", "green", "red")
+)    
 ```
 
 
