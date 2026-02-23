@@ -1,0 +1,1811 @@
+﻿{
+  "type": "FeatureCollection",
+  "name": "Equipamientos de la isla de Tenerife",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Cruz de Luis",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "Los Realejos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.34113862992496,
+        "longitud": -16.57571910530477
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.57571910530477,
+          28.34113862992496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Cruz del Dornajito",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.359143571043532,
+        "longitud": -16.530428898455554
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.530428898455554,
+          28.359143571043532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Enrique Talg",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "Los Realejos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.35578977807419,
+        "longitud": -16.58944614507812
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.58944614507812,
+          28.35578977807419
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Bermeja",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.348558040270188,
+        "longitud": -16.51401930608371
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.51401930608371,
+          28.348558040270188
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Betancourt",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.322378322731414,
+        "longitud": -16.54442909832059
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.54442909832059,
+          28.322378322731414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chimoche",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.34635768018161,
+        "longitud": -16.499155155944063
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.499155155944063,
+          28.34635768018161
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Sventenius",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "Los Realejos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.316229630759267,
+        "longitud": -16.573885141883895
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.573885141883895,
+          28.316229630759267
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Viera y Clavijo",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "Los Realejos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.35391314944208,
+        "longitud": -16.591191286623864
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.591191286623864,
+          28.35391314944208
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Caseta de Piedra",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Guancha",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.35415997975541,
+        "longitud": -16.650346686061358
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.650346686061358,
+          28.35415997975541
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Topo",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.36884400855244,
+        "longitud": -16.486359476395123
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.486359476395123,
+          28.36884400855244
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Fuente Fría",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "El Sauzal",
+        "espacio_natural_nombre": null,
+        "puntos_interes": "",
+        "latitud": 28.420896407046,
+        "longitud": -16.408937369096744
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.408937369096744,
+          28.420896407046
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Ceballos",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.361954206568637,
+        "longitud": -16.499874254660085
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.499874254660085,
+          28.361954206568637
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Canales",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Victoria de Acentejo",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.41383622724876,
+        "longitud": -16.432272169500635
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.432272169500635,
+          28.41383622724876
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Bolinaga",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.335067789406523,
+        "longitud": -16.51543965239594
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.51543965239594,
+          28.335067789406523
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Casa de La Pradera",
+        "equipamiento_tipo": "Área de descanso",
+        "municipio_nombre": "La Guancha",
+        "espacio_natural_nombre": null,
+        "puntos_interes": "",
+        "latitud": 28.361047737260854,
+        "longitud": -16.657833505509906
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.657833505509906,
+          28.361047737260854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Barranco de la Arena",
+        "equipamiento_tipo": "Aula en la Naturaleza",
+        "municipio_nombre": "La Guancha",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.33722305103761,
+        "longitud": -16.627342643963726
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.627342643963726,
+          28.33722305103761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Lagunetilla Chica",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Santa Úrsula",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.39381341024727,
+        "longitud": -16.482502844742697
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.482502844742697,
+          28.39381341024727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Caldera",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.35754903044134,
+        "longitud": -16.501597764688764
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.501597764688764,
+          28.35754903044134
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Calderetas 2",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "El Sauzal",
+        "espacio_natural_nombre": null,
+        "puntos_interes": "",
+        "latitud": 28.44857654330272,
+        "longitud": -16.41305233919196
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.41305233919196,
+          28.44857654330272
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chanajiga",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Los Realejos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.344125621979895,
+        "longitud": -16.584813574160847
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.584813574160847,
+          28.344125621979895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Arenas Negras",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Garachico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.320094171893537,
+        "longitud": -16.758494493493757
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.758494493493757,
+          28.320094171893537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Fuente del Llano",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Arico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.220405774826478,
+        "longitud": -16.552995378534977
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.552995378534977,
+          28.220405774826478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Hoya del Abade",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "La Victoria de Acentejo",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.415247895230177,
+        "longitud": -16.44303024051164
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.44303024051164,
+          28.415247895230177
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Contador",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Arico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "Pino Gordo ",
+        "latitud": 28.207485047557,
+        "longitud": -16.539125772199366
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.539125772199366,
+          28.207485047557
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Lagar",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.34156242702385,
+        "longitud": -16.65324267560965
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.65324267560965,
+          28.34156242702385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Lajas",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Adeje",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.19034584911941,
+        "longitud": -16.66556775232444
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.66556775232444,
+          28.19034584911941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Hayas",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.335110232372028,
+        "longitud": -16.676857677842786
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.676857677842786,
+          28.335110232372028
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Lagunetas",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "El Rosario",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.414163170122382,
+        "longitud": -16.405224873127725
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.405224873127725,
+          28.414163170122382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Los Frailes",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Arafo",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Siete Lomas",
+        "puntos_interes": "",
+        "latitud": 28.353243699824088,
+        "longitud": -16.43885472613985
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.43885472613985,
+          28.353243699824088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Tahona",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "San Juan de la Rambla",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.35066248115424,
+        "longitud": -16.62974672871687
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.62974672871687,
+          28.35066248115424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Los Pedregales",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Buenavista del Norte",
+        "espacio_natural_nombre": "Parque Rural de Teno",
+        "puntos_interes": "",
+        "latitud": 28.342471976136608,
+        "longitud": -16.85675471335223
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.85675471335223,
+          28.342471976136608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Barranco de Fuente Pedro",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "San Juan de la Rambla",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.3407841121392,
+        "longitud": -16.623373523393525
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.623373523393525,
+          28.3407841121392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Calderetas",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "El Sauzal",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.446386040087244,
+        "longitud": -16.411930608285417
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.411930608285417,
+          28.446386040087244
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Raíces",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "El Rosario",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.423570641260063,
+        "longitud": -16.380214173096533
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.380214173096533,
+          28.423570641260063
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Lomo de La Jara",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "Tacoronte",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "Barranco de Toledo",
+        "latitud": 28.455687831378416,
+        "longitud": -16.40351679721003
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.40351679721003,
+          28.455687831378416
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Ramón Caminero",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.329747850136783,
+        "longitud": -16.532775283266147
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.532775283266147,
+          28.329747850136783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "San José de los Llanos",
+        "equipamiento_tipo": "Zona de aparcamiento",
+        "municipio_nombre": "El Tanque",
+        "espacio_natural_nombre": "Reserva Natural Especial del Chinyero",
+        "puntos_interes": "",
+        "latitud": 28.328073375204333,
+        "longitud": -16.78363130868159
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.78363130868159,
+          28.328073375204333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chanajiga",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Los Realejos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.344125621979895,
+        "longitud": -16.584813574160847
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.584813574160847,
+          28.344125621979895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Contador",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Arico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "Pino Gordo ",
+        "latitud": 28.20818847455848,
+        "longitud": -16.53902706644636
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.53902706644636,
+          28.20818847455848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Hoya del Abade",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "La Victoria de Acentejo",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.415247895230177,
+        "longitud": -16.44303024051164
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.44303024051164,
+          28.415247895230177
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Tahona",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "San Juan de la Rambla",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.351607677474572,
+        "longitud": -16.63019528327232
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.63019528327232,
+          28.351607677474572
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Ramón Caminero",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.329747850136783,
+        "longitud": -16.532775283266147
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.532775283266147,
+          28.329747850136783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Hayas",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.33459840016562,
+        "longitud": -16.67752930278526
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.67752930278526,
+          28.33459840016562
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Quebrada",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Tegueste",
+        "espacio_natural_nombre": "Parque Rural de Anaga",
+        "puntos_interes": "",
+        "latitud": 28.5320696885192,
+        "longitud": -16.300710533935487
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.300710533935487,
+          28.5320696885192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Llano de los Viejos",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "La Laguna",
+        "espacio_natural_nombre": "Parque Rural de Anaga",
+        "puntos_interes": "Laureles Llano de los Viejos",
+        "latitud": 28.527378126849854,
+        "longitud": -16.283237552741145
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.283237552741145,
+          28.527378126849854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Los Pedregales",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Buenavista del Norte",
+        "espacio_natural_nombre": "Parque Rural de Teno",
+        "puntos_interes": "",
+        "latitud": 28.342197546801305,
+        "longitud": -16.85671448007028
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.85671448007028,
+          28.342197546801305
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Lagar",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.342426934778292,
+        "longitud": -16.65389588174842
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.65389588174842,
+          28.342426934778292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Lomo de La Jara",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Tacoronte",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "Barranco de Toledo",
+        "latitud": 28.455687831378416,
+        "longitud": -16.40351679721003
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.40351679721003,
+          28.455687831378416
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Lagunetilla Chica",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Santa Úrsula",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.39381341024727,
+        "longitud": -16.482502844742697
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.482502844742697,
+          28.39381341024727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Los Frailes",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Arafo",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.354750890899417,
+        "longitud": -16.438180018190437
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.438180018190437,
+          28.354750890899417
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Arenas Negras",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Garachico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.31952060789466,
+        "longitud": -16.756614991252356
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.756614991252356,
+          28.31952060789466
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chío",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Guía de Isora",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.266693425598067,
+        "longitud": -16.747075071857108
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.747075071857108,
+          28.266693425598067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Lajas",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "Adeje",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.190284639134635,
+        "longitud": -16.666189070865894
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.666189070865894,
+          28.190284639134635
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Caldera",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.35734937977324,
+        "longitud": -16.501577919398144
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.501577919398144,
+          28.35734937977324
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Raíces",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "El Rosario",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.420138543210193,
+        "longitud": -16.3783963045654
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.3783963045654,
+          28.420138543210193
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "San José de los Llanos",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "El Tanque",
+        "espacio_natural_nombre": "Reserva Natural Especial del Chinyero",
+        "puntos_interes": "",
+        "latitud": 28.32765133670598,
+        "longitud": -16.78379760631917
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.78379760631917,
+          28.32765133670598
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Calderetas",
+        "equipamiento_tipo": "Área recreativa",
+        "municipio_nombre": "El Sauzal",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.446904879312385,
+        "longitud": -16.411745834451818
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.411745834451818,
+          28.446904879312385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Madre del Agua",
+        "equipamiento_tipo": "Campamento",
+        "municipio_nombre": "Granadilla de Abona",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.18201241409087,
+        "longitud": -16.595393048406297
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.595393048406297,
+          28.18201241409087
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Lagar",
+        "equipamiento_tipo": "Campamento",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.341240509061148,
+        "longitud": -16.65671608678279
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.65671608678279,
+          28.341240509061148
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Barranco de la Arena",
+        "equipamiento_tipo": "Campamento",
+        "municipio_nombre": "La Guancha",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.337219141111753,
+        "longitud": -16.627929841419448
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.627929841419448,
+          28.337219141111753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Cañada Blanca",
+        "equipamiento_tipo": "Centro de visitantes",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Nacional del Teide",
+        "puntos_interes": "Ermita de Nuestra Señora de las Nieves",
+        "latitud": 28.223985816370444,
+        "longitud": -16.62698831814089
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.62698831814089,
+          28.223985816370444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Portillo",
+        "equipamiento_tipo": "Centro de visitantes",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Nacional del Teide",
+        "puntos_interes": "Jardín Botánico de El Portillo",
+        "latitud": 28.304524192376512,
+        "longitud": -16.56660158869686
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.56660158869686,
+          28.304524192376512
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Telesforo Bravo",
+        "equipamiento_tipo": "Centro de visitantes",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": null,
+        "puntos_interes": "",
+        "latitud": 28.39224307907284,
+        "longitud": -16.527237233608947
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.527237233608947,
+          28.39224307907284
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Los Pedregales",
+        "equipamiento_tipo": "Centro de visitantes",
+        "municipio_nombre": "Buenavista del Norte",
+        "espacio_natural_nombre": "Parque Rural de Teno",
+        "puntos_interes": "Mercadillo del Agricultor de El Palmar",
+        "latitud": 28.341977031017837,
+        "longitud": -16.850916264360364
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.850916264360364,
+          28.341977031017837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Cruz del Carmen - Parque Rural de Anaga",
+        "equipamiento_tipo": "Centro de visitantes",
+        "municipio_nombre": "La Laguna",
+        "espacio_natural_nombre": "Parque Rural de Anaga",
+        "puntos_interes": "",
+        "latitud": 28.53080941637379,
+        "longitud": -16.280220107578884
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.280220107578884,
+          28.53080941637379
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Camino Barranco de Masca",
+        "equipamiento_tipo": "Centro de visitantes",
+        "municipio_nombre": "Buenavista del Norte",
+        "espacio_natural_nombre": "Parque Rural de Teno",
+        "puntos_interes": "",
+        "latitud": 28.305274988269616,
+        "longitud": -16.84060036412879
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.84060036412879,
+          28.305274988269616
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chipeque",
+        "equipamiento_tipo": "Mirador",
+        "municipio_nombre": "Santa Úrsula",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.37397905267799,
+        "longitud": -16.463869589794584
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.463869589794584,
+          28.37397905267799
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chimague",
+        "equipamiento_tipo": "Mirador",
+        "municipio_nombre": "Arafo",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.373158503163875,
+        "longitud": -16.459592988734332
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.459592988734332,
+          28.373158503163875
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Roques de García / La Ruleta",
+        "equipamiento_tipo": "Mirador",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Nacional del Teide",
+        "puntos_interes": "Roques de García",
+        "latitud": 28.223190480883254,
+        "longitud": -16.630873242625576
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.630873242625576,
+          28.223190480883254
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Los Poleos",
+        "equipamiento_tipo": "Mirador",
+        "municipio_nombre": "Santiago del Teide",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.280967295997037,
+        "longitud": -16.76800487942756
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.76800487942756,
+          28.280967295997037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Samara",
+        "equipamiento_tipo": "Mirador",
+        "municipio_nombre": "Guía de Isora",
+        "espacio_natural_nombre": "Parque Nacional del Teide",
+        "puntos_interes": "",
+        "latitud": 28.266640815958617,
+        "longitud": -16.726016995012113
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.726016995012113,
+          28.266640815958617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Zona autorizable para la pernocta en vivac Teide",
+        "equipamiento_tipo": "Zona vivac",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Monumento Natural del Teide",
+        "puntos_interes": "",
+        "latitud": 28.273600409973074,
+        "longitud": -16.638332124213136
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.638332124213136,
+          28.273600409973074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Zona autorizable para la pernocta en vivac Montaña Blanca",
+        "equipamiento_tipo": "Zona vivac",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Monumento Natural del Teide",
+        "puntos_interes": "",
+        "latitud": 28.27005428950437,
+        "longitud": -16.616777489419746
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.616777489419746,
+          28.27005428950437
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Zona autorizable para la pernocta en vivac Pico Viejo",
+        "equipamiento_tipo": "Zona vivac",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Monumento Natural del Teide",
+        "puntos_interes": "",
+        "latitud": 28.26326328114397,
+        "longitud": -16.661598989862647
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.661598989862647,
+          28.26326328114397
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Zona autorizable para la pernocta en vivac Montaña Guajara",
+        "equipamiento_tipo": "Zona vivac",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Nacional del Teide",
+        "puntos_interes": "Montaña de Guajara",
+        "latitud": 28.21687575669133,
+        "longitud": -16.611371216401142
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.611371216401142,
+          28.21687575669133
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Fuente del Llano",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Arico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.219751673527064,
+        "longitud": -16.55337310378013
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.55337310378013,
+          28.219751673527064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Hayas",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.33512373601029,
+        "longitud": -16.676753438550293
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.676753438550293,
+          28.33512373601029
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Tahona",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "San Juan de la Rambla",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.352127869118615,
+        "longitud": -16.629961305715927
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.629961305715927,
+          28.352127869118615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "La Caldera",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.355354829921133,
+        "longitud": -16.50123727537703
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.50123727537703,
+          28.355354829921133
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chío",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Guía de Isora",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.265092968359564,
+        "longitud": -16.750486841265936
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.750486841265936,
+          28.265092968359564
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Ramón Caminero",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "La Orotava",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.329629415449574,
+        "longitud": -16.53220522412202
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.53220522412202,
+          28.329629415449574
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Raíces",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "El Rosario",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.42089121340172,
+        "longitud": -16.379711823587545
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.379711823587545,
+          28.42089121340172
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Contador",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Arico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "Pino Gordo ",
+        "latitud": 28.207373189780753,
+        "longitud": -16.539426990480305
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.539426990480305,
+          28.207373189780753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Lagar",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.34113015231891,
+        "longitud": -16.653201060369305
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.653201060369305,
+          28.34113015231891
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Arenas Negras",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Garachico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.319271620296405,
+        "longitud": -16.755723548990236
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.755723548990236,
+          28.319271620296405
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Lajas",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Adeje",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.190608379710792,
+        "longitud": -16.66505711116704
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.66505711116704,
+          28.190608379710792
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Barranco de Fuente Pedro",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "San Juan de la Rambla",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.3407841121392,
+        "longitud": -16.623373523393525
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.623373523393525,
+          28.3407841121392
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "San José de los Llanos",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "El Tanque",
+        "espacio_natural_nombre": "Reserva Natural Especial del Chinyero",
+        "puntos_interes": "",
+        "latitud": 28.32754603565491,
+        "longitud": -16.783439263990367
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.783439263990367,
+          28.32754603565491
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Los Pedregales",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "Buenavista del Norte",
+        "espacio_natural_nombre": "Parque Rural de Teno",
+        "puntos_interes": "",
+        "latitud": 28.342548358862654,
+        "longitud": -16.85669069721195
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.85669069721195,
+          28.342548358862654
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Calderetas",
+        "equipamiento_tipo": "Zona de acampada (casetas)",
+        "municipio_nombre": "El Sauzal",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.445914376677568,
+        "longitud": -16.41149654857531
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.41149654857531,
+          28.445914376677568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Arenas Negras",
+        "equipamiento_tipo": "Zona de acampada (caravanas)",
+        "municipio_nombre": "Garachico",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.31900870239509,
+        "longitud": -16.755606068900942
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.755606068900942,
+          28.31900870239509
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Chío",
+        "equipamiento_tipo": "Zona de acampada (caravanas)",
+        "municipio_nombre": "Guía de Isora",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.266721424823587,
+        "longitud": -16.74853225582568
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.74853225582568,
+          28.266721424823587
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "El Lagar",
+        "equipamiento_tipo": "Zona de acampada (caravanas)",
+        "municipio_nombre": "Icod de los Vinos",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.341138709613414,
+        "longitud": -16.652955730394563
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.652955730394563,
+          28.341138709613414
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Lajas",
+        "equipamiento_tipo": "Zona de acampada (caravanas)",
+        "municipio_nombre": "Adeje",
+        "espacio_natural_nombre": "Parque Natural de Corona Forestal",
+        "puntos_interes": "",
+        "latitud": 28.190087650667646,
+        "longitud": -16.6649504485892
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.6649504485892,
+          28.190087650667646
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "equipamiento_nombre": "Las Raíces",
+        "equipamiento_tipo": "Zona de acampada (caravanas)",
+        "municipio_nombre": "El Rosario",
+        "espacio_natural_nombre": "Paisaje Protegido de Las Lagunetas",
+        "puntos_interes": "",
+        "latitud": 28.420569513221505,
+        "longitud": -16.379739220214425
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.379739220214425,
+          28.420569513221505
+        ]
+      }
+    }
+  ]
+}

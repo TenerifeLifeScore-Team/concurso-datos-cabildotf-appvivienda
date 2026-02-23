@@ -1,0 +1,3252 @@
+﻿{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.153901429139932,
+          28.525557512004102
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La iglesia comenzó a construirse como ermita dependiente \nde la parroquia de San Andrés en 1890, consagrándose el 29 de junio de 1909. En 1943 fue ascendida al rango de parroquia",
+        "nombre": "Iglesia de San Pedro Apóstol",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.217146013461676,
+          28.560585615148906
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Desde 1507 se cita en la documentación la existencia de un recinto en el fértil Valle de Taganana dedicado a Nuestra Señora de las Nieves. El paso del tiempo y las intenciones de familias y cofradías fueron ampliando la antigua ermita para conformar un templo de tres naves con sus capillas y camarín. En su interior destaca el tríptico flamenco de la Adoración de los Reyes, el Cristo del Socorro o la imagen titular del siglo XVI",
+        "nombre": "Iglesia de Nuestra Señora de las Nieves",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.484632827648603,
+          28.371725329677457
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Alberga epífitos como líquenes (Usnea) y batatillas (Davallia), indicadores de la elevada humedad existente",
+        "nombre": "Pino de la pista los Órganos",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.4022332794249,
+          28.457113091345526
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Se trata de 2 ejemplares con chupones a modo de jaula a su alrededor.  Un ejemplar en la ladera Oeste, de 8 m de altura y un perímetro aproximado por fuera de los chupones de 8 m; y otro mayor en la ladera Este. Este último se encuentra situado sobre una cuevas artificiales, y tiene una altura de aproximadamente 10 m. Su perímetro es difícilmente mensurable pero el exterior , incluidos los chupones, es de 16 m, y el interior de 12,20 m. El mayor de los chupones podría pasar el solo por un gran ejemplar de 410 cm de perímetro",
+        "nombre": "Viñátigos Centenarios",
+        "enp": "Paisaje Protegido de Las Lagunetas",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.75547632999803,
+          28.296897863370724
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Volcán Montaña Chinyero es un testimonio de la última manifestación volcánica en Tenerife, que ocurrió a principios del siglo XX y tuvo una duración de tan solo 10 días. Este volcán es una importante reliquia geológica que marca un evento significativo en la historia volcánica de la isla",
+        "nombre": "Montaña de Chinyero",
+        "enp": "Reserva Natural Especial del Chinyero",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.815190778160204,
+          28.298153388830187
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Lagar de la Hacienda del Señorío del Valle",
+        "enp": "",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.625797883564047,
+          28.254592801429688
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": "La estación base del teleférico del Teide dispone de un área de descanso, servicio de cafetería y restaurante-buffet con magníficas vistas al Parque Nacional del Teide, tienda y aseos públicos. Es el lugar adecuado para informarse de las distintas rutas que se pueden realizar tras subir al Teide en teleférico",
+        "nombre": "Teleférico del Teide",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Infraestructura de transporte"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.154962163002285,
+          28.566034146255337
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Pequeño caserío habitado, que carece de servicios, y está poblado desde el siglo XVI por colonos y guanches libres después de la conquista. Estuvo aislado por carretera hasta 1970",
+        "nombre": "Caserío de la Cumbilla",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.154495436209707,
+          28.56345572752268
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La ermita de Lomo de Las Bodegas, dedicada a Santiago \nApóstol, forma parte de la parroquia de Las Nieves de Taganana y fue edificada en la década de 1930.",
+        "nombre": "Ermita de Santiago Apóstol",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.760357787162636,
+          28.314032199228343
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Se cuenta que venía una yunta de bueyes arrastrando madera por el camino y un buey cayó, agotado, de rodillas. El gañan o boyero le pegó para que se levantara y el otro buey, en su defensa, habló: «aguante compañero que nuestro dueño lo sufrirá». Tiene 5 pernadas, tres de ellas juntas en la base. Ramificado desde la base. Sobre picón (Montaña de Arenas Negras). Con batatillas (Davallia) y líquenes (Usnea) epífitos",
+        "nombre": "Pino del sitio donde el Buey habló",
+        "enp": "Reserva Natural Especial del Chinyero",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.376067457455456,
+          28.317202610643537
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "Montaña Grande es el mayor de los volcanes que se erigen sobre el malpaís de Güímar. Su simétrica silueta es un icono del municipio y el elemento central de la Reserva Natural Especial. La subida al cono volcánico está prohibida, por los efectos negativos que el tránsito provoca sobre la conservación del cono",
+        "nombre": "Montaña Grande",
+        "enp": "Reserva Natural Especial del Malpaís de Güímar",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.81716760367172,
+          28.365313637876607
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": null,
+        "nombre": "Oficina de Información Turística de Los Silos",
+        "enp": "",
+        "subtipo": "Punto de información"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.63718038569793,
+          28.159795691951803
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La iglesia de San Pedro de Vilaflor o Chasna es heredera de una historia que se remonta a principios del siglo XVI, ya que su fundación responde a los anhelos piadosos de Pedro Soler y Juana Padilla, su mujer. A dichos propietarios, los más importantes del pueblo y de la comarca en que habitaron de modo continuo, se debe la erección de una primera ermita en torno a 1530. No sería elevada a parroquia hasta 1568, incluyendo en su amplio partido jurisdiccional durante más de dos siglos a buena parte de los pueblos existentes en los actuales municipios de Vilaflor, Arona, San Miguel, Granadilla y Arico. De esa primera construcción apenas han perdurado testimonios artísticos, aunque sí lo ha hecho la efigie titular de San Pedro: una importante pieza de alabastro blanco que firmó en la peana el escultor aragonés Pedro Villar.",
+        "nombre": "Iglesia de San Pedro Apóstol",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.336413447413925,
+          28.52320743131999
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Con su especial disposición geográfica ya que linda en todo su\nperímetro con La Laguna, hecho insólito de entre los municipios\nde Tenerife, Tegueste toma su nombre del antiguo menceyato,\ndependiente tras la conquista del ayuntamiento lagunero (hasta su\nnombramiento como municipio independiente con las Cortes de\nCádiz). El repartimiento de tierras por parte del Adelantado produce\nla transformación de un medio natural que prácticamente estaba\nintacto. En las datas, se concedió a Fernando de Llerena, Guillén Castellano, Juan de Almansa, Francisco Melián, Gonzalo del Castillo, o Juan Zapata, entre otros, el aprovechamiento de tierras, aguas y pastos. El centro urbano se desarrolla en una disposición subcuadrangular en torno a la parroquia de San Marcos y delimitado entre el barranco de Aguas de Dios, el puente del Camino del Caidero y la casa de la Palmera.",
+        "nombre": "Conjunto Histórico de Tegueste",
+        "enp": "",
+        "subtipo": "Bien de Interés Cultural"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.264971153478402,
+          28.533405575823327
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Pico del Inglés",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.21436149973915,
+          28.55710164178677
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La imagen de la Virgen de la Caridad del Cobre venerada en \nAzanos fue traída en 1984 por un vecino que había tenido un sueño en que «aparecía la imagen de la Virgen con una barca a sus pies», por lo que encargó una talla a un imaginero de Sevilla. Ese mismo año se construye la pequeña ermita en su honor en Azanos. ",
+        "nombre": "Ermita Virgen de la Caridad y el Cobre",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.778389560497185,
+          28.20966660505856
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Al igual que ocurre con la mayoría de municipios de Canarias, el casco histórico de Guía de Isora surgió a partir de la construcción del primer recinto religioso. Sus orígenes se remontan al menos a la primera mitad del siglo XVI, pues se tiene constancia documental de la construcción de un edificio para fines religiosos. Se amplió a lo largo del siglo XVIII y sufrió profundas transformaciones en los siglos XIX y XX, apariencia con la que la conocemos hoy en día. En cuanto a su arquitectura civil, si bien existen algunos ejemplos del siglo XVIII, la mayoría de viviendas que conforman este conjunto arquitectónico datan del siglo XIX, donde el eclecticismo y el neoclasicismo son los estilos dominantes. ",
+        "nombre": "Conjunto Histórico de Guía de Isora",
+        "enp": "",
+        "subtipo": "Bien de Interés Cultural"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.159284828549094,
+          28.568683920144508
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La ermita de Chamorga, pertenece a la parroquia de \nNuestra Señora de las Nieves de Taganana, y fue construida en la década de 1930 bajo la advocación de la Purísima Concepción.",
+        "nombre": "Ermita de la Purísima Concepción",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.49627759184498,
+          28.36035492454518
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Pino Padre conocido como referencia del lugar. Situado en el sendero PR 35",
+        "nombre": "Pino de la Punta de la Baranda",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.814185171920656,
+          28.36071577096897
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": "Constituyen un lugar emblemático donde reina la paz, ideal parala relajación, siendo además un importante recurso etnográfico del municipio",
+        "nombre": "Lavaderos de Susana",
+        "enp": "",
+        "subtipo": "Instalación hidráulica"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.80366191660127,
+          28.352678194821465
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Construida a finales del siglo XIX, esta ermita llama la atención principalmente por su pequeño campanario",
+        "nombre": "Ermita Nuestra Señora de Lourdes",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.2307441671679,
+          28.562272860836455
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Lagares del Camino del Chorro",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.499666553096386,
+          28.37890382625624
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Pinolere es un pequeño pueblo enclavado en el frondoso monte con una historia que está marcada por el apego a la tierra de sus 700 habitantes, tanto por la importancia de la agricultura como por tradiciones tan arraigadas como el carboneo o la cestería. Está rodeado de barrancos (Quirirá, La Arena y La Hondura) y la visita sorprende porque se conservan todavía algunas de sus construcciones tradicionales",
+        "nombre": "Pinolere",
+        "enp": "",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.876718436464877,
+          28.34359590106662
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Reducto de las costumbres rurales de la isla, en pleno corazón del Parque Rural de Teno. Tiene un rico legado etnográfico donde destacan los hornos o eras, así como las casas de tradicional arquitectura rural canaria",
+        "nombre": "Los Bailaderos o Teno Alto",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.706386345630097,
+          28.23561187535143
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": "Curiosa e interesante era antigua construida sobre lava pahoehoe",
+        "nombre": "Era de la Fajana de Charagueche",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.156381099709566,
+          28.552222714146094
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Caserío abandonado de tradición agrícola, que conserva muestras de arquitectura rural tradicional canaria, pero famoso por las vistas a los valles de alrededor",
+        "nombre": "Caserío Las Casillas",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.79302606951247,
+          28.317314910086637
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Presenta un hueco de 170 cm de alto, 85 cm de ancho y 60 cm de fondo. Es un ejemplar solitario a un lado de la pista de acceso a Los Partidos de Franquis. Tiene líquenes y batatillas epífitos en su cara Norte",
+        "nombre": "Pino de Nica",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.37408483268557,
+          28.382347246444123
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Este drago fue trasplantado hace unos 60 años a su actual emplazamiento, teniendo ya gran porte por aquel entonces es centenario, ya que tiene 8 niveles de ramificación. Se ha incluído en el catálogo por ser el único drago viejo de la zona",
+        "nombre": "Drago de Igueste de Candelaria",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.759072265709825,
+          28.33545698320331
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Pequeño santuario construido en el siglo XX por el Personal Forestal del estado, con la ayuda municipal",
+        "nombre": "Ermita de San Francisco de Asís",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.19730200981536,
+          28.571300534881033
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La Virgen de Begoña es la patrona de Almáciga y una de las \nimágenes más veneradas del Macizo de Anaga. Pese a tratarse de una réplica de la imagen que se encuentra en la Basílica de Nuestra Señora de Begoña en Bilbao, la imagen de Almáciga tiene su propia historia, la cual se ha convertido en una de las más populares de Tenerife",
+        "nombre": "Ermita de Nuestra Señora de Begoña",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.31607751558326,
+          28.55741973127513
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Volcán de las Rozas es una formación volcánica que desempeñó un papel fundamental en la creación de la plataforma volcánica de Punta del Hidalgo.",
+        "nombre": "Volcán de las Rozas",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.187192873075716,
+          28.572665201968654
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Caserío fundado sobre asentamiento guanche, famoso por su cercanía a la Playa de Benijo, con gran belleza paisajística y tradición agraria",
+        "nombre": "Benijo",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.796843341755128,
+          28.318200527221517
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Su denominación proviene de un laurel epífito que crece en una de sus horquillas. Presenta además en la primera ramificación una zarza, batatillas y líquenes epífitos. Es un ejemplar muy visible desde la mencionada carretera, por lo que muchos turistas paran para retratarse bajo su sombra",
+        "nombre": "Pino Loro",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.778330401536575,
+          28.209557815544386
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "La circunferencia del árbol medida a un tamaño de 1,30 m es 4,80 m. El tamaño es de exactamente 10 m ",
+        "nombre": "Higuera de la China",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.610398945034728,
+          28.21565573673293
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "La Montaña de Guajara, con sus imponentes 2.718 metros de altitud, se erige como el punto más elevado dentro del Parque Nacional y se posiciona como el tercer pico más alto de la isla. Esta majestuosa montaña, con su silueta distintiva, es un punto de referencia icónico en el Parque Nacional del Teide.",
+        "nombre": "Montaña de Guajara",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.198040078660554,
+          28.571310536863464
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Pequeño caserío de larga tradición agrícola con su pequeña ermita dedicada a Nuestra Señora de Begoña, y su playa, paraíso de surfistas por su intenso oleaje",
+        "nombre": "Almáciga",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.676881653847555,
+          28.254974871495108
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Volcán Las Narices del Teide es el resultado de la erupción de 1798 y se caracteriza por la presencia de dos cráteres volcánicos que surgieron durante este evento.",
+        "nombre": "Las Narices del Teide",
+        "enp": "Monumento Natural del Teide",
+        "subtipo": "Cráter"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.282988948127638,
+          28.527497747379684
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Como ocurre con otros árboles del Monteverde canario, cuando se pudre el tronco principal de los laureles, es sustituido por chupones del propio árbol. Por lo tanto, aunque el tronco es diferente, el árbol sigue siendo el mismo. El tronco principal mide 680 cm de perímetro, aunque actualmente sólo quedan sus restos en un tocón. Tiene tres grandes chupones de 250 cm de perímetro, y quedan restos de un cuarto. Batatillas epífitas. Al estar en una zona recreativa, sufren una elevada presión por los visitantes",
+        "nombre": "Laureles Llano de los Viejos",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.764109156683958,
+          28.373087045766187
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Grupo de 3 palmeras masculinas. Presentan buen aspecto con parterre circular alrededor. Alturas 6,7 y 8 metros; Perímetros: 1.45, 1.60, 1.87 m. Se considera notable por su belleza y ornamento de esta construcción histórica y zona tradicional del casco municipal. Utilizadas como base de decoración de diversos festejos",
+        "nombre": "Palmas de la Iglesia de San Francisco",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.49981277740978,
+          28.37833760729276
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "Museo Etnográfico, inaugurado en 2002 en cuyas instalaciones se recrea la cultura popular, la historia y las costumbres de esta zona de medianías del norte de Tenerife. El centro cuenta con una era, distintas casas terreras, corrales con gallinas y conejos, un huerto de plantas medicinales y sus características casas pajizas o pajares, tradicionales construcciones utilizadas antaño como vivienda -y habilitados hoy como salas de exposiciones-. Una meticulosa reproducción de una \"venta\" (tienda) tradicional es otro de sus contenidos de interés.",
+        "nombre": "Museo y Parque Etnográfico de Pinolere",
+        "enp": "",
+        "subtipo": "Centro de interpretación/museo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.48945851839302,
+          28.3596151945031
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Es un enorme pino padre conocido como referencia del lugar, destacando sobre otros pinos de gran talla. Es el ejemplar más viejo de la zona rodeado de bosque mixto. De sus ramas cuelgan líquenes dándole un aspecto fantasmal. Presenta una gran rama lateral hacia la pista de Los Órganos. Se encuentra en una zona de difícil acceso, pero su copa se puede ver desde la pista de Los Órganos",
+        "nombre": "Pino Negro",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.50146568925664,
+          28.19248743492495
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": "La era de Los Borges está  situada cerca de la casa de Tamadaya, a unos 400 metros siguiendo el sendero que parte de la casa, la encontraremos a nuestra derecha",
+        "nombre": "Era de los Borges",
+        "enp": "",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.603918587885914,
+          28.190935093246637
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Paisaje Lunar",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.639178886174808,
+          28.159061787635398
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Árboles de elevada altura pero poca frondosidad. Perímetro 1º: 6,15 m, 2º: 4,9 m. Altura: aproximadamente 25 y \n20 m respectivamente",
+        "nombre": "Pinos de San Roque",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.638842365656846,
+          28.15884616662468
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La ermita de San Roque fue construida a principios del siglo XVII y está situada en una colina desde la que se otea el casco del pueblo. Con suelo de losa chasnera se compone de una sola nave y cubierta a dos aguas",
+        "nombre": "Ermita de San Roque",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.336145377819072,
+          28.523083624620558
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": null,
+        "nombre": "Oficina de Información de Tegueste",
+        "enp": "",
+        "subtipo": "Punto de información"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.812521199785785,
+          28.352286228397453
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco Cuevas Negras / Barranco del Agua",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.764610184775133,
+          28.373139127575083
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "En pocas ciudades se da el caso de que una fecha marque el comienzo de una nueva etapa. Y la historia de Garachico se articula en base a un acontecimiento de tipo natural que marca un antes y un después: la erupción del volcán de Arenas Negras en 1706. Este cono volcánico sepultó por medio de la lava gran parte de las zonas de medianías, el casco y su puerto, y ello trajo consigo grandes pérdidas en lo patrimonial, en lo económico y en definitiva en lo vinculado con la población de este núcleo de Daute. A partir de ahí comienza una reconstrucción de su trama arquitectónica y urbanística que ha llegado prácticamente intacta hasta la actualidad, aunque durante los siglos XIX y XX la villa experimentó los cambios propios que puede sufrir cualquier sociedad en desarrollo. A pesar de la destrucción del volcán, conserva algunas viviendas señoriales y edificios religiosos que se articulan en un trazado urbano que discurre paralelo a la costa.",
+        "nombre": "Conjunto Histórico Villa y Puerto de Garachico",
+        "enp": "",
+        "subtipo": "Bien de Interés Cultural"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.292584980131906,
+          28.523127550725476
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Se trata de un árbol espectacular por sus proporciones. Destaca en altura sobre el resto del bosque. Se encuentra junto al sendero que sube hacia Cruz del Carmen, al principio",
+        "nombre": "Faya Llano de los Viejos",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.400294083200833,
+          28.357857103557347
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Este pino canario se encuentra en las Cuevecitas de Candelaria",
+        "nombre": "Pino de Cha Meliá",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.680668744559163,
+          28.10028595439739
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "En el casco histórico de Arona se encuentra un ejemplar de almácigo centenario, con una altura de nueve metros, que está incluido en el Libro de Árboles Monumentales de Tenerife. Este árbol es uno de los elementos del escudo heráldico del municipio, por lo que forma parte de su patrimonio cultural. Existen otros almácigos en Arona, al borde de la carretera que sube hacia Vilaflor. \nUno de ellos, actualmente desaparecido, se encuentra en el escudo heráldico de este municipio sureño. Es visible desde la carretera, destacando frente a la casa de la que se encuentra próximo",
+        "nombre": "Almácigo de Arona",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.76508539401122,
+          28.372716405170987
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La iglesia de Santa Ana se asienta sobre un solar donado en 1520 por el rico genovés Cristóbal de Ponte, y es muy probable que su advocación responda al hecho de que su mujer se llamara Ana, como suele ser lo propio en estas circunstancias. Afectada por la erupción del volcán de Trevejo en 1706 que sepultó gran parte de la Villa y Puerto, tuvo que ser reconstruida y enriquecida gracias a los bienes muebles de los conventos que también existían en la zona. Su disposición es de tres naves con tres capillas en el testero, la mayor de gran desarrollo.",
+        "nombre": "Iglesia de Santa Ana",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.80909653168847,
+          28.318879375029265
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": null,
+        "nombre": "Charcas de Erjos",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Humedal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.4826540870307,
+          28.39049070326487
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Con acebiños y brezos creciendo en su base. Está «enteado», es decir, su interior tiene tea. \nPuede observarse una ramificación a dos metros de altura",
+        "nombre": "Pino Rey",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.56597581736587,
+          28.305146693887526
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": null,
+        "nombre": "Jardín Botánico de El Portillo",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Jardín"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.546319219958978,
+          28.145085701513132
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "En él se ubicó la campana de la ermita de Santa Ana, siendo, según cuentan orgullosos los vecinos, el único \ncampanario que crece todos los años. Una de sus ramas se utiliza como soporte de la campana de la ermita, de ahí su denominación popular",
+        "nombre": "Pino El Campanario",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.576459748721454,
+          28.241818976333022
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "La Cañada de la Grieta es una de las notables planicies que se encuentran a lo largo del conocido sendero PNT 04 Siete Cañadas. Su nombre se origina en el icónico Roque de la Grieta, una formación rocosa distintiva que se alza en esta zona.",
+        "nombre": "Cañada de la Grieta",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.81454752271706,
+          28.29800953068432
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": "Dentro de esta casa del siglo XVII encontramos la era más grande de la isla, y está en perfecto estado de conservación",
+        "nombre": "Era de la Casa del Patio",
+        "enp": "",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.391621557016492,
+          28.44372984501864
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Montaña El Cerro",
+        "enp": "Paisaje Protegido de Las Lagunetas",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.478648823783768,
+          28.382517844164738
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Localizada en un pinar mixto. Se encuentra ramificada desde su base. \nEstá en las proximidades del Pino Santo, un notable ejemplar de Pino Canario catalogado como de Interés Regional",
+        "nombre": "Faya Santa",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.747292222238013,
+          28.0970035003109
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "También es conocida como Ermita de la Encarnación o de La Enramada, puesto que allí se depositó y veneró la imagen de la Virgen de la Encarnación que apareció en la Playa de la Enramada. Esta primitiva ermita se construyó a principios del siglo XVI, pero es reconstruida en 1558 por Pedro de Ponte, regidor de Tenerife y caballero de la Orden de Calatrava",
+        "nombre": "Ermita Vieja de San Sebastián",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.6346009636126,
+          28.222913597308825
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "La Catedral",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.742568035258344,
+          28.19367469703729
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Enclave natural con gran valor etnográfico abandonado desde los 70. Conserva muchos elementos de la vida tradicional rural del sur de Tenerife, con aljibes, hornos, eras y cuevas. Fue el granero de Isora por su gran producción agrícola",
+        "nombre": "Caserío de Las Fuentes",
+        "enp": "",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.587454708120926,
+          28.370533479456558
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco La Lora",
+        "enp": "",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.592833161023044,
+          28.178476674284813
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Único eucalipto de la zona y de los mayores de la Comarca",
+        "nombre": "Eucalipto El Convento / El Conventito",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.584877805612173,
+          28.380720888709245
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": null,
+        "nombre": "Oficina Municipal de Turismo de Los Realejos",
+        "enp": "",
+        "subtipo": "Punto de información"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.185942549208896,
+          28.575579092017136
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "Para muchos esta playa salvaje rodeada de naturaleza y con unas privilegiadas vistas de los Roques de Anaga, es una de las más espectaculares de Tenerife. Tiene unas dimensiones de 300 metros de largo por 30 metros de ancho y esta compuesta de arena negra y entorno con callaos. Hay que tener especial precaución con el oleaje, ya que por lo general es fuerte. Salvo los meses de julio, agosto y septiembre no cuenta con servicio de socorristas. Su grado de ocupación es medio-alto los meses de verano y bajo el resto del año, siendo frecuentada principalmente por gente local. Es una playa mixta, donde resulta habitual ver a bañistas practicar nudismo. No dispone de servicios y para acceder a la misma, hay que hacerlo por un sendero con escaleras. Su acceso y la fuerza del oleaje hacen que sea una playa peligrosa. Para poder disfrutar de la playa en su máximo esplendor, se recomienda la visita con la marea baja. ",
+        "nombre": "Playa de Benijo",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Playa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.815825787627873,
+          28.29832156240263
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "En 1663 se constituye el Señorío del Valle de Santiago, por el maestre de campo de los tercios de milicias provinciales Fernando del Hoyo Solórzano y Alzola. A este momento pertenece la época de construcción de esta gran Hacienda de los Marqueses de San Andrés que algunos autores la establecen entre 1665 y 1668, residencia señorial de don Fernando en la Villa de Santiago, y que desde entonces ha sido el edificio más emblemático del Valle. Otra disposición real de 1679 le autoriza a fundar mayorazgo de sus bienes, incluyendo el patronato sobre las ermitas de San Juan Bautista de Taco (Buenavista del Norte) y Nuestra Señora del Rosario, en Tejina de Isora. El Cabildo de la isla se opuso tenazmente a la creación de dicho Señorío, y diversos pueblos de la isla ofrecieron cantidades para comprar de nuevo dicha jurisdicción, así como la del Señorío de Adeje. ",
+        "nombre": "Casa del Patio",
+        "enp": "",
+        "subtipo": "Edificio emblemático"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.74829048786181,
+          28.191754713324514
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "La Montaña de Tejina es un cono volcánico que en tiempos posteriores fue dedicado a la agricultura, lo que resultó en la creación de terrazas de cultivo que la rodean. Esta combinación de elementos geológicos y agrarios agrega un atractivo singular a la montaña",
+        "nombre": "Montaña de Tejina",
+        "enp": "Monumento Natural de La Montaña Tejina",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.726547597803336,
+          28.268986525308694
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "La Montaña de Samara es un cono volcánico de aspecto llamativo que marca la entrada al Parque Nacional. Su cráter es accesible para visitar, ofreciendo a los excursionistas y amantes de la geología la oportunidad de explorar esta singular formación volcánica",
+        "nombre": "Montaña de Sámara",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.303037044640085,
+          28.569085991129747
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Barranco del Tomadero es un profundo cañón que tiene su origen en el Risco de los dos Hermanos. Este impresionante barranco serpentea a través del paisaje, ofreciendo una perspectiva natural impresionante.",
+        "nombre": "Barranco del Tomadero",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.81718374338838,
+          28.365308820297432
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "El convento de San Bernardo fue fundado el 31 de agosto de 1649 por \nel capitán Sebastián Pérez Enríquez y su mujer Luisa Francisca Montañés, a quienes se deben los adelantos de la construcción y su primera dotación material. Allí profesaron al menos tres de sus hijas, quienes iniciaron la andadura monacal junto a otras cinco mujeres en calidad de religiosas fundadoras. Sin embargo, la extrema pobreza del convento y del lugar donde se emplazaba no le hizo ganar el desarrollo que habían adquirido otras fundaciones del mismo tipo existentes en Garachico, Icod, Los Realejos, La Orotava, Puerto de la Cruz o La Laguna. Destacan el claustro con el patio interior con corredor de madera de sencillas carpinterías y la iglesia de una sola nave con capilla mayor, situada en el costado norte que abre a la plaza principal.",
+        "nombre": "Antiguo Convento de San Bernardo",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.7639260226816,
+          28.3730879724328
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "El convento franciscano de Nuestra Señora de los Ángeles surgió en 1524 a raíz del patrocinio del genovés Cristóbal de Ponte, que cedió unos terrenos de su propiedad junto a una ermita existente bajo esta advocación mariana construida a principios del siglo XVI. Posee dos claustros, hoy dependencias del ayuntamiento, y una iglesia con capilla anexa dedicada a la Misericordia. Se trata del convento más antiguo del municipio, con dos portadas de cantería con frontón y columnas.",
+        "nombre": "Antiguo Convento Franciscano de Nuestra \nSeñora de Los Ángeles",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.764383515299023,
+          28.372932424713927
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "El Espacio Casa de Piedra es lugar de encuentro, de foros y seminarios de artistas, que tendrán en este espacio un autentico vivero para la creación, a la vez que un recinto para la exposición de la obra que se genere en este semillero artístico",
+        "nombre": "Espacio de Arte la Casa de Piedra",
+        "enp": "",
+        "subtipo": "Espacio cultural"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.798439538112856,
+          28.319503920615364
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "El Ecomuseo de El Tanque acoge una exposición sobre la vida en el Partido de Abajo, nombre que se le daba antiguamente a este lugar, mediante paneles interpretativos, audiovisuales, realidad virtual e interactivos, destinados a conocer la historia y cultura de este pequeño rincón del norte de Tenerife",
+        "nombre": "Ecomuseo de El Tanque",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Centro de interpretación/museo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.81691355540062,
+          28.36527163876263
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Construido sobre el terreno que ocupaba la primera ermita del municipio, este inmueble data de mediados de finales del siglo XVI. Fue reformada a principios del siglo XX",
+        "nombre": "Iglesia Parroquial de Nuestra Señora de la Luz",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.228846158118056,
+          28.54187647931534
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La Casa Forestal de Anaga es un edificio histórico que, en su pasado, funcionó como una instalación forestal. Sin embargo, en la actualidad, ha sido reutilizado y alberga las oficinas de la Policía Local y Protección Civil.",
+        "nombre": "Casa Forestal de Anaga",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Edificio emblemático"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.61223270345686,
+          28.26815976876069
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Montaña Blanca",
+        "enp": "Monumento Natural del Teide",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.817360978468468,
+          28.365597310600815
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "El pasado agrónomo de Los Silos estás más que patente en la historia del municipio, partiendo del hecho de su denominación. Integrado en el antiguo menceyato de Daute, debe su nombre a los silos o depósitos subterráneos para el trigo construidos por Gonzalo Yanes, heredero del ingenio del Adelantado. Desde su pasado su plaza y la iglesia de Nuestra Señora de la Luz han sido el centro neurálgico del municipio, desde donde se articulan de forma radial las principales calles que configuran el histórico casco urbano: Estrella y Benítez de Lugo; y Doctor Jordán y El Olivo. El límite del conjunto viene determinado al este por la plazoleta de la Constitución y al oeste por la plaza del Calvario. En ese entorno se conservan los principales inmuebles a destacar, como la casa que alberga el ayuntamiento, el kiosco de la plaza principal o las viviendas de dos plantas con balcones y ventanas de guillotinas construidas en torno a un patio central.",
+        "nombre": "Conjunto Histórico de Los Silos",
+        "enp": "",
+        "subtipo": "Bien de Interés Cultural"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.217022972792517,
+          28.56072444497281
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Localidad situada al norte de la capital de la isla, con rico patrimonio natural, arquitectónico y etnográfico. Históricamente es un pueblo agrícola, manteniéndose hoy por hoy como subsistencia de papas, viña, batata y hortalizas. El estado y mantenimiento de las construcciones en el casco, es digno de admiración",
+        "nombre": "Taganana",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.527362548114237,
+          28.361046788081076
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "Este barranco, ampliamente reconocido en la región, se destaca por su impresionante entorno natural, en especial el Monte Verde. Aquí encontramos una popular área de descanso conocida como \"La Cruz del Dornajito\"",
+        "nombre": "Barranco del Dornajito / Los Tres Pinos",
+        "enp": "",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.75999581973104,
+          28.330966044629992
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Su tronco está ramificado a los 60 cm del suelo con tres pernadas de grandes dimensiones. \nRodeado de un sotobosque de fayal-brezal. El perímetro de tronco en la base es de 7,30 m",
+        "nombre": "Los Tres Pinos / Pino de las Tres\nPernadas",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.616130277969255,
+          28.180558041077862
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Ruinas de construcción en piedra, donde vivían los ganaderos de la zona",
+        "nombre": "Casas Marrubial",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Edificio emblemático"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.2339814270984,
+          28.535183983663856
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Lomo de Mataborricos, ubicada al sur del núcleo de Casas de la Cumbre, es una fuerte pendiente en el terreno que aporta un elemento distintivo a la zona.",
+        "nombre": "Lomo Mataborricos",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Loma"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.83007835972794,
+          28.355726407386634
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Ruinas de antiguo caserío ejemplo de la sociedad rural del norte de Tenerife. Eminentemente agrícola, cuenta además con dos importantes eras, graneros, cuartos de aperos, corrales, gallineros...",
+        "nombre": "Caserío de Talavera",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.8763644052379,
+          28.34328925881645
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Pequeña ermita frente a la plaza del caserío, entre bancales y  pastizales con granjas",
+        "nombre": "Ermita de Teno Alto",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.65972741630975,
+          28.213208538015706
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Llano de Ucanca es una destacada depresión geográfica que se encuentra en el interior del majestuoso Parque Nacional del Teide. Este lugar se caracteriza por su topografía única, donde se extiende un amplio y llano terreno rodeado por las imponentes formaciones volcánicas de la región, dando lugar a unas panorámicas increíbles.",
+        "nombre": "Llano de Ucanca",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Llano"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.204903558230637,
+          28.57142061538934
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Roque de las Bodegas",
+        "enp": "",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.21885361113176,
+          28.561270027585582
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Lagar de la Chanca",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.156360499420447,
+          28.531566984782835
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco Igueste de San Andrés",
+        "enp": "",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.54621544454931,
+          28.14535374998181
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "El núcleo de las Vegas se encuentra en la actualidad en un buen estado de conservación, siendo una de las pocas localidades que aun mantienen ese marcado carácter rural que poseían las medianías del Sur de Tenerife, existiendo buenos ejemplos de arquitectura canaria, así como de una rica cultura tradicional",
+        "nombre": "Caserío de Las Vegas",
+        "enp": "",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.756784094062315,
+          28.340483539517734
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Caserío perteneciente al municipio de Garachico, de gran interés natural, que cuenta con una admirada ermita de paredes de piedra junto a un área recreativa",
+        "nombre": "San Francisco de la Montañeta",
+        "enp": "",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.497529781991283,
+          28.36049972488778
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Pino Padre conocido como referencia del lugar.Tiene helechos epifitos (Davallia canariensis) en su tronco. Se encuentra en el sendero P.R. TF-35 (La Caldera-Mamio-La Caldera), por encima de la casa forestal de Aguamansa",
+        "nombre": "Pino Camino de las Piedras",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.226058797738492,
+          28.52354901024759
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Pelotón en Valle Brosque es una estructura de roca llamativa que evoca la imagen de una gran bola equilibrada sobre un pedestal. Este peculiar rasgo geológico se destaca por su singularidad y forma inusual.",
+        "nombre": "El Pelotón",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.336324778059243,
+          28.523395389224806
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Su primera piedra se coloca a partir del año 1700 financiado en su mayor parte por la venta de madera y las aportaciones de los vecinos. Con estilo romántico mudéjar, su construcción se alargó durante años en los que las reformas y ampliaciones fueron constantes",
+        "nombre": "Iglesia de San Marcos",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.63094107762941,
+          28.22357145869194
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Roques de García",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.485844065346768,
+          28.33404761306461
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Arco o Ventana de Igueque",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.317921227248327,
+          28.571296037750994
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": null,
+        "nombre": "Oficina de Información Punta del Hidalgo",
+        "enp": "",
+        "subtipo": "Punto de información"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.14544863833826,
+          28.52334196570368
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Antigua estación de señalización marítima construida entre \n1880 y 1895, y que funcionó hasta 1971. Se encuentra hoy en estado de abandono, se lo conoce como Semáforo de Igueste o Semáforo de Anaga y su función era la de avisar al personal del Puerto de Santa Cruz de Tenerife de los barcos que se acercaban para que tuvieran todo listo para su atraque, bien por banderas durante el día o por luces durante la noche",
+        "nombre": "El Semáforo de la Atalaya de Igueste \nde San Andrés",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Infraestructura emblemática"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.594074429528547,
+          28.395841524563618
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La ermita de San Pedro Apóstol fue construida en la primera década del siglo XVII, junto al camino Real y frente a la cruz llamada de Castro, dentro de las tierras de las Ramblas",
+        "nombre": "Ermita de San Pedro",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.264492807961616,
+          28.557223298773735
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Pequeño caserío de riqueza natural, situado sobre una cresta que separa dos barrancos, y con interesantes muestras de arquitectura rural canaria. Ha habido interesantes hallazgos arqueológicos guanches en la zona",
+        "nombre": "Taborno",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.47821389277252,
+          28.382621298198895
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Ejemplar de dimensiones extraordinarias, ya que tiene seis pies ramificados a la altura del pecho, con un perímetro total de 1053 cm. Se encuentra ligeramente escorado hacia el Noroeste. Es visible desde la pista que pasa en sus proximidades. Tiene una faya creciendo en su base",
+        "nombre": "Pino Santo",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.345432919892588,
+          28.554431041601767
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": null,
+        "nombre": "Oficina de Información Turística de Bajamar",
+        "enp": "",
+        "subtipo": "Punto de información"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.40270862140564,
+          28.455342869922777
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco de Toledo",
+        "enp": "Paisaje Protegido de Las Lagunetas",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.76607426710041,
+          28.373170517867514
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "Castillo que sobrevivió a la erupción de 1706, y reacondicionado en 1999 para convertirlo en el Centro de Información Patrimonial",
+        "nombre": "Museo Castillo Fortaleza San Miguel",
+        "enp": "",
+        "subtipo": "Centro de interpretación/museo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.681639583802415,
+          28.2123414447907
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "La casa en la que vivió Juan Évora, último habitante de Las Cañadas del Teide, ha sido rehabilitada convirtiéndose en un punto de información y pequeño museo etnográfico que nos muestra una exposición sobre el antiguo estilo de vida de los pastores en Las Cañadas",
+        "nombre": "Museo Etnográfico Juan Évora",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Centro de interpretación/museo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.81604760726562,
+          28.2975804163673
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Construida por don Fernando del Hoyo Solorzano, alberga imágenes del siglo XVIII y una llamativa cúpula de media naranja y es la Parroquia de Santiago del Teide",
+        "nombre": "Iglesia de San Fernando Rey",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.602749841499442,
+          28.394188985283325
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "Impresionante playa salvaje, casi virgen, de arena negra combinada con algunas piedras. Con una longitud de más 200 metros y una anchura de 30 metros aproximadamente, es ideal para que disfrutar de unas vistas inmejorables de la escarpada silueta del norte de Tenerife. Ostenta la distinción de Bandera Azul por disponer de todos los servicios necesarios para tu comodidad y disfrute (duchas, puntos de vigilancia, salvamento y socorristas, aseos, restaurantes y chiringuitos de playa). Además si te gusta estar siempre conectado, esta playa cuenta con zonas Wi-Fi. Aunque está vigilada y cuenta con un punto de salvamento de la Cruz Roja durante todo el año se recomienda siempre tener precaución con el mar y observar el color de la bandera que ondea en ese momento. En la playa de El Socorro conviven además de manera armónica bañistas y surfistas, pero si vas a bañarte y no conoces bien la zona debes tener especial cuidado con las corrientes y el fuerte oleaje. Calificada como \"Playa Accesible\" por el Cabildo de Tenerife, dispone de aparcamiento reservado, duchas, rampas y pasarelas de acceso para personas minusválidas que hagan uso de silla de ruedas.",
+        "nombre": "Playa del Socorro",
+        "enp": "",
+        "subtipo": "Playa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.58542123723319,
+          28.380915191882927
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La existencia de un recinto religioso en el lugar está asociado a la rendición y bautismo de los nueve menceyes guanches tras la colonización de los castellanos. El Apóstol, en su iconografía de caballero, viene asociado al héroe vencedor en clara analogía del triunfo del cristianismo sobre los territorios aborígenes, concluyendo así el último capítulo del proceso conquistador del Archipiélago. Su nombramiento como parroquia se debió al Obispo Fernando Vázquez de Arce en 1498, convirtiéndose en el primer beneficio de la comarca de Taoro. Su conformación actual es de tres naves con sendas capillas centrales. Los elementos más destacados son sus retablos, como el de Santa Bárbara atribuido a Guillermo Veraud, o importantes esculturas como la propia santa, de Pedro Duque Cornejo, el Nazareno de Martín de Andújar y la Virgen de los Remedios, de Fernando Estévez.",
+        "nombre": "Iglesia de Santiago Apóstol",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.152721277602577,
+          28.577164194721934
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Dos construcciones de piedra, en ruinas actualmente. Sirvieros de vivienda para los  trabajadores de las fincas cercanas y almacén",
+        "nombre": "Casas de Tafada",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.55754237020287,
+          28.31068143195416
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "La Montaña de Guamaso es un cono volcánico que se caracteriza por su perfil suavemente inclinado y la exuberante vegetación que lo cubre. Una de sus características más singulares es que los visitantes tienen la oportunidad de caminar sobre el cráter, siguiendo el sendero PNT 14.- Alto de Guamaso",
+        "nombre": "Montaña de Guamaso",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.81290369848951,
+          28.34756812378503
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Crece sobre la pared basáltica del barranco. De su base parten bastantes chupones . \nSe observan picaduras de ácaros en las hojas, lo que le produce las agallas típicas de esta especie. La vegetación de la zona es del tipo Monteverde, con algunas especies exóticas posiblemente relacionadas con la introducción desde las casas próximas. Sobre este ejemplar crecen helechos (batatillas) y líquenes epífitos",
+        "nombre": "Barbusano de Cuevas Negras",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.263518523485107,
+          28.532723225983588
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Está ramificado desde la base, muy retorcido. El tronco principal está muerto, pero con varias ramas aún vivas",
+        "nombre": "Barbusano de Aguirre",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.647355449642838,
+          28.195073083081567
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Sombrero de Chasna es un fenómeno geológico único en el sur de la isla de Tenerife. Se trata de un corto derrame de lava que ha dado forma a una de las cumbres más llamativas de la zona, ya que tiene su característica forma similar a un sombrero peculiar.",
+        "nombre": "Sombrero de Chasna",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.885668701942677,
+          28.342298089599847
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Horno de Azabuche",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Instalación artesanal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.47868348483785,
+          28.37989674929543
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Se encuentra en ladera Este de un pequeño barranco. \nTiene una rama grande cortada hacia el Noreste y está ramificada a 130 cm de su base",
+        "nombre": "Faya Gorda",
+        "enp": "Reserva Natural Integral de Pinoleris",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.158969222733624,
+          28.569112892093656
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Núcleo poblacional tradicionalmente agraria, con interesantes muestras de la arquitectura rural tradicional canaria. Se ubica al pie del Monteverde, y tiene una riqueza natural muy apreciada por los visitantes",
+        "nombre": "Chamorga",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.14020707553841,
+          28.581285401866353
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "El Faro de Anaga es el más oriental de la isla, y se encuentra en la zona conocida como Roque Bermejo. Se comenzó a construir en 1861 y desde 1964 está en funcionamiento. La torre blanca en forma de cilindro se erige a 237 metros sobre el nivel del mar, convirtiéndolo en el tercer faro de mayor altitud de España.  ",
+        "nombre": "Faro de Anaga",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Infraestructura emblemática"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.819480375064398,
+          28.345203506113705
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Caserío abandonado ejemplo de la supervivencia de los pobladores después de la conquista para explotar los recursos que da el entorno. Las edificaciones cuentan con vivienda, cuadras, corrales...",
+        "nombre": "Caserío de Las Moradas",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.75886926633271,
+          28.366018449301524
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Acantilado de La Culata es un acantilado costero que, debido a la formación de la Isla Baja, quedó ubicado tierra adentro. Esta característica geológica es un testimonio visual de los procesos de cambio en la topografía de la región a lo largo del tiempo",
+        "nombre": "Acantilado de La Culata",
+        "enp": "Paisaje Protegido de Los Acantilados de La Culata",
+        "subtipo": "Acantilado"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.29099156707575,
+          28.56178216452141
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Pequeño caserío donde destacan las tradicionales casas-cueva, desde la época de los guanches hasta hoy en día que siguen en uso. Este entorno ha tenido usos eminentemente agrícola y ganadero, destacando algunos pajeros",
+        "nombre": "Chinamada",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.59471990699557,
+          28.367334289629717
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "La Ladera de Tigaiga es una majestuosa formación que se destaca por su rica vegetación de laureles. Esta impresionante ladera montañosa ofrece un paisaje espectacular, donde la densa vegetación de laureles crea una atmósfera de belleza natural.",
+        "nombre": "Ladera de Tigaiga",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.335625303039183,
+          28.52153233278798
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "Casa de principios del s.XX, que desde el año 2014 se convirtió en el Centro de Interpretación Casa Los Zamorano donde se está llevando a cabo un proyecto de gestión del patrimonio cultural de Tegueste. La dinamización de La Casa implica el establecimiento de varias líneas de trabajo paralelas. Esta planificación incluye la mediación cultural con la comunidad y la atención de las visitas a la Casa Los Zamorano, además de otras actuaciones relacionadas con la coordinación y seguimiento general del proyecto: la gestión de la propia exposición con montajes expositivos permanentes y temporales, la gestión y conservación preventiva de la colección de objetos y documentos, la implementación y desarrollo del enfoque didáctico para escolares, trabajos de documentación, digitalización, investigación, entrevistas, rutas, organización de eventos culturales en La Casa y la colaboración con otras instituciones del ámbito patrimonial implicadas con el proyecto de Los Zamorano",
+        "nombre": "Centro de Interpretación museo etnográfico Casa de los Zamorano",
+        "enp": "",
+        "subtipo": "Centro de interpretación/museo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.658030812166547,
+          28.21097045030677
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "La Zapatilla de la Reina",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.600577597635056,
+          28.313713790174003
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Risco de la Fortaleza",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.477890440908617,
+          28.384081734224033
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Este ejemplar tiene tres ramas principales. Presenta el aspecto de la quilla de un barco, al estar bifurcado por una gran rama desde la base",
+        "nombre": "Pino de la Quilla",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.513897396396434,
+          28.284451913508818
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Volcán de Fasnia es un cono volcánico relativamente joven, cuya última erupción tuvo lugar en 1705. Este cono volcánico se distingue por su intensa coloración negra, que es característica de las rocas volcánicas.",
+        "nombre": "Volcán de Fasnia",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.216834876439854,
+          28.561247598140515
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "La ermita de Santa Catalina mártir en Taganana remonta sus orígenes a la década de 1620. El 4 de mayo de 1621 el oficial de albañilería Juan García, residente en el Realejo Bajo, se comprometía a edificarla en términos muy precisos: «una ermita de treinta pies de hueco […] y dieciocho de ancho de hueco, y las paredes han de tener de ancho tres cuartas de vara». Fue edificada bajo la forma convenida en los meses siguientes, aunque no tuvo una escritura dotacional hasta que el alcalde y el párroco del lugar la firmaron junto a otros vecinos en representación del resto hasta 1630. De ahí que la fábrica quedara situada a un extremo de la plaza principal del pueblo, frente a la parroquia y junto a las principales viviendas del lugar. Siempre fue un recinto de gran sencillez, que se mantuvo con las condiciones exigibles para el culto y con pocos recursos",
+        "nombre": "Ermita de Santa Catalina",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.53953043304357,
+          28.208535632300713
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Su tronco está bifurcado a 130 cm y ha sido aprovechado para instalar la señalización de las actividades prohibidas \nen el entorno, como acampar y hacer fuego",
+        "nombre": "Pino Gordo ",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.311469174922593,
+          28.5711594566799
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "Paraje virgen y asilado compuesta de piedras y callados en su totalidad. El oleaje es muy fuerte y las corrientes muy peligrosas. Sus dimensiones aproximadamente son de 370 metros de longitud por 10 metros de anchura. Se accede a pie, no existen carreteras cercanas. Es una playa que no ofrece infraestructua ni ningún tipo de serviciio.",
+        "nombre": "Playa de Troche",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Playa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.336167972687146,
+          28.52311716676359
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Inmueble que acogió, además de la vivienda del sacerdote que lleva su nombre, la primera escuela pública de Tegueste en 1849",
+        "nombre": "Casa del Prebendado Pacheco",
+        "enp": "",
+        "subtipo": "Edificio emblemático"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.81289017207378,
+          28.347700271070163
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Lavaderos de Cuevas Negras",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Instalación hidráulica"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.642206055816594,
+          28.272598581018748
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Pico Teide es el punto más alto de la geografía española, al que solo se puede acceder con autorización previa, ya que su acceso está restringido.",
+        "nombre": "Pico Teide",
+        "enp": "Monumento Natural del Teide",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.78980259710509,
+          28.3012715279093
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Lugar donde en 1909 se hizo una rogativa para que el volcán Chinyero dejara de escupir lava en la última erupción volcánica de Tenerife",
+        "nombre": "Santuario del Calvario de la Virgen",
+        "enp": "Reserva Natural Especial del Chinyero",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.325494153200413,
+          28.568794574950747
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Ermita construida en 1677 en  honor a San Mateo Apóstol y ampliada en 1876, que alberga un lienzo del Apóstol hallado por unos pescadores en una cueva de la Punta del Hidalgo",
+        "nombre": "Iglesia de San Mateo",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.22929077976119,
+          28.561880320750404
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco de los Auchones",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.851077416924955,
+          28.342711583490182
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": "Venta de productos Agrícolas, Artesanales y Ecológicos de la zona",
+        "nombre": "Mercadillo del Agricultor de El Palmar",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Mercado (festivos)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.37101549136655,
+          28.31280068603865
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": "Este mirador esta a las faldas de Montaña Grande y ofrece inigualables vistas del malpaís, cubierto de tabaibas y cardones, con el océano al fondo",
+        "nombre": "Mirador Morras del Corcho",
+        "enp": "Reserva Natural Especial del Malpaís de Güímar",
+        "subtipo": "Mirador"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.497672524353415,
+          28.191683440083928
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco de las Hiedras",
+        "enp": "",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.766071694770407,
+          28.373163060921048
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Situado estratégicamente en el margen derecho de la bocana de la antigua rada natural de Garachico, actualmente se encuentra en la avenida Tomé Cano, que bordea el casco histórico de esta localidad por el lado de El Caletón. Al igual que los anteriores, su función era la de defender la entrada a la gran bahía natural que fue sepultada con la erupción de 1706. Su planta es cuadrada, con una pequeña entrada por el costado sur rematada por diferentes escudos heráldicos.",
+        "nombre": "Castillo de San Miguel",
+        "enp": "",
+        "subtipo": "Edificio militar"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.87981355595797,
+          28.348066888873152
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Paisaje Lunar de Teno Alto",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.398026750482025,
+          28.3705096944384
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Lagar de la Fincha Las Haciendas",
+        "enp": "",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.13594063083461,
+          28.577550921969312
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco Roque Bermejo",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.332929111155224,
+          28.523970278078174
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Elemento arquitectónico de gran importancia para las comunicaciones del municipio con el exterior. Fue destruido en varias ocasiones debido a la fuerza del torrente",
+        "nombre": "Puente de Palo",
+        "enp": "",
+        "subtipo": "Infraestructura emblemática"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.591497261859164,
+          28.39752483293609
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Pequeña fortaleza del siglo XVIII para defender la costa de ataques, que conserva tres de los cañones",
+        "nombre": "Fortín de San Fernando",
+        "enp": "Paisaje Protegido de Rambla de Castro",
+        "subtipo": "Edificio militar"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.63732567906549,
+          28.159667063061647
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Conjuno de cipreses que se encuentran en la Plaza de la iglesia de San Pablo Apóstol",
+        "nombre": "Cipreses de Vilaflor",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.6899800238603,
+          28.122144758879323
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Era de los Brezos",
+        "enp": "Reserva Natural Especial del Barranco del Infierno",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.21747136943067,
+          28.55923508009894
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Está en el borde de una huerta, junto a un muro, con una antigua atarjea de tea que pasa por su base.  En el otro lado de la casa hay otro magnífico ejemplar de drago que es visible desde la carretera. Su edad ronda los 240 años, ya que cuenta con 16 ramificaciones",
+        "nombre": "Dragos del Cura",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.290850800054145,
+          28.544081070463246
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco del Río / Barranco del Batán",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.336652363848753,
+          28.523082779159473
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Su construcción se inició en 1843 gracias a la aportación de los vecinos. Aunque Tegueste se había constituido como municipio en 1813, no disponía de una sede para las dependencias municipales. Este edificio sirvió también como alhóndiga, casa mortuoria y escuela",
+        "nombre": "Antiguo Ayuntamiento",
+        "enp": "",
+        "subtipo": "Edificio civil"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.8309151796204,
+          28.35490387649564
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": "Dos eras en muy buen estado de conservación",
+        "nombre": "Eras del Caserío de Talavera",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.84228512551477,
+          28.325682555339984
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Levantada en la Plaza de este barrio de Buenavista, se erige esta preciosa ermita tradicional",
+        "nombre": "Iglesia Las Portelas",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.33442327804947,
+          28.524145138611257
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Según la tradición oral, cuando una epidemia de peste azotó la isla en 1583 el Cabildo, que entonces tenía su sede en La Laguna, se reunió en este edificio",
+        "nombre": "Casa de la Audiencia",
+        "enp": "",
+        "subtipo": "Edificio emblemático"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.765329999681473,
+          28.372059056001685
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": "En este parque aún se conserva el arco de la puerta que daba entrada al antiguo puerto de Garachico en el siglo XVI. En él también puede verse de cerca el viejo lagar en muy buen estado",
+        "nombre": "Parque la Puerta de la Tierra",
+        "enp": "",
+        "subtipo": "Plaza/parque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.585883583591276,
+          28.39893041694593
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Una obra que marcó un hito en su tiempo por lo complicado de la orografía del terreno y por haberse instalado en su interior la primera máquina de vapor de la Isla de Tenerife",
+        "nombre": "Estación de bombeo La Gordejuela (Casa del Agua)",
+        "enp": "Paisaje Protegido de Rambla de Castro",
+        "subtipo": "Edificio hidráulico"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.62937555563068,
+          28.274145110942854
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": "El Refugio de Altavista, ubicado a 3.260 metros de altitud, se encuentra en el punto perfecto para disfrutar del mejor amanecer de Tenerife, con la majestuosa sombra del volcán proyectándose sobre el océano Atlántico",
+        "nombre": "Refugio de Altavista",
+        "enp": "Monumento Natural del Teide",
+        "subtipo": "Refugio"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.667184074207302,
+          28.153538204621803
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Campo de Volcanes de Montaña Mojino - Boca de Cascajos, destaca por su belleza natural, y está situado en la zona de Trevejos a una elevación de 1.422 metros. Esta zona es referencia para senderistas y deportistas.",
+        "nombre": "Campo de Volcanes Montaña Mojino - Boca de Cascajos (Trevejos)",
+        "enp": "Paisaje Protegido de Ifonche",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.603470861376085,
+          28.38481722187272
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "Bentor, hijo de Bencomo, lideró la batalla conocida como la segunda gran derrota guanche en la Victoria de Acentejo. Tras el desastre, se refugió junto a sus hombres en los altos de la ladera de Tigaiga, donde decide poner fin a su vida despeñándose, a principios de 1496. Escultura de bronce de la artista Carmen Luis León",
+        "nombre": "Escultura Mencey Bentor",
+        "enp": "",
+        "subtipo": "Escultura"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.19266302895854,
+          28.57214167792943
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "De fina arena negra y en un entorno rocoso, esta playa virgen se extiende a través de 300 metros de longitud por 35 de ancho y es de fácil acceso. Muy apreciada por los amantes del surf por la fuerza de sus aguas, si vas a bañarte debes tener mucho cuidado y vigilar el estado del mar ya que sus corrientes y su fuerte oleaje la hacen muy   peligrosa. Solo en los meses de julio, agosto y septiembre es vigilada por socorristas. En la temporada de verano y los fines de semana alcanza una ocupación media-alta pasando a ser baja durante el resto del año. No dispone de servicio de hamacas y sombrillas y cuenta con un kiosko frente a la playa. ",
+        "nombre": "Playa de Almáciga",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Playa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.28216211435905,
+          28.559415567982008
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": "El Cabezo de Tenejía es un impresionante roque ubicado en las proximidades de Las Carboneras, que se erige como un punto de referencia destacado en la zona. Con una altitud de casi 650 metros, esta formación geológica se alza majestuosamente sobre el paisaje circundante.",
+        "nombre": "Cabezo de Tenejías",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.252805463114015,
+          28.56088373181312
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco de Afur",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.575976941775004,
+          28.16255065337994
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Era del Corral de la Abejera",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.63707608334054,
+          28.159526278158506
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Levantada en el siglo XIX junto a los cipreses de la plaza de la iglesia de San Pedro Apóstol, actualmente cumple la función de casa parroquial",
+        "nombre": "La Casa Inglesa",
+        "enp": "",
+        "subtipo": "Edificio emblemático"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.7633684059264,
+          28.374493977755428
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "En 1643 comenzó a construirse este monasterio en un solar ubicado frente a \nla costa de Garachico, puesto bajo la advocación de San Pedro y San Cristóbal por así llamarse los hijos de quien fuera su patrono, Cristóbal de Ponte y Hoyo. Aunque el edificio no padeció la erupción del volcán de Trevejo en 1706, tres años más tarde un voraz incendió lo asoló en su totalidad, siendo reconstruido gracias a la disposición del obispo Juan Francisco Guillén. También ha sufrido las consecuencias de la fuerza del mar, como en 1856, que destruyó parte de la construcción. A diferencia de los otros cuatro conventos de la Villa y Puerto, no fue afectado por la desamortización.",
+        "nombre": "Monasterio de la Inmaculada Concepción",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.48649197458221,
+          28.360978330290322
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Se trata de varios individuos de gran porte situados en una zona con fayas y brezos viejos. Les cuelgan Usneas y musgos, están trifurcados y presentan numerosos chupones",
+        "nombre": "Acebiños de Los Órganos",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.80523189291687,
+          28.327858432784083
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Barrio situado a 14 kilómetros del casco de Los Silos, que fue en épocas pasadas eminentemente agrícola y ganadero, y posteriormente a las minas de tierra, dejando un paisaje singular, que en época de lluvias crea las famosas Charcas de Erjos",
+        "nombre": "Erjos",
+        "enp": "",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.84606545295289,
+          28.344101952347955
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Ermita construida a finales del siglo XVII dentro de las tierras del Conde del Palmar",
+        "nombre": "Iglesia de Nuestra Señora de la Consolación",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.778609029824427,
+          28.20953912180546
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Primer edificio religioso que se construyó en Guía de Isora, en el siglo XVI. Consta de tres naves que mantienen el aspecto de una iglesia tradicional canaria con cubiertas de madera y piso de piedra de cantería. En esta iglesia se encuentran diversos retablos, pinturas e imágenes de gran valor artístico y patrimonial.",
+        "nombre": "Iglesia de Nuestra Señora de la Luz",
+        "enp": "",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.497706952139815,
+          28.360296966102975
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Algunas ramas casi tocan la ladera debido a su enorme tamaño. Presenta tres pernadas a los dos metros",
+        "nombre": "Pino del Sendero",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.189323393318766,
+          28.574576953576898
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Barranco de Benijo",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Barranco"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.585325772113908,
+          28.37707657297188
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "El surgimiento del núcleo histórico se remonta a las etapas finales del \nproceso de conquista de la isla por las tropas del adelantado Alonso Fernández de Lugo, el cual estableció su campamento (El Real) en el lugar que posteriormente pasaría a llamarse El Realejo (de Arriba y de Abajo). Este conjunto sufrió un profunda transformación durante el siglo XX, aunque se pudo conservar destacadas viviendas, sobre todo en la calle El Medio Arriba, con ejemplos de arquitectura del siglo XVIII, con planta en forma de L y corredor exterior, y otras eclécticas de finales del siglo XIX y principios del XX.",
+        "nombre": "Conjunto Histórico El Realejo Alto",
+        "enp": "",
+        "subtipo": "Bien de Interés Cultural"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.478163167534564,
+          28.384033469640134
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Este pino tiene tres ramas principales a 1 m. En la zona, cuya vegetación corresponde con un pinar mixto, hay \nnumerosos pinos grandes, de más de 4 m de perímetro como el Pino de la Quilla y el de la Vereda, de 501 cm",
+        "nombre": "Pino \"la medida\"",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.798640014222322,
+          28.318892092157594
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": "Varias eras para la difusión de uso a los visitantes del museo",
+        "nombre": "Eras del Ecomuseo de El Tanque",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Instalación agrícola"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.587009676593535,
+          28.379016636683392
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "El valor histórico de este inmueble radica en que en él nació el historiador y erudito canario José Viera y  Clavijo, máximo representante de la Ilustración en Canarias. Creció y disfrutó de sus primeros años de vida y de formación académica, enseñanzas que recibiría en el convento de los dominicos de La Orotava. Durante su adolescencia despertó su inquietud como literato y adquirió la influencia del racionalismo ilustrado que posteriormente lo caracterizaría. La vivienda data del siglo XVII con planta en forma rectangular y patio posterior, con una disposición de vanos irregulares en su fachada.",
+        "nombre": "Casa Natal de Viera y Clavijo",
+        "enp": "",
+        "subtipo": "Edificio emblemático"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.217422805196247,
+          28.560416444416376
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": null,
+        "nombre": "Fuente Pianola",
+        "enp": "Parque Rural de Anaga",
+        "subtipo": "Instalación hidráulica"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.374568614499747,
+          28.382612496123418
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "Lugar simbólico y mágico para los guanches. Los antiguos pobladores de la isla lo utilizaban para realizar sepulturas colectivas, y lo consideraban uno de los sitios para acoger el ganado sagrado de la Virgen de Candelaria",
+        "nombre": "Igueste de Candelaria",
+        "enp": "",
+        "subtipo": "Núcleo poblacional"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.680786795926803,
+          28.100233155403334
+        ]
+      },
+      "properties": {
+        "tipo": "Asentamientos",
+        "descripcion": "El ámbito delimitado por el BIC acoge el área fundacional del núcleo de Arona, cuyos orígenes se remontan al momento de la fundación de la primitiva ermita, erigida en honor a San Antonio Abad por Antón Domínguez \"el Viejo\" en 1625, que posteriormente se reforma y amplía en 1796 y a principios del siglo XIX.Destacan en el conjunto las casas señoriales que rodean la parroquia, y su trazado de calles con calzada adoquinada que le otorga la calidad de uno de los mejores núcleos conservados de la isla.",
+        "nombre": "Conjunto Histórico de Arona",
+        "enp": "",
+        "subtipo": "Bien de Interés Cultural"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.31807108583758,
+          28.571052652475913
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "Homenaje a Sebastián Ramos «El Puntero» (1894-1976) uno de los más importantes artistas que ha dado el folclore canario a lo largo de la historia y nacido en la Punta del Hidalgo",
+        "nombre": "\"El Puntero\" en memoria de SebastiánRamos",
+        "enp": "",
+        "subtipo": "Escultura"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.862803101794793,
+          28.334817451804128
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Pico Baracán",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Montaña/Volcán"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.664673352153514,
+          28.153868942123342
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Etnográfico",
+        "descripcion": "El Paisaje Agrario de Trevejos es un espacio dedicado a la agricultura, donde el cultivo principal es la viña. Este entorno agrícola se caracteriza por sus campos de viñedos en bancada que abarcan el paisaje.",
+        "nombre": "Paisaje Agrario de Trevejos",
+        "enp": "Paisaje Protegido de Ifonche",
+        "subtipo": "Paisaje agrario"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.846263344557354,
+          28.34528163052331
+        ]
+      },
+      "properties": {
+        "tipo": "Cultura y Arte",
+        "descripcion": "Escultura íntegra de bronce, del artista Eladio de la Cruz, que rinde homenaje al baile de las Libreas, símbolo representativo del tesoro etnográfico de El Palmar. El baile de Las Libreas se sigue celebrando cada año, y simboliza la lucha entre el bien y el mal",
+        "nombre": "Escultura Homenaje al Baile de las \nLibreas",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Escultura"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.673105048055227,
+          28.150203668954777
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": null,
+        "nombre": "Puente de Guayero",
+        "enp": "Paisaje Protegido de Ifonche",
+        "subtipo": "Infraestructura emblemática"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.487350836965078,
+          28.358723146243076
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Situado a unos 100 metros sobre el sendero PR 35.2 (Ruta del agua).Tiene dos pernadas. Se encuentra en una zona de difícil acceso",
+        "nombre": "Pino Lomo del Jaral",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.48257335928039,
+          28.390600695448967
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Difícilmente mensurable, mide aproximadamente 7 m de perímetro. Ramificado a los 2.50 m de altura. Se encuentra al borde de barranco límite entre La Orotava y Santa Úrsula, junto al Pino Rey",
+        "nombre": "Pino de Don Alberto",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.711969518651074,
+          28.22232004016083
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Se encuentra en una loma, cercano a otros grandes pinos utilizados antiguamente para la extracción de la brea.Tiene una forma característica, achaparrado, con cuatro grandes pernadas. El aspecto actual es de un gran candelabro de cuatro brazos, del que sobresale una gran rama de 19 m hacia el NO. Ha sobrevivido a distintos incendios, mostrándose como un viejo superviviente. En esta parte del Bosque situado sobre la galería de Tágara, se desarrolló durante los siglos XVIII y XIX una intensa actividad relacionada con la industria de la brea para calafatear navíos. Se trata, por tanto de una zona de numerosos pinos enteados y furados, que tuvieron una importancia económica muy importante para la zona.",
+        "nombre": "Pino de las Cuatro Pernadas",
+        "enp": "Parque Natural de Corona Forestal",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.817510555109184,
+          28.365579528051985
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": "Variedad de frutas y verduras, especias, dulces y pasteles, quesos y vino",
+        "nombre": "Mercadillo del Agricultor de Los Silos",
+        "enp": "",
+        "subtipo": "Mercado (festivos)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.588802234942644,
+          28.22501666289909
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Geológico",
+        "descripcion": null,
+        "nombre": "Roque de la Grieta",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Formación rocosa"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.788765119373036,
+          28.32309133740885
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Su corteza era utilizada con usos medicinales. Antes medía unos 13 m, pero un temporal le partió bastantes ramas. \nEn la base de su tronco posee un hueco de donde partía un fuste más robusto que el actual. Hoy salen varios chupones de su base y está algo escorado",
+        "nombre": "Chopo de La Hoya",
+        "enp": "",
+        "subtipo": "Árbol monumental"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.33260202737755,
+          28.52396447211186
+        ]
+      },
+      "properties": {
+        "tipo": "Servicios y Facilidades",
+        "descripcion": "Lugar donde se fundó Tegueste, ya que dispone de unas condiciones orográficas favorables para el asentamiento de la población, especialmente en cuanto a la facilidad de acceso ya la disponibilidad de agua",
+        "nombre": "Plaza de la Arañita",
+        "enp": "",
+        "subtipo": "Plaza/parque"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.627965908375852,
+          28.22378169266809
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Arquitectónico",
+        "descripcion": "Ermita situada junto al Parador de las Cañadas del Teide, con una nave de forma rectangular. Es un templo muy austero, pero de gran belleza, construida en 1954, y con la imagen de la Virgen de las Nieves de mármol blanca coronando su altar",
+        "nombre": "Ermita de Nuestra Señora de las Nieves",
+        "enp": "Parque Nacional del Teide",
+        "subtipo": "Edificio religioso"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.796173740131565,
+          28.318782665041564
+        ]
+      },
+      "properties": {
+        "tipo": "Patrimonio Biológico",
+        "descripcion": "Tiene un hueco de 230 cm de altura, 100 cm de ancho y 80 cm de fondo a partir de 80 cm del suelo. \nSe encuentra en una zona donde hay otros pinos padre», como el Pino Trebejo, el Pino de Nica o el Pino Loro",
+        "nombre": "Pino del Cercado de las Mulas",
+        "enp": "Parque Rural de Teno",
+        "subtipo": "Árbol monumental"
+      }
+    }
+  ]
+}
