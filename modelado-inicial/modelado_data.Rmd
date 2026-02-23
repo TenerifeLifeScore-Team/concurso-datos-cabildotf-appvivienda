@@ -451,6 +451,18 @@ temp <- raw_salud %>%
   relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
 ```
 
+```{r mascotasocio-a-comercio}
+
+temp2 <- raw_centrosdeportivos_ocio %>% 
+    
+    select(nombre,
+           tipo = actividad_tipo,
+           geometry) %>% 
+    
+    filter(tipo %in% c("playa mascotas", "parque mascotas")) 
+```
+
+
 ```{r comercio-transformacion, fig.align="center", out.width="100%", fig.height=6}
 clean_comercio <- raw_comercio %>%
   janitor::clean_names() %>%
@@ -528,8 +540,9 @@ clean_comercio <- raw_comercio %>%
   
   relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
 
-# Añadimos veterinarios de la tabla temporal temp
-clean_comercio <- bind_rows(clean_comercio, temp)
+# Añadimos veterinarios y parques/playas mascotas de la tabla temporal temp
+clean_comercio <- bind_rows(clean_comercio, temp, temp2)
+
 
 # --- VERIFICACIÓN ---
 mapview(
@@ -630,6 +643,31 @@ mapview(
 )
 ```
 
+## Centros deportivos y Ocio
+
+```{r, centros_deportivos_y_ocio-inicial}
+raw_centrosdeportivos_ocio <- st_read("../data-raw/centros-deportivos-y-de-ocio-en-tenerife.geojson", quiet = TRUE) %>% 
+  janitor::clean_names()
+
+```
+
+
+```{r centros_deportivos_y_ocio-transformacion}
+
+clean_centrosdeportivos_y_ocio <- raw_centrosdeportivos_ocio %>% 
+    select(nombre,
+           tipo = actividad_tipo,
+           geometry) %>% 
+    
+    filter(!tipo %in% c("administracion publica juzgado", "asociacion cultural")) %>%
+    
+    mutate(nombre = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo))
+
+
+```
+
+
+
 ```{verbatim guardar-archivos}
 # saveRDS(transport_master, "data-clean/clean_movilidad.rds")
 
@@ -638,4 +676,5 @@ st_write(clean_salud, "../data-clean/salud.geojson", delete_dsn = TRUE, quiet = 
 st_write(clean_edu, "../data-clean/educacion.geojson", delete_dsn = TRUE, quiet = TRUE)
 st_write(clean_comercio, "../data-clean/comercio.geojson", delete_dsn = TRUE, quiet = TRUE)
 st_write(clean_restauracion, "../data-clean/restauracion.geojson", delete_dsn = TRUE, quiet = TRUE)
+st_write(clean_centrosdeportivos_y_ocio, "../data-clean/deportes_y_ocio.geojson", delete_dsn = TRUE, quiet = TRUE)
 ```
