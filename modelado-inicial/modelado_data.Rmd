@@ -181,8 +181,6 @@ clean_guaguas <- raw_guaguas %>%
   select(nombre = parada_nombre, geometry) %>% # Nos quedamos solo con el nombre y la pos
   mutate(
     tipo = "Guagua",
-    ponderacion = 10,
-    max_acumulable = 4,
     grupo = "Transporte publico"
   )
 
@@ -192,8 +190,6 @@ clean_tranvia <- raw_tranvia %>%
   select(nombre = parada_nombre, geometry) %>%
   mutate(
     tipo = "Tranvia",
-    ponderacion = 10,
-    max_acumulable = 1,
     grupo = "Transporte publico"
   )
          
@@ -202,7 +198,7 @@ clean_tranvia <- raw_tranvia %>%
 ```{r unificación-movilidad, fig.align="center", out.width="100%", fig.height=6}
 # 4. Unificación
 clean_movilidad <- bind_rows(clean_guaguas, clean_tranvia) %>%
-  relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
+  relocate(nombre, grupo, tipo, geometry)
 
 # 5. Verificación de Coordenadas (CRÍTICO)
 # Aseguramos que sea WGS84 (EPSG:4326) para la web
@@ -268,32 +264,14 @@ clean_salud <- raw_salud %>%
       actividad_tipo %in% c("servicios hospitalarios", "centro de salud", "farmacia") ~ "Vital",
       # Todo lo demás va al grupo especialistas (dentistas, fisios, etc.)
       TRUE ~ "Salud especializada"
-    ),
-    
-    # Asignación de ponderaciones
-    ponderacion = case_when(
-      actividad_tipo %in% c('centro de salud', 'servicios hospitalarios', 'clinica dental') ~ 10,
-      actividad_tipo %in% c('farmacia', 'servicios profesionales medicos', 'fisioterapia rehabilitacion') ~ 9,
-      actividad_tipo %in% c("servicios profesionales psicologia", "servicios asistenciales") ~ 7,
-      actividad_tipo %in% c("laboratorio analisis clinicos", "servicios profesionales logopedia") ~ 6,
-      actividad_tipo %in% c('servicios profesionales podologia') ~ 5
-    ),
-    
-    # Asignación máximo acumulable
-    max_acumulable = case_when(
-        actividad_tipo %in% c("centro de salud", "servicios hospitalarios", "laboratorio analisis clinicos", "servicios profesionales logopedia", "servicios profesionales podologia") ~ 1,
-        actividad_tipo %in% c("servicios profesionales medicos", "fisioterapia rehabilitacion", "clinica dental", "servicios profesionales psicologia", "servicios asistenciales") ~ 2,
-        actividad_tipo %in% c('farmacia') ~ 3
-    )
-    
-  ) %>%
+    )) %>%
   
   rename(
     grupo = grupo_salud,
     tipo = actividad_tipo
   ) %>%
   
-  relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
+  relocate(nombre, grupo, tipo, geometry)
 
 
 # --- 4. CHEQUEO FINAL ---
@@ -370,33 +348,14 @@ clean_edu <- raw_edu %>%
       actividad_tipo %in% c(cat_colegios, cat_formacion)  ~ "Educacion",
       actividad_tipo %in% cat_cultura   ~ "Cultura",
       TRUE ~ "Otros"
-    ),
-    
-    # Asignación ponderación
-    ponderacion = case_when(
-        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "enseñanza universitaria", "biblioteca ludoteca") ~ 10,
-        actividad_tipo %in% c("enseñanza secundaria") ~ 9,
-        actividad_tipo %in% c("enseñanza profesional", "enseñanza especial") ~ 8,
-        actividad_tipo %in% c("centro cultural", "museos salas de arte") ~ 7,
-        actividad_tipo %in% c("enseñanza adultos", "enseñanza especializada", "enseñanza idiomas") ~ 6,
-        actividad_tipo %in% c("asociacion cultural") ~ 4
-    ),
-    
-    # Asignacion acumulacion maxima
-    max_acumulable = case_when(
-        actividad_tipo %in% c("enseñanza idiomas") ~ 3,
-        actividad_tipo %in% c("guarderias centros infantiles", "enseñanza infantil", "enseñanza infantil y primaria", "enseñanza obligatoria", "enseñanza secundaria", "enseñanza universitaria", "enseñanza adultos", "enseñanza profesional", "enseñanza especializada", "biblioteca ludoteca", "centro cultural", "museos salas de arte") ~ 2,
-        actividad_tipo %in% c("enseñanza especial", "asociacion cultural") ~ 1
-    )
-    
-  ) %>%
+    )) %>%
   
   rename(
     grupo = grupo_edu,
     tipo = actividad_tipo
   ) %>%
   
-  relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
+  relocate(nombre, grupo, tipo, geometry)
 
 # --- 3. VERIFICACIÓN Y MAPA ---
 # Definimos colores para cada grupo:
@@ -443,12 +402,10 @@ temp <- raw_salud %>%
   filter(actividad_tipo == "servicios veterinarios") %>%
   select(nombre, actividad_tipo, geometry) %>%
   mutate(
-    grupo = "Mascotas",
-    ponderacion = 10,
-    max_acumulable = 2
+    grupo = "Mascotas"
   ) %>%
   rename(tipo = actividad_tipo) %>%
-  relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
+  relocate(nombre, grupo, tipo, geometry)
 ```
 
 ```{r mascotasocio-a-comercio}
@@ -508,37 +465,14 @@ clean_comercio <- raw_comercio %>%
       
       actividad %in% c("mascotas") ~ "Mascotas"
       
-      # SIGUE AQUÍ TOMÁS, PON LO QUE FALTAN, PONDERACIONES Y MAX ACUM, CAMBIA LOS NOMBRES DE LAS VARIABLES TAMBIÉN.
-    ),
-    
-    # Asignación ponderación
-    ponderacion = case_when(
-      actividad %in% c("concesionario exposicion automocion") ~ 3,
-      actividad %in% c("alimentacion vinoteca", "artesania y productos tradicionales", "estudio fotografia") ~ 4,
-      actividad %in% c("alimentacion productos especializados herbolario", "kiosco prensa", "tabaqueria licoreria", "floristeria", "bisuteria complementos", "merceria textil", "zapateria calzado taller", "comercio otro tipo") ~ 5,
-      actividad %in% c("hogar textil", "joyeria relojeria taller", "moda complementos taller", "articulos musicales", "locutorio", "mascotas") ~ 6,
-      actividad %in% c("optica ortopedia audicion", "parafarmacia productos naturales", "perfumeria estetica complementos", "joyeria relojeria", "bazar electronica") ~ 7,
-      actividad %in% c("bazar multitienda estanco", "mercados y ferias", "electricidad electronica", "hogar muebles electrodomesticos decoracion", "zapateria calzado", "jugueteria", "telefonia") ~ 8,
-      actividad %in% c("centro comercial hogar construccion", "centro comercial hogar moda", "moda complementos", "moda complementos infantil", "centro comercial deportes", "centro comercial hogar informatica telecomunicaciones", "libreria papeleria discoteca") ~ 9,
-      actividad %in% c("alimentacion supermercados", "peluqueria estetica", "ferreteria", "centro comercial", "articulos deportivos", "informatica telecomunicaciones") ~ 10
-    ),
-    
-    # Asignacion acumulacion maxima
-    max_acumulable = case_when(
-      actividad %in% c("centro comercial hogar construccion", "centro comercial", "centro comercial hogar moda", "centro comercial deportes", "centro comercial hogar informatica telecomunicaciones", "concesionario exposicion automocion") ~ 1,
-      actividad %in% c("alimentacion productos especializados herbolario", "alimentacion vinoteca", "mercados y ferias", "kiosco prensa", "tabaqueria licoreria", "optica ortopedia audicion", "parafarmacia productos naturales", "peluqueria estetica", "perfumeria estetica complementos", "electricidad electronica", "ferreteria", "floristeria", "hogar muebles electrodomesticos decoracion", "hogar textil", "artesania y productos tradicionales", "bisuteria complementos", "joyeria relojeria", "joyeria relojeria taller", "merceria textil", "moda complementos taller", "zapateria calzado taller", "articulos musicales", "estudio fotografia", "jugueteria", "locutorio", "mascotas") ~ 2,
-      actividad %in% c("alimentacion supermercados", "bazar multitienda estanco", "articulos deportivos", "bazar electronica", "comercio otro tipo", "informatica telecomunicaciones", "telefonia") ~ 3,
-      actividad %in% c("moda complementos", "moda complementos infantil", "zapateria calzado", "libreria papeleria discoteca") ~ 4
-    )
-    
-  ) %>%
+    )) %>%
   
   rename(
     grupo = grupo_comercio,
     tipo = actividad
   ) %>%
   
-  relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
+  relocate(nombre, grupo, tipo, geometry)
 
 # Añadimos veterinarios y parques/playas mascotas de la tabla temporal temp
 clean_comercio <- bind_rows(clean_comercio, temp, temp2)
@@ -605,33 +539,13 @@ clean_restauracion <- raw_restaur %>%
       actividad %in% c("cibercafe", "autobar", "bar", "bar cafeteria", "bar cafeteria arepera", "bar cafeteria creperia", "bar cafeteria hamburgueseria", "bar cibercafe", "bar kiosco", "bar terraza", "barhamburgueseria") ~ "Casual, fast food y bares de paso",
       actividad %in% c("bar taberna", "bartasca", "guachinche", "restaurante bodega", "restaurante tasca", "tasca", "restaurante", "restaurante buffet", "restaurante meson", "restaurante pizzeria") ~ "Gastronomia y guachinches",
       actividad %in% c("salon recreativo", "bar cafeteria pub", "bar cerveceria", "barclub", "discoteca", "discoteca club", "pub", "sala de fiestas") ~ "Vida nocturna y copas"
-    ),
-    
-    # Asignación ponderación
-    ponderacion = case_when(
-      actividad %in% c("autobar") ~ 4,
-      actividad %in% c("cibercafe", "bar cibercafe") ~ 5,
-      actividad %in% c("bar kiosco") ~ 6,
-      actividad %in% c("bar cafeteria arepera", "bar cafeteria creperia", "restaurante buffet", "salon recreativo") ~ 7,
-      actividad %in% c("heladeria", "bar cafeteria zumeria", "bar churreria chocolateria", "bar croissanteria", "barchurreria", "bardulceria", "bar taberna", "restaurante meson", "restaurante pizzeria", "bar cafeteria pub", "bar cerveceria", "sala de fiestas") ~ 8,
-      actividad %in% c("heladeria pasteleria", "bar pasteleria", "barcafeteriachurreria", "barcafeteriapasteleria", "bar cafeteria hamburgueseria", "bar terraza", "barhamburgueseria", "bartasca", "restaurante bodega", "restaurante tasca", "tasca", "barclub", "pub") ~ 9,
-      actividad %in% c("cafeteria", "café", "bar", "bar cafeteria", "guachinche", "restaurante", "discoteca", "discoteca club") ~ 10
-    ),
-    
-    # Asignacion acumulacion maxima
-    max_acumulable = case_when(
-      actividad %in% c("autobar") ~ 1,
-      actividad %in% c("café", "heladeria", "heladeria pasteleria", "bar cafeteria zumeria", "bar churreria chocolateria", "bar croissanteria", "bar pasteleria", "barcafeteriachurreria", "barcafeteriapasteleria", "barchurreria", "bardulceria", "cibercafe", "bar cafeteria", "bar cafeteria arepera", "bar cafeteria creperia", "bar cafeteria hamburgueseria", "bar cibercafe", "bar kiosco", "bar terraza", "barhamburgueseria", "bar taberna", "bartasca", "guachinche", "restaurante bodega", "restaurante tasca", "tasca", "restaurante buffet", "restaurante meson", "restaurante pizzeria", "salon recreativo", "barclub", "sala de fiestas") ~ 2,
-      actividad %in% c("cafeteria", "bar", "restaurante", "bar cafeteria pub", "bar cerveceria", "discoteca", "discoteca club", "pub") ~ 3
-    )
-    
-  ) %>%
+    )) %>%
   
   rename(
     tipo = actividad
   ) %>%
   
-  relocate(nombre, grupo, tipo, ponderacion, max_acumulable, geometry)
+  relocate(nombre, grupo, tipo, geometry)
 
 # --- 3. VERIFICACIÓN Y MAPA ---
 # MAPA INTERACTIVO
