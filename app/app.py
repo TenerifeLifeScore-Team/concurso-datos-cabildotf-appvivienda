@@ -129,13 +129,11 @@ if seleccion_menu == "Visión general del modelo":
     # 1. Cargar Datos (Cacheado)
     gdf_hexagons = cargar_datos_mapa()
     
-    # Verificación de seguridad
-    if gdf_hexagons.empty:
-        st.error("⚠️ No se pudo cargar el mapa base (GeoJSON). Revisa 'loaders.py'.")
-        st.stop()
+    # INICIALIZACIÓN: Si no existe la variable en sesión, la creamos vacía
+    if 'gdf_mapa_actual' not in st.session_state:
+        st.session_state['gdf_mapa_actual'] = None
 
     # Contenedor principal
-    # Botón de calcular del sidebar
     if boton_calcular:
         with st.spinner("Calculando LifeScore para toda la isla... 🧮"):
             
@@ -143,7 +141,6 @@ if seleccion_menu == "Visión general del modelo":
             # Los diccionarios 'sliders_subgrupos' y 'checks_actividades' ya vienen rellenos del sidebar
             
             # B. LLAMAR AL MOTOR (ENGINE)
-            # Esto nos devuelve el GeoDataFrame con la columna 'score_final'
             gdf_resultado = calcular_lifescore_vectorial(
                 gdf_hexagons, 
                 diccionario_config, 
@@ -151,53 +148,61 @@ if seleccion_menu == "Visión general del modelo":
                 checks_actividades
             )
             
-            # C. PREPARAR COLORES PARA PYDECK
-            # PyDeck necesita una columna con lista [R, G, B]. La creamos al vuelo.
-            # Usamos una lambda para aplicar la función de colores fila a fila.
+            # C. PREPARAR COLORES
             gdf_resultado["fill_color"] = gdf_resultado["score_final"].apply(obtener_color_por_score)
             
-            # D. CONFIGURAR EL MAPA (PYDECK)
-            view_state = pdk.ViewState(
-                latitude=28.30,     # Centro aprox de Tenerife
-                longitude=-16.55,
-                zoom=9,
-                pitch=0,            # 0 para vista cenital (2D), 45 para 3D
-            )
-
-            layer_hexagonos = pdk.Layer(
-                "GeoJsonLayer",
-                data=gdf_resultado,
-                opacity=0.8,
-                stroked=False,      # Sin bordes negros para que se vea más limpio
-                filled=True,
-                extruded=False,     # Ponlo a True si quieres que los hexágonos tengan altura
-                get_fill_color="fill_color", # Usamos la columna que acabamos de crear
-                pickable=True,      # Para que funcione el tooltip al pasar el ratón
-            )
-
-            # Tooltip: Qué sale al pasar el ratón
-            tooltip = {
-                "html": "<b>LifeScore:</b> {score_final}/10",
-                "style": {"backgroundColor": "steelblue", "color": "white"}
-            }
-
-            r = pdk.Deck(
-                layers=[layer_hexagonos],
-                initial_view_state=view_state,
-                tooltip=tooltip,
-                map_style="mapbox://styles/mapbox/light-v9" # O 'road', 'dark', etc.
-            )
-
-            # E. PINTAR FINALMENTE
-            st.pydeck_chart(r, width='stretch')
+            # D. GUARDAR EN MEMORIA (PERSISTENCIA)
+            st.session_state['gdf_mapa_actual'] = gdf_resultado
             
-            # F. Métrica resumen (Opcional pero útil)
-            # mejor_zona = gdf_resultado['score_final'].max()
-            # st.success(f"✅ Mapa actualizado. La puntuación máxima encontrada es **{mejor_zona}/100**.")
-            
+            #if boton_calcular:
+            #    st.success("¡Mapa actualizado!")
+
+    # ============================================================
+    # PINTADO (RENDER) - FUERA DEL IF PARA QUE NO SE BORRE
+    # ============================================================
+    
+    # 1. Recuperamos lo que hay en la caja fuerte
+    gdf_a_pintar = st.session_state.get('gdf_mapa_actual')
+
+    # 2. Si hay datos, pintamos (usando tu configuración exacta)
+    if gdf_a_pintar is not None:
+        
+        view_state = pdk.ViewState(
+            latitude=28.30,     # Centro aprox de Tenerife
+            longitude=-16.55,
+            zoom=9,
+            pitch=0,            # 0 para vista cenital (2D), 45 para 3D
+        )
+
+        layer_hexagonos = pdk.Layer(
+            "GeoJsonLayer",
+            data=gdf_a_pintar,  # AQUÍ USAMOS LA VARIABLE DE SESIÓN
+            opacity=0.8,
+            stroked=False,      # Sin bordes negros
+            filled=True,
+            extruded=False,     
+            get_fill_color="fill_color", 
+            pickable=True,      
+        )
+
+        tooltip = {
+            "html": "<b>LifeScore:</b> {score_final}/10",
+            "style": {"backgroundColor": "steelblue", "color": "white"}
+        }
+
+        r = pdk.Deck(
+            layers=[layer_hexagonos],
+            initial_view_state=view_state,
+            tooltip=tooltip,
+            map_style="mapbox://styles/mapbox/light-v9" 
+        )
+
+        # E. PINTAR FINALMENTE
+        st.pydeck_chart(r, width='stretch')
+        
     else:
+        # Si entras por primera vez y no se ha calculado nada (raro con la lógica actual, pero por seguridad)
         st.info("👈 Ajusta tus preferencias en el menú lateral y pulsa 'Calcular LifeScore'.")
-
 
 
 
