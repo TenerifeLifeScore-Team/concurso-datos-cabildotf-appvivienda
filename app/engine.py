@@ -41,10 +41,10 @@ def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuar
         # C. Obtenemos factores (Peso * Slider)
         peso_base = config['peso']       # Ponderación del experto
         grupo = config['grupo_slider']   # Ej: "Salud vital"
-        val_slider = sliders_usuario.get(grupo, 5) # 1 a 10
+        val_slider = sliders_usuario.get(grupo, 3) # Valor por si acaso
         
-        # Normalizamos slider (1 -> 0.1, 10 -> 1.0)
-        factor_usuario = val_slider / 10.0
+        # Normalizamos slider (1 -> 0.1, 5 -> 1.0)
+        factor_usuario = val_slider / 5.0
         
         # D. CÁLCULO VECTORIAL
         # Sumamos: (Cantidad Saturada * Peso * Importancia)
