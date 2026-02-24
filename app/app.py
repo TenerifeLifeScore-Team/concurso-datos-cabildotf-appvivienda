@@ -84,7 +84,7 @@ with st.sidebar:
                     # Slider del subgrupo
                     sliders_subgrupos[grupo_slider] = st.slider(
                         grupo_slider, 
-                        min_value=1, max_value=5, value=3, step=1,
+                        min_value=0, max_value=5, value=3, step=1,
                         key=f"slider_{grupo_slider}"
                     )
 
