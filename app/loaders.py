@@ -8,7 +8,7 @@ UBICACION_ACTUAL = Path(__file__).parent
 # 2. Subimos un nivel (.parent) para ir a la raíz del proyecto
 # Y desde ahí entramos a 'data-proccesed'
 # OJO: Mantengo tu nombre "data-proccesed" (con dos c), si la cambias, cámbialo aquí también.
-PATH_DATOS = UBICACION_ACTUAL.parent / "data-proccesed" / "tabla_saturada.geojson"
+PATH_DATOS = UBICACION_ACTUAL.parent / "data-proccesed" / "tabla_saturada_suavizada.geojson"
 
 @st.cache_data(show_spinner=False)
 def cargar_datos_mapa():
