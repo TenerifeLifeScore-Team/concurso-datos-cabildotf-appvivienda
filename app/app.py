@@ -84,7 +84,7 @@ with st.sidebar:
                     # Slider del subgrupo
                     sliders_subgrupos[grupo_slider] = st.slider(
                         grupo_slider, 
-                        min_value=1, max_value=5, value=3, step=1,
+                        min_value=0, max_value=5, value=3, step=1,
                         key=f"slider_{grupo_slider}"
                     )
 
@@ -160,13 +160,32 @@ if seleccion_menu == "Visión general del modelo":
     # ============================================================
     # PINTADO (RENDER) - FUERA DEL IF PARA QUE NO SE BORRE
     # ============================================================
-    
-    # 1. Recuperamos lo que hay en la caja fuerte
-    gdf_a_pintar = st.session_state.get('gdf_mapa_actual')
+    # Recuperamos los datos COMPLETOS de la memoria
+    gdf_completo = st.session_state['gdf_mapa_actual']
 
-    # 2. Si hay datos, pintamos (usando tu configuración exacta)
-    if gdf_a_pintar is not None:
+    if gdf_completo is not None:
         
+        # --------------------------------------------------------
+        # PASO DE OPTIMIZACIÓN: EL FILTRO "DIETA"
+        # --------------------------------------------------------
+        # Solo pasamos a PyDeck las columnas que NECESITA para pintar.
+        # Esto reduce el tamaño del JSON de 5MB a 200KB (vuela).
+        if 'hex_id' not in gdf_completo.columns:     # <--- NUEVO
+            gdf_completo = gdf_completo.reset_index() # <--- NUEVO
+
+        cols_visualizacion = [
+            "geometry",     # Obligatorio: Dónde está el hexágono
+            "score_final",  # Para el Tooltip
+            "fill_color",   # El color calculado
+            "hex_id"        # Identificador (siempre útil tenerlo)
+        ]
+        
+        # Creamos una copia ligera solo con lo necesario
+        gdf_ligero = gdf_completo[cols_visualizacion].copy()
+        
+        # --------------------------------------------------------
+        # CONFIGURACIÓN PYDECK
+        # --------------------------------------------------------
         view_state = pdk.ViewState(
             latitude=28.30,     # Centro aprox de Tenerife
             longitude=-16.55,
@@ -176,16 +195,17 @@ if seleccion_menu == "Visión general del modelo":
 
         layer_hexagonos = pdk.Layer(
             "GeoJsonLayer",
-            data=gdf_a_pintar,  # AQUÍ USAMOS LA VARIABLE DE SESIÓN
+            data=gdf_ligero,      # USAMOS LA VERSIÓN LIGERA
             opacity=0.8,
             stroked=False,      # Sin bordes negros
             filled=True,
-            extruded=False,     
-            get_fill_color="fill_color", 
-            pickable=True,      
+            get_fill_color="fill_color",
+            pickable=True,
+            auto_highlight=True,
         )
 
         tooltip = {
+            # "html": "<b>Zona:</b> {hex_id}<br/><b>LifeScore:</b> {score_final}/10",
             "html": "<b>LifeScore:</b> {score_final}/10",
             "style": {"backgroundColor": "steelblue", "color": "white"}
         }
@@ -198,7 +218,8 @@ if seleccion_menu == "Visión general del modelo":
         )
 
         # E. PINTAR FINALMENTE
-        st.pydeck_chart(r, width='stretch')
+        with st.spinner("Pintando el mapa... 🗺️"):
+            st.pydeck_chart(r, width='stretch')
         
     else:
         # Si entras por primera vez y no se ha calculado nada (raro con la lógica actual, pero por seguridad)
