@@ -478,7 +478,7 @@
     "mascotas": {
         "macro_categoria": "Ocio y estilo de vida",
         "grupo_slider": "Mascotas",
-        "peso": 6.0,
+        "peso": 8.0,
         "limite": 2.0,
         "nombre_ui": "Tiendas de mascotas"
     },
@@ -488,6 +488,20 @@
         "peso": 10.0,
         "limite": 2.0,
         "nombre_ui": "Veterinarios"
+    },
+    "parque mascotas": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Mascotas",
+        "peso": 7.0,
+        "limite": 2.0,
+        "nombre_ui": "Parques de mascotas"
+    },
+    "playa mascotas": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Mascotas",
+        "peso": 6.0,
+        "limite": 2.0,
+        "nombre_ui": "Playas de mascotas"
     },
     "cafeteria": {
         "macro_categoria": "Restauración y socialización",
@@ -789,5 +803,103 @@
         "peso": 10.0,
         "limite": 1.0,
         "nombre_ui": "Paradas de tranvía"
+    },
+    "actividades deporte ocio": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Centros Deportivos",
+        "peso": 10.0,
+        "limite": 5.0,
+        "nombre_ui": "Actividades deportivas"
+    },
+    "puerto deportivo": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Centros Deportivos",
+        "peso": 7.0,
+        "limite": 1.0,
+        "nombre_ui": "Puertos deportivos"
+    },
+    "gimnasion artes marciales yoga": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Centros Deportivos",
+        "peso": 8.0,
+        "limite": 1.0,
+        "nombre_ui": "Gimnasios de artes marciales"
+    },
+    "parques infantiles": {
+        "macro_categoria": "Restauración y socialización",
+        "grupo_slider": "Parques",
+        "peso": 10.0,
+        "limite": 2.0,
+        "nombre_ui": "Parques"
+    },
+    "parque deporte urbano": {
+        "macro_categoria": "Restauración y socialización",
+        "grupo_slider": "Parques",
+        "peso": 10.0,
+        "limite": 2.0,
+        "nombre_ui": "Parques"
+    },
+    "Area recreativa": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Naturaleza",
+        "peso": 10.0,
+        "limite": 1.0,
+        "nombre_ui": "Areas recreativas"
+    },
+    "Area de descanso": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Naturaleza",
+        "peso": 8.0,
+        "limite": 1.0,
+        "nombre_ui": "Areas recreativas"
+    },
+    "Aula en la Naturaleza": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Naturaleza",
+        "peso": 5.0,
+        "limite": 1.0,
+        "nombre_ui": "Areas recreativas"
+    },
+    "Mirador": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Naturaleza",
+        "peso": 10.0,
+        "limite": 2.0,
+        "nombre_ui": "Miradores"
+    },
+    "Centro de visitantes": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Naturaleza",
+        "peso": 7.0,
+        "limite": 1.0,
+        "nombre_ui": "Centros de visitantes"
+    },
+    "Zona de acampada (caravanas)": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Camping",
+        "peso": 8.0,
+        "limite": 2.0,
+        "nombre_ui": "Zonas para acampar"
+    },
+    "Zona de acampada (casetas)": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Camping",
+        "peso": 8.0,
+        "limite": 2.0,
+        "nombre_ui": "Zonas para acampar"
+    },
+    "Campamento": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Camping",
+        "peso": 10.0,
+        "limite": 1.0,
+        "nombre_ui": "Zonas para acampar"
+    },
+    "Zona vivac": {
+        "macro_categoria": "Ocio y estilo de vida",
+        "grupo_slider": "Camping",
+        "peso": 8.0,
+        "limite": 1.0,
+        "nombre_ui": "Zonas para acampar"
     }
 }

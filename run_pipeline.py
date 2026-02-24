@@ -44,7 +44,9 @@ def main():
         "comercio": str(CARPETA_CLEAN / "comercio.geojson"),
         "salud": str(CARPETA_CLEAN / "salud.geojson"),
         "restauracion": str(CARPETA_CLEAN / "restauracion.geojson"),
-        "educacion": str(CARPETA_CLEAN / "educacion.geojson")
+        "educacion": str(CARPETA_CLEAN / "educacion.geojson"),
+        "naturaleza": str(CARPETA_CLEAN / "naturaleza.geojson"),
+        "deporte": str(CARPETA_CLEAN / "deportes_y_ocio.geojson")
     }
 
     # =================
