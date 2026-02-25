@@ -228,13 +228,28 @@ if seleccion_menu == "Visión general del modelo":
 
 
 elif seleccion_menu == "Zona específica":
-    st.write("Introduce una dirección para ver qué servicios tienes a tu alrededor.")
+    st.write("### Análisis de Zona al Detalle")
+    st.markdown("""
+        Escriba la dirección a mano o, para una **PRECISIÓN ABSOLUTA**, ingrese las coordenadas directamente (por ejemplo, copiándolas de Google Maps).
+        * **Formato calle:** Calle Castillo 10, Santa Cruz
+        * **Formato coordenadas:** `28.4668, -16.2499`
+    """)
     
     col1, col2 = st.columns([3, 1])
     with col1:
-        st.text_input("📍 Buscar dirección o barrio...")
+        # El input ahora acepta las dos cosas
+        direccion_input = st.text_input("📍 Buscar dirección o coordenadas (Lat, Lon)...")
     with col2:
         st.markdown("<div style='margin-top: 28px;'></div>", unsafe_allow_html=True)
-        st.button("Buscar", use_container_width=True)
+        boton_buscar = st.button("Escanear Zona 🎯", use_container_width=True)
         
-    st.info("👆 Aquí saldrán las métricas específicas del hexágono seleccionado.")
+    if boton_buscar and direccion_input:
+        with st.spinner("Localizando el punto exacto..."):
+            coords = obtener_coordenadas(direccion_input)
+            
+            if coords:
+                lat, lon = coords
+                st.success(f"¡Punto de anclaje fijado en Lat: {lat}, Lon: {lon}!")
+                # AQUÍ ENCHUFARÁ EL RADAR MÁS ADELANTE
+            else:
+                st.error("No hemos podido localizar ese punto. Revisa la dirección o intenta usar coordenadas exactas separadas por una coma.")

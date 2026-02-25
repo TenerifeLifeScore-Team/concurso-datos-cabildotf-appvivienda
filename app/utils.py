@@ -3,6 +3,9 @@ import json
 import pandas as pd
 import geopandas as gpd
 from pathlib import Path
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
+import re
 
 RAIZ = Path(__file__).parent.parent
 
@@ -110,3 +113,46 @@ def obtener_color_por_score(score):
     # 5. Añadimos transparencia (Alpha) al final
     # 160 es semi-transparente (0-255)
     return rgb # + [160]
+
+
+@st.cache_data(show_spinner=False)
+def obtener_coordenadas(input_usuario):
+
+    if not input_usuario or str(input_usuario).strip() == "":
+        return None
+        
+    input_limpio = str(input_usuario).strip()
+    res = son_coordenadas(input_limpio)
+
+    if res is not None:
+        return res
+
+    geolocator = Nominatim(user_agent="Tenerife_LifeScore_App")
+    direccion_completa = f"{input_limpio}, Tenerife, Canarias, España"
+    
+    try:
+        location = geolocator.geocode(direccion_completa, timeout=10)
+        if location:
+            return (location.latitude, location.longitude)
+        return None
+            
+    except (GeocoderTimedOut, GeocoderUnavailable):
+        return None
+
+
+def son_coordenadas(input_usuario):
+    
+    patron = r"^\s*\(?\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*\)?\s*$"
+    
+    match = re.match(patron, input_usuario)
+    
+    if match:
+        # Extraemos los dos números que Regex ha capturado
+        lat = float(match.group(1))
+        lon = float(match.group(2))
+        
+        # Última comprobación matemática de seguridad
+        if -90 <= lat <= 90 and -180 <= lon <= 180:
+            return (lat, lon)
+            
+    return None
