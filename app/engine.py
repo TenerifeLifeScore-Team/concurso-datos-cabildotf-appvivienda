@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import geopandas as gpd
+from shapely.geometry import Point
 
 def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuario, checks_usuario):
     """
@@ -105,3 +106,104 @@ def calcular_lifescore_vectorial(gdf_saturado, diccionario_config, sliders_usuar
     gdf_result['score_final'] = np.clip(score_final, 0, 10).round(2)
     
     return gdf_result
+
+
+
+# PUNTO ESPECÍFICO
+
+def obtener_multiplicador(d):
+    """Aplica la prima de proximidad y el decaimiento por distancia en metros."""
+    if d <= 150: return 1.2
+    elif d <= 500: return 0.8
+    elif d <= 1000: return 0.5
+    elif d <= 2500: return 0.25
+    elif d <= 5000: return 0.1
+    else: return 0.0
+
+
+def calcular_conteo_efectivo(lat, lon, gdf_puntos):
+    """
+    Proyecta el punto, escanea las distancias a todos los locales 
+    y devuelve un diccionario con el q_j (Conteo Efectivo) aplicando pesos.
+    """
+    # 1. Proyectamos
+    punto_wgs84 = gpd.GeoSeries([Point(lon, lat)], crs="EPSG:4326")
+    punto_metric = punto_wgs84.to_crs(epsg=32628).iloc[0]
+
+    # 2. Medimos distancias
+    df_distancias = gdf_puntos[['actividad']].copy()
+    df_distancias['distancia'] = gdf_puntos.geometry.distance(punto_metric)
+
+    # 3. Aplicamos la Prima de Proximidad
+    df_distancias['peso_distancia'] = df_distancias['distancia'].apply(obtener_multiplicador)
+
+    # 4. Agrupamos y devolvemos el diccionario
+    df_utiles = df_distancias[df_distancias['peso_distancia'] > 0]
+    return df_utiles.groupby('actividad')['peso_distancia'].sum().to_dict()
+
+
+
+def calcular_lifescore_punto(lat, lon, gdf_puntos, diccionario_config, sliders_usuario, checks_usuario):
+    """
+    Recibe el Conteo Efectivo de un punto y aplica la fórmula del modelo 
+    (límites, pesos y sliders) para devolver el LifeScore final (0-10).
+    """
+    
+    # --- DELEGAMOS EL TRABAJO ESPACIAL ---
+    conteo_efectivo = calcular_conteo_efectivo(lat, lon, gdf_puntos)
+
+    # -------------------------------------------------------------
+    # FASE 1: CÁLCULO POR CATEGORÍAS (MICRO)
+    # -------------------------------------------------------------
+    grupos_calc = {}
+
+    for actividad, config in diccionario_config.items():
+        if not checks_usuario.get(actividad, True):
+            continue
+
+        grupo = config['grupo_slider']
+        peso_experto = config['peso']
+        max_cap = config['limite']
+
+        if grupo not in grupos_calc:
+            grupos_calc[grupo] = {'numerador': 0.0, 'denominador': 0.0}
+
+        # B. SATURACIÓN: min(q_j, L_j)
+        cantidad_real = conteo_efectivo.get(actividad, 0.0)
+        cantidad_saturada = min(cantidad_real, max_cap)
+
+        puntos_reales = cantidad_saturada * peso_experto
+        puntos_ideales = max_cap * peso_experto
+
+        grupos_calc[grupo]['numerador'] += puntos_reales
+        grupos_calc[grupo]['denominador'] += puntos_ideales
+
+    # -------------------------------------------------------------
+    # FASE 2: AGREGACIÓN GLOBAL (MACRO)
+    # -------------------------------------------------------------
+    numerador_global = 0.0
+    denominador_global = 0.0
+
+    for grupo, valores in grupos_calc.items():
+        if valores['denominador'] > 0:
+            score_categoria = (valores['numerador'] / valores['denominador']) * 10
+        else:
+            score_categoria = 0.0
+            
+        score_categoria = np.clip(score_categoria, 0, 10)
+        peso_slider = sliders_usuario.get(grupo, 3)
+        
+        numerador_global += score_categoria * peso_slider
+        denominador_global += peso_slider
+
+    # -------------------------------------------------------------
+    # FASE 3: SCORE FINAL
+    # -------------------------------------------------------------
+    if denominador_global > 0:
+        score_final = numerador_global / denominador_global
+    else:
+        score_final = 0.0
+
+    score_final = np.clip(score_final, 0, 10)
+    
+    return round(score_final, 2), conteo_efectivo
