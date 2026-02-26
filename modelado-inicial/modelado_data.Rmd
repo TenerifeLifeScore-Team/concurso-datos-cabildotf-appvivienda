@@ -17,6 +17,10 @@ library(janitor)
 library(mapview)
 library(dplyr)
 library(stringr)
+library(ggplot2)
+library(patchwork)
+library(scales) 
+library(tidyr)
 
 
 
@@ -191,7 +195,7 @@ clean_tranvia <- raw_tranvia %>%
     grupo = "Transporte publico")
 ```
 
-```{r unificación-movilidad, fig.align="center", out.width="100%", fig.height=6}
+```{r unificación-movilidad}
 
 clean_movilidad <- bind_rows(clean_guaguas, clean_tranvia) %>%
   relocate(nombre, grupo, tipo, geometry)
@@ -201,7 +205,7 @@ clean_movilidad <- st_transform(clean_movilidad, crs = 4326)
 
 mapview(clean_movilidad, 
         zcol = "tipo", 
-        layer.name = "Red de transporte unificada", 
+        layer.name = "Transporte Público", 
         col.regions = c("green", "red"))
 ```
 
@@ -229,7 +233,7 @@ mapview(clean_movilidad,
 raw_salud <- st_read("../data-raw/centros-medicos-farmacias-y-servicios-sanitarios-en-tenerife.geojson", quiet = TRUE)
 ```
 
-```{r salud-transformacion, fig.align="center", out.width="100%", fig.height=6}
+```{r salud-transformacion}
 clean_salud <- raw_salud %>%
 
   
@@ -269,7 +273,7 @@ clean_salud <- raw_salud %>%
 
 mapview(clean_salud, 
         zcol = "grupo", 
-        layer.name = "Salud por Categoría", 
+        layer.name = "Centros de Salud", 
         col.regions = c("lightblue", "green"))
 ```
 
@@ -295,7 +299,7 @@ mapview(clean_salud,
 raw_edu <- st_read("../data-raw/centros-educativos-y-culturales-en-tenerife.geojson", quiet = TRUE) 
 ```
 
-```{r edu-transformacion, fig.align="center", out.width="100%", fig.height=6}
+```{r edu-transformacion}
 
 cat_colegios <- c("enseñanza infantil y primaria", "enseñanza secundaria", 
                   "enseñanza obligatoria", "guarderias centros infantiles", 
@@ -465,7 +469,7 @@ añadir_mascotas <- raw_centrosdeportivos_ocio %>%
 
 
 
-```{r comercio-transformacion, fig.align="center", out.width="100%", fig.height=6}
+```{r comercio-transformacion}
 
 clean_comercio <- raw_comercio %>%
     
@@ -577,8 +581,8 @@ mapview(
 raw_restaur <- st_read("../data-raw/locales-de-hosteleria-y-restauracion-en-tenerife.geojson", quiet = TRUE) 
 ```
 
-```{r restaur-transformacion, fig.align="center", out.width="100%", fig.height=6}
-
+```{r restaur-transformacion}
+unique(raw_restaur$actividad_tipo)
 clean_restauracion <- raw_restaur %>%
     
   janitor::clean_names() %>%
@@ -598,8 +602,8 @@ clean_restauracion <- raw_restaur %>%
  
   mutate(grupo = case_when(
       actividad %in% c("cafeteria", 
-                       "café", "
-                       heladeria", 
+                       "café", 
+                       "heladeria", 
                        "heladeria pasteleria", 
                        "bar cafeteria zumeria", 
                        "bar churreria chocolateria", 
@@ -722,4 +726,124 @@ st_write(clean_comercio, "../data-clean/comercio.geojson", delete_dsn = TRUE, qu
 st_write(clean_restauracion, "../data-clean/restauracion.geojson", delete_dsn = TRUE, quiet = TRUE)
 st_write(clean_centrosdeportivos_y_ocio, "../data-clean/deportes_y_ocio.geojson", delete_dsn = TRUE, quiet = TRUE)
 st_write(clean_naturaleza, "../data-clean/naturaleza.geojson", delete_dsn = TRUE, quiet = TRUE)
+```
+
+# 2. Modelado Espacial y Algoritmo Base
+
+Una vez finalizada la fase ETL de limpieza en `R`, el proyecto requiere una arquitectura de preprocesamiento espacial para garantizar que la aplicación web funcione de forma fluida. Para ello, se ha desarrollado un *pipeline* automatizado en Python compuesto por 6 módulos secuenciales que transforman los datos crudos en un sistema de indexación territorial.
+
+## 2.1. Unificación y Proyección Métrica 
+
+* Archivo: `unificar_puntos.py`
+
+El primer paso consiste en recopilar los 7 datasets geoespaciales y consolidarlos en una única capa maestra de puntos de interés (POI). Una decisión técnica clave en esta fase es la reproyección de las coordenadas geográficas estándar (WGS84) al sistema métrico oficial de Canarias (**EPSG:32628 - UTM Zona 28N**). Esto es imprescindible para que los cálculos de distancias posteriores se realicen en metros reales y no en grados, evitando distorsiones espaciales.
+
+## 2.2. Ingestión de Reglas de Negocio 
+
+* Archivo: `leer_excel.py`
+
+Para separar la lógica de negocio del código fuente, el sistema lee dinámicamente los archivos Excel de configuración. Mediante este script se construye un diccionario maestro que mapea cada actividad con su Macro-categoría (ej. "Servicios básicos"), su nombre para la interfaz de usuario, y sus valores matemáticos críticos: la ponderación y el límite máximo acumulable.
+
+## 2.3. Generación de Malla Hexagonal a Medida 
+
+* Archivo: `generar_grid.py`
+
+En lugar de depender de librerías de indexación externas, se ha desarrollado un algoritmo propio para generar una malla hexagonal (Grid) perfectamente ajustada a la morfología de Tenerife. 
+- Utilizando trigonometría y `shapely`, se genera una matriz de polígonos regulares sobre el *bounding box* de la isla.
+- **Filtro Oceánico:** Para optimizar el rendimiento, el algoritmo calcula el área de intersección de cada hexágono con el polígono real de la costa. Mediante un umbral definido (`porcentaje_tierra = 0.45`), se eliminan automáticamente las celdas oceánicas que no contienen suficiente superficie de tierra firme. El grid resultante se re-proyecta a GPS estándar (EPSG:4326) para su compatibilidad web.
+
+```{r}
+grid_tenerife <- st_read("../data-proccesed/tabla_saturada.geojson", quiet = TRUE)
+
+ggplot(grid_tenerife) +
+    
+  geom_sf(fill = "#f8f9fa", color = "#2c3e50", linewidth = 0.2) +
+    
+  labs(title = "Discretización del Territorio") +
+    
+  theme_void() +
+    
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    plot.subtitle = element_text(hjust = 0.5, color = "#555555"))
+
+```
+
+
+## 2.4. Cruce Espacial y Pivotaje 
+
+* Archivo: `generar_tabla_maestra.py`
+
+Con el territorio discretizado y los puntos unificados, se ejecuta un *Spatial Join* (predicado `within`) para contar con exactitud cuántos elementos de cada tipología (ej. farmacias, colegios) caen dentro de cada hexágono (`hex_id`). Esta información se agrupa y se pivota para generar una "Tabla Maestra" tabular en formato GeoJSON, donde cada columna representa el conteo bruto de una actividad específica (prefijo `q_`).
+
+## 2.5. Aplicación del Límite de Saturación 
+
+* Archivo: `aplicar_limites.py`
+
+El motor cruza la Tabla Maestra con el diccionario de reglas de negocio para aplicar la "Ley de rendimientos decrecientes". A través de este script, se generan nuevas variables (prefijo `sat_`) donde el conteo bruto de infraestructuras se recorta matemáticamente mediante un "techo" (función `clip`), limitando el valor útil máximo por hexágono al umbral establecido en los Excel de configuración.
+
+
+## 2.6. Algoritmo de Suavizado Espacial 
+
+* Archivo: `suavizado_espacial.py`
+
+Para resolver el "efecto frontera" (la caída abrupta de puntuación en los bordes de los hexágonos) se ha implementado un sofisticado modelo de dispersión espacial (*Spatial Smoothing*) basado en contactos geométricos reales:
+1.  **Mapa de Adyacencia:** Se aplica un micro-buffer de 1 metro a la malla y se realiza un auto-cruce espacial (`intersects`) para descubrir qué hexágonos son vecinos físicos entre sí.
+2.  **Kernel de Decaimiento:** El valor saturado de cada celda se reparte en anillos concéntricos utilizando un sistema de pesos decrecientes:
+    -   *Anillo 0 (Celda origen):* Conserva el 100% del valor (Peso 1.0).
+    -   *Anillo 1 (Vecinos directos):* Reciben un 50% del valor (Peso 0.5).
+    -   *Anillo 2 (Vecinos de segunda línea):* Reciben un 25% del valor (Peso 0.25).
+Este proceso genera un mapa de calor continuo y orgánico, acercando el modelo de la aplicación a la experiencia real de movilidad peatonal de los usuarios.
+
+
+
+
+
+ 
+```{r grafico-suavizado, echo=FALSE, warning=FALSE, message=FALSE, fig.width=10}
+
+grid_bruto <- st_read("../data-proccesed/tabla_saturada.geojson", quiet = TRUE)
+grid_suavizado <- st_read("../data-proccesed/tabla_saturada_suavizada.geojson", quiet = TRUE)
+
+variable_plot <- "sat_farmacia" 
+
+
+tope_bruto <- max(grid_bruto[[variable_plot]], na.rm = TRUE)
+
+
+grid_bruto$lifescore <- (grid_bruto[[variable_plot]] / tope_bruto) * 10
+
+freno <- 2  
+grid_suavizado$lifescore <- (grid_suavizado[[variable_plot]] / (tope_bruto * freno)) * 10
+
+
+colores <- c("#e74c3c", "#f1c40f", "#2ecc71", "#3498db")
+
+
+mapa_bruto <- ggplot(grid_bruto) +
+  geom_sf(aes(fill = lifescore), 
+          color = NA) +
+  scale_fill_gradientn(
+    colors = colores, 
+    limits = c(0, 10), 
+    oob = scales::squish, 
+    name = "LifeScore") +
+  labs(title = "1. Puntuación Bruta") +
+  theme_void()
+
+
+mapa_suavizado <- ggplot(grid_suavizado) +
+  geom_sf(aes(fill = lifescore), 
+          color = NA) +
+    
+  scale_fill_gradientn(
+    colors = colores, 
+    limits = c(0, 10), 
+    oob = scales::squish, 
+    name = "LifeScore") +
+    
+  labs(title = "2. Suavizado Espacial") +
+  theme_void()
+
+
+mapa_bruto | mapa_suavizado
 ```
