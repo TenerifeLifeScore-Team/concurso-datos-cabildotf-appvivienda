@@ -9,6 +9,7 @@ from modelado_avanzado.aplicar_limites import aplicar_limites
 from modelado_avanzado.generar_grid import calcular_grid_hexagonal
 from modelado_avanzado.leer_excel import generar_diccionario_desde_excel
 from modelado_avanzado.suavizado_espacial import aplicar_suavizado_espacial
+from modelado_avanzado.unificar_puntos import generar_puntos_maestros
 
 # 1. Configurar el Logging global
 logging.basicConfig(
@@ -81,6 +82,15 @@ def main():
         json.dump(diccionario, f, ensure_ascii=False, indent=4)
     logging.info(f"✅ Diccionario guardado en: {ruta_diccionario}")
 
+
+    # PASO 1.2: Unificar todos los puntos limpios para el Radar de la App Web
+    print()
+    logging.info("--- FASE 1.5: GENERANDO MEGA-TABLA DE PUNTOS (RADAR) ---")
+    ruta_puntos_maestros = CARPETA_PRO / "puntos_maestros.geojson"
+    generar_puntos_maestros(
+        carpeta_clean=CARPETA_CLEAN,
+        ruta_salida=ruta_puntos_maestros
+    )
 
     # PASO 2: Cruzar Puntos con Hexágonos
     print()
