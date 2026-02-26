@@ -4,12 +4,12 @@ import pandas as pd
 import geopandas as gpd
 from pathlib import Path
 
-RAIZ = Path(__file__).parent.parent
+UBICACION_ACTUAL = Path(__file__).resolve().parent
 
 @st.cache_data
 def cargar_configuracion():
     """Carga el diccionario en caché para no leer el JSON constantemente."""
-    ruta_json = RAIZ / "data-proccesed" / "diccionario_config.json"
+    ruta_json = UBICACION_ACTUAL / "data-processed" / "diccionario_config.json"
     with open(ruta_json, "r", encoding="utf-8") as f:
         diccionario = json.load(f)
     return diccionario

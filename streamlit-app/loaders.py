@@ -3,12 +3,12 @@ import geopandas as gpd
 import os
 from pathlib import Path
 
-UBICACION_ACTUAL = Path(__file__).parent
+UBICACION_ACTUAL = Path(__file__).resolve().parent
 
 # 2. Subimos un nivel (.parent) para ir a la raíz del proyecto
 # Y desde ahí entramos a 'data-proccesed'
 # OJO: Mantengo tu nombre "data-proccesed" (con dos c), si la cambias, cámbialo aquí también.
-PATH_DATOS = UBICACION_ACTUAL.parent / "data-proccesed" / "tabla_saturada_suavizada.geojson"
+PATH_DATOS = UBICACION_ACTUAL / "data-processed" / "tabla_saturada_suavizada.geojson"
 
 @st.cache_data(show_spinner=False)
 def cargar_datos_mapa():
