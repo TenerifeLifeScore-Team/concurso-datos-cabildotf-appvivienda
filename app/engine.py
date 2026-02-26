@@ -206,4 +206,12 @@ def calcular_lifescore_punto(lat, lon, gdf_puntos, diccionario_config, sliders_u
 
     score_final = np.clip(score_final, 0, 10)
     
-    return round(score_final, 2), conteo_efectivo
+    # -------------------------------------------------------------
+    # FASE 4: LIMPIEZA VISUAL PARA LA WEB
+    # -------------------------------------------------------------
+    conteo_final = {}
+    for actividad, valor in conteo_efectivo.items():
+        if actividad in diccionario_config and checks_usuario.get(actividad, True):
+            conteo_final[actividad] = valor
+
+    return round(score_final, 2), conteo_final
