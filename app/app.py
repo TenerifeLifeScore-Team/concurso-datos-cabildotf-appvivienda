@@ -2,8 +2,8 @@ import streamlit as st
 import pydeck as pdk
 from streamlit_option_menu import option_menu
 from utils import *
-from loaders import cargar_datos_mapa
-from engine import calcular_lifescore_vectorial
+from loaders import cargar_datos_mapa, cargar_puntos_maestros
+from engine import calcular_lifescore_vectorial, calcular_lifescore_punto
 
 # ==========================================
 # 1. CONFIGURACIÓN DE LA PÁGINA Y CSS
@@ -30,7 +30,7 @@ st.markdown(
         }
         /* Eliminar el scroll vertical solo de la parte principal (derecha) */
         [data-testid="stMain"] {
-            overflow: hidden !important;
+            overflow-y: auto !important;
         }
         /* Reducir el espacio en blanco de arriba */
         .block-container {
@@ -250,6 +250,39 @@ elif seleccion_menu == "Zona específica":
             if coords:
                 lat, lon = coords
                 st.success(f"¡Punto de anclaje fijado en Lat: {lat}, Lon: {lon}!")
-                # AQUÍ ENCHUFARÁ EL RADAR MÁS ADELANTE
+
+                # --- EL RADAR EN ACCIÓN ---
+                with st.spinner("Desplegando radar espacial y escaneando locales... 📡"):
+                    # 1. Cargamos la munición (súper rápido gracias a la caché)
+                    gdf_puntos = cargar_puntos_maestros()
+                    
+                    if gdf_puntos is not None:
+                        # 2. Arrancamos el motor matemático
+                        score_zona, conteo_zona = calcular_lifescore_punto(
+                            lat=lat, 
+                            lon=lon, 
+                            gdf_puntos=gdf_puntos, 
+                            diccionario_config=diccionario_config, 
+                            sliders_usuario=sliders_subgrupos, 
+                            checks_usuario=checks_actividades
+                        )
+                        
+                        # 3. Pintamos los resultados en la web
+                        st.divider()
+                        st.markdown("### 🏆 Resultado del Análisis")
+                        
+                        # st.metric crea ese número gigante y bonito típico de los dashboards
+                        st.metric(label="LifeScore de esta ubicación exacta", value=f"{score_zona} / 10")
+                        
+                        # 4. Desplegable de transparencia (Conteo Efectivo)
+                        with st.expander("📊 Ver desglose de locales cercanos (Conteo Efectivo)"):
+                            st.write("*Nota: Los valores incluyen la Prima de Proximidad (ej: un local a 100m vale 1.2).*")
+                            
+                            # Limpiamos los ceros y ordenamos de mayor a menor para que quede pro
+                            conteo_limpio = {k: round(v, 2) for k, v in conteo_zona.items() if v > 0}
+                            conteo_ordenado = dict(sorted(conteo_limpio.items(), key=lambda item: item[1], reverse=True))
+                            
+                            st.json(conteo_ordenado)
+
             else:
                 st.error("No hemos podido localizar ese punto. Revisa la dirección o intenta usar coordenadas exactas separadas por una coma.")
