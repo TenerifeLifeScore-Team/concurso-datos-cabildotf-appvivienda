@@ -10,6 +10,7 @@ from modelado_avanzado.aplicar_limites import aplicar_limites
 from modelado_avanzado.generar_grid import calcular_grid_hexagonal
 from modelado_avanzado.leer_excel import generar_diccionario_desde_excel
 from modelado_avanzado.suavizado_espacial import aplicar_suavizado_espacial
+from modelado_avanzado.unificar_puntos import generar_puntos_maestros
 
 # Configuración de Logging
 logging.basicConfig(
@@ -67,8 +68,8 @@ def main():
         "comercio": str(DIR_CLEAN / "comercio.geojson"),
         "salud": str(DIR_CLEAN / "salud.geojson"),
         "restauracion": str(DIR_CLEAN / "restauracion.geojson"),
-        "educacion": str(DIR_CLEAN / "educacion.geojson")
-        # FALTA AÑADIR EL DE DEPORTES Y OCIO
+        "naturaleza": str(DIR_CLEAN / "naturaleza.geojson"),
+        "deporte": str(DIR_CLEAN / "deportes_y_ocio.geojson")
     }
 
     # Asegurar existencia carpeta principal
@@ -103,6 +104,19 @@ def main():
     
     replicar_archivo(ruta_diccionario_main, LISTA_DESTINOS)
 
+    # --- FASE 1.5: Unificar todos los puntos limpios para el Radar de la App Web ---
+    logging.info("--- FASE 1.5: GENERANDO MEGA-TABLA DE PUNTOS (RADAR) ---")
+    ruta_puntos_maestros_main = DIR_PRINCIPAL / "puntos_maestros.geojson"
+    
+    # 2. Ejecutamos la función (Calculamos una sola vez)
+    generar_puntos_maestros(
+        carpeta_clean=DIR_CLEAN,      # Usamos la variable DIR_CLEAN que definimos arriba
+        ruta_salida=str(ruta_puntos_maestros_main)
+    )
+    logging.info(f"Puntos maestros generados en: {ruta_puntos_maestros_main}")
+    
+    # 3. Replicamos el archivo a la carpeta de la API/Backend
+    replicar_archivo(ruta_puntos_maestros_main, LISTA_DESTINOS)
 
     # --- FASE 2: TABLA MAESTRA ---
     logging.info("--- FASE 2: CREANDO TABLA MAESTRA ---")

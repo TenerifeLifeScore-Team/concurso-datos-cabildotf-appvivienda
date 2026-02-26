@@ -15,11 +15,12 @@ def generar_diccionario_desde_excel(ruta_excel):
             "Hogar y Bricolaje", "Moda y Shopping"
         ],
         "Ocio y estilo de vida": [
-            "Cultura", "Ocio, Hobbies y Tecnología", "Mascotas"
+            "Cultura", "Ocio, Hobbies y Tecnología", "Mascotas", "Centros Deportivos", "Naturaleza",
+            "Camping"
         ],
         "Restauración y socialización": [
             "Cafeterías y Mañaneo", "Casual, Fast Food y Bares de Paso", 
-            "Gastronomía y Guachinches", "Vida Nocturna y Copas"
+            "Gastronomía y Guachinches", "Vida Nocturna y Copas", "Parques"
         ]
     }
 

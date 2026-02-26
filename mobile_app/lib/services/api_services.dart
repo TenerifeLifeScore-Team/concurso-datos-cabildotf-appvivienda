@@ -9,7 +9,7 @@ class ApiService {
   // Si estás en iOS, tu PC es localhost
   // Si pruebas en un móvil físico, necesitas la IP local de tu PC (ej: 192.168.1.XX)
   static String get _baseUrl {
-    const String miIpDelPc = "10.58.85.131"; 
+    const String miIpDelPc = "192.168.1.195"; 
   
   if (kIsWeb) return "http://localhost:8000";
   return "http://$miIpDelPc:8000";
