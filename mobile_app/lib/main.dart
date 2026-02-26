@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'config/theme/app_theme.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const TenerifeLifeScoreApp());
@@ -18,11 +19,7 @@ class TenerifeLifeScoreApp extends StatelessWidget {
       theme: AppTheme.light,
       
       // De momento, una pantalla temporal vacía
-      home: const Scaffold(
-        body: Center(
-          child: Text("🏗️ Estructura lista"),
-        ),
-      ),
+      home: const HomeScreen()
     );
   }
 }
