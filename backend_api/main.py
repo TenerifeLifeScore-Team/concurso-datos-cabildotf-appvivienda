@@ -79,38 +79,43 @@ def root():
 @app.get("/config")
 def get_config_structure():
     """
-    Devuelve la jerarquía organizada por Macro-Categoría:
-    {
-      "Servicios Básicos": {
-          "Salud": ["Hospitales", "Farmacias"],
-          "Educación": ["Colegios"]
-      },
-      "Ocio": { ... }
-    }
+    Devuelve la jerarquía organizada para la UI:
+    Macro -> Grupo -> Lista de Objetos { "label": "Farmacias", "ids": ["id_interno_1", "id_interno_2"] }
     """
-    jerarquia = {}
+    # 1. Estructura temporal: jerarquia[Macro][Grupo][NombreUI] = [lista_de_ids_internos]
+    temp_structure = {}
     
     for key, data in memoria_config.items():
-        # Extraemos los 3 niveles
         macro = data.get("macro_categoria", "Otros")
         grupo = data.get("grupo_slider", "General")
-        nombre_ui = data.get("nombre_ui", key)
+        nombre_ui = data.get("nombre_ui", key) # Ej: "Farmacias"
         
-        # Construimos el árbol
-        if macro not in jerarquia:
-            jerarquia[macro] = {}
+        if macro not in temp_structure:
+            temp_structure[macro] = {}
+        if grupo not in temp_structure[macro]:
+            temp_structure[macro][grupo] = {}
+        if nombre_ui not in temp_structure[macro][grupo]:
+            temp_structure[macro][grupo][nombre_ui] = []
             
-        if grupo not in jerarquia[macro]:
-            jerarquia[macro][grupo] = set()
-            
-        jerarquia[macro][grupo].add(nombre_ui)
+        # Guardamos la 'key' original (el ID técnico) para que el checkbox sepa qué apagar
+        temp_structure[macro][grupo][nombre_ui].append(key)
     
-    # Convertimos los sets a listas ordenadas para enviar JSON limpio
+    # 2. Formatear para enviar JSON limpio al móvil
     resultado = {}
-    for macro, grupos in jerarquia.items():
+    for macro, grupos in temp_structure.items():
         resultado[macro] = {}
-        for grupo, items in grupos.items():
-            resultado[macro][grupo] = sorted(list(items))
+        for grupo, items_ui in grupos.items():
+            # Convertimos el diccionario de UIs a una lista de objetos ordenados
+            lista_items = []
+            for ui_label, internal_ids in items_ui.items():
+                lista_items.append({
+                    "label": ui_label,   # Lo que ve el usuario (Ej: "Farmacias")
+                    "ids": internal_ids  # Lo que controla (Ej: ["farmacia", "bazar_farmacia"])
+                })
+            
+            # Ordenamos alfabéticamente por etiqueta
+            lista_items.sort(key=lambda x: x["label"])
+            resultado[macro][grupo] = lista_items
             
     return resultado
 

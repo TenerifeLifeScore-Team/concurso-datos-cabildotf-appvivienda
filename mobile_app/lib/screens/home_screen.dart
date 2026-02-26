@@ -15,13 +15,16 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   String? errorMessage;
   
-  // ESTRUCTURA DE DATOS NUEVA:
-  // Macro -> { Grupo : [Items] }
-  Map<String, Map<String, List<String>>>? arbolConfig;
+  // DATOS: Macro -> { Grupo : [ConfigItem] }
+  Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
   
-  // Estado de la UI
-  String? macroSeleccionada; // ¿Qué pestaña estamos viendo? ("Servicios", "Ocio"...)
-  Map<String, double> sliderValues = {}; // Valores de los sliders (0-5)
+  // ESTADO UI
+  String? macroSeleccionada;
+  Map<String, double> sliderValues = {}; // Sliders (0-5)
+  
+  // ESTADO CHECKBOXES (ID interno -> true/false)
+  // Guardamos cada ID individualmente para enviarlo fácil a Python
+  Map<String, bool> checkValues = {}; 
 
   @override
   void initState() {
@@ -33,21 +36,29 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final datos = await _apiService.getCategories();
       
-      // Inicializamos sliders a 3.0 si están vacíos
-      final Map<String, double> iniciales = {};
+      final Map<String, double> inicialesSliders = {};
+      final Map<String, bool> inicialesChecks = {};
+      
+      // Recorremos todo para inicializar valores
       datos.forEach((macro, grupos) {
         grupos.forEach((grupo, items) {
-          iniciales[grupo] = 3.0;
+          inicialesSliders[grupo] = 3.0; // Slider al medio
+          
+          for (var item in items) {
+            // Activamos por defecto todos los IDs internos de este item
+            for (var id in item.ids) {
+              inicialesChecks[id] = true;
+            }
+          }
         });
       });
 
-      // Ordenamos las macros para que siempre salgan en el mismo orden
       final primerMacro = datos.keys.toList()..sort();
       
       setState(() {
         arbolConfig = datos;
-        sliderValues = iniciales;
-        // Seleccionamos la primera pestaña por defecto
+        sliderValues = inicialesSliders;
+        checkValues = inicialesChecks;
         macroSeleccionada = primerMacro.isNotEmpty ? primerMacro.first : null;
         isLoading = false;
       });
@@ -62,8 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ... (El Scaffold, AppBar y Stack son idénticos al anterior, no cambian) ...
+    // COPIA AQUÍ LA PARTE DEL SCAFFOLD QUE YA TENÍAS HASTA EL _buildPanelBody
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Evita que el teclado rompa el layout
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Tenerife LifeScore 🇮🇨"),
         actions: [
@@ -78,55 +91,24 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // FONDO (MAPA)
           Positioned.fill(
-            child: Container(
-              color: AppColors.background,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.map_outlined, size: 60, color: Colors.grey[300]),
-                    const SizedBox(height: 10),
-                    const Text("El mapa interactivo irá aquí"),
-                  ],
-                ),
-              ),
-            ),
+            child: Container(color: AppColors.background), // Placeholder mapa
           ),
-
-          // PANEL DESLIZANTE
           DraggableScrollableSheet(
             initialChildSize: 0.5,
             minChildSize: 0.15,
-            maxChildSize: 0.9,
+            maxChildSize: 0.8,
             builder: (context, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black26, blurRadius: 15, spreadRadius: 2)
-                  ],
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 15)],
                 ),
                 child: Column(
                   children: [
-                    // 1. TIRADOR (Para arrastrar)
-                    Center(
-                      child: Container(
-                        width: 40, height: 5,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300], 
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                      ),
-                    ),
-
-                    // 2. CONTENIDO PRINCIPAL (Con scroll)
-                    Expanded(
-                      child: _buildPanelBody(scrollController),
-                    ),
+                    Center(child: Container(width: 40, height: 5, margin: const EdgeInsets.symmetric(vertical: 10), decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)))),
+                    Expanded(child: _buildPanelBody(scrollController)),
                   ],
                 ),
               );
@@ -142,25 +124,18 @@ class _HomeScreenState extends State<HomeScreen> {
     if (errorMessage != null) return Center(child: Text(errorMessage!));
     if (arbolConfig == null) return const SizedBox();
 
-    // Obtenemos las categorías (Tabs) ordenadas
     final macros = arbolConfig!.keys.toList()..sort();
 
     return ListView(
-      controller: scrollController, // Importante para que el panel se deslice
+      controller: scrollController,
       padding: EdgeInsets.zero,
       children: [
-        
-        // A. TÍTULO Y PESTAÑAS (Header)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          child: const Text(
-            "Personaliza tu búsqueda",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
+        // TITULO Y TABS
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          child: Text("Personaliza tu búsqueda", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ),
         const SizedBox(height: 15),
-
-        // BARRA DE PESTAÑAS (Scroll Horizontal)
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -172,100 +147,152 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ChoiceChip(
                   label: Text(macro),
                   selected: isSelected,
-                  onSelected: (bool selected) {
-                    if (selected) {
-                      setState(() {
-                        macroSeleccionada = macro;
-                      });
-                    }
-                  },
-                  // Estilos personalizados
+                  onSelected: (sel) => setState(() => macroSeleccionada = macro),
                   selectedColor: AppColors.primary,
-                  labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black87,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  ),
-                  backgroundColor: Colors.grey[200],
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  showCheckmark: false, // Quitamos el check ✅ para que parezca un botón
-                  side: BorderSide.none,
+                  labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black87),
+                  showCheckmark: false,
                 ),
               );
             }).toList(),
           ),
         ),
-        
         const Divider(height: 30, thickness: 1),
 
-        // B. LISTA DE SLIDERS (Del grupo seleccionado)
+        // LISTA DE GRUPOS (Sliders + Expander)
         if (macroSeleccionada != null)
-          ..._buildSlidersList(macroSeleccionada!),
+          ..._buildGroupList(macroSeleccionada!),
           
-        // Espacio extra al final para que no se corte
         const SizedBox(height: 40),
       ],
     );
   }
 
-  List<Widget> _buildSlidersList(String macro) {
-    // Obtenemos los grupos de esa macro (ej: "Salud Vital", "Educación")
+  List<Widget> _buildGroupList(String macro) {
     final gruposMap = arbolConfig![macro]!;
     final gruposOrdenados = gruposMap.keys.toList()..sort();
 
-    return gruposOrdenados.map((grupo) {
-      final valor = sliderValues[grupo] ?? 3.0;
-      final items = gruposMap[grupo]!; // Lista de ejemplos (Farmacias, Colegios...)
+    return gruposOrdenados.map((grupoKey) {
+      final valorSlider = sliderValues[grupoKey] ?? 3.0;
+      final itemsConfig = gruposMap[grupoKey]!; // Lista de objetos ConfigItem (Farmacia, Hospital...)
       
-      // Texto descriptivo (ej: "Farmacias, Hospitales...")
-      final descripcion = items.take(3).join(", ") + (items.length > 3 ? "..." : "");
+      // Creamos un widget personalizado para mantener limpio el código
+      return _GroupCard(
+        title: grupoKey,
+        sliderValue: valorSlider,
+        items: itemsConfig,
+        checkValues: checkValues,
+        onSliderChanged: (val) => setState(() => sliderValues[grupoKey] = val),
+        onCheckChanged: (idsAfectados, nuevoEstado) {
+          setState(() {
+            for (var id in idsAfectados) {
+              checkValues[id] = nuevoEstado;
+            }
+          });
+        },
+      );
+    }).toList();
+  }
+}
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+// WIDGET AISLADO PARA LA TARJETA DEL GRUPO (Slider + Expander)
+// ... Todo el código anterior de HomeScreen permanece igual ...
+
+// WIDGET AISLADO PARA LA TARJETA DEL GRUPO (Slider + Expander)
+class _GroupCard extends StatelessWidget {
+  final String title;
+  final double sliderValue;
+  final List<ConfigItem> items;
+  final Map<String, bool> checkValues;
+  final ValueChanged<double> onSliderChanged;
+  final Function(List<String>, bool) onCheckChanged;
+
+  const _GroupCard({
+    required this.title,
+    required this.sliderValue,
+    required this.items,
+    required this.checkValues,
+    required this.onSliderChanged,
+    required this.onCheckChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: ExpansionTile(
+        // Quitamos bordes raros
+        shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
+        collapsedShape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        
+        // CABECERA
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Encabezado del Slider
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(grupo, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text(descripcion, 
-                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                        maxLines: 1, overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    valor.toStringAsFixed(0),
-                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            
-            // El Slider
-            Slider(
-              value: valor,
-              min: 0, max: 5, divisions: 5,
-              label: valor.toStringAsFixed(0),
-              onChanged: (v) {
-                setState(() => sliderValues[grupo] = v);
-              },
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                sliderValue.toStringAsFixed(0),
+                style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
-      );
-    }).toList();
+        // Subtítulo: Ahora solo contiene el Slider
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Slider(
+            value: sliderValue,
+            min: 0, 
+            max: 5, 
+            divisions: 5,
+            onChanged: onSliderChanged,
+          ),
+        ),
+        
+        // CONTENIDO EXPANDIDO
+        children: [
+          // Pequeño texto de ayuda al expandir
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "(Desmarca las que no necesites)",
+                style: TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
+              ),
+            ),
+          ),
+          
+          // Lista de checkboxes agrupados
+          ...items.map((item) {
+            final isChecked = item.ids.every((id) => checkValues[id] == true);
+            
+            return CheckboxListTile(
+              title: Text(item.label, style: const TextStyle(fontSize: 14)),
+              value: isChecked,
+              dense: true,
+              activeColor: AppColors.primary,
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (bool? val) {
+                if (val != null) {
+                  onCheckChanged(item.ids, val);
+                }
+              },
+            );
+          }).toList(),
+          
+          // Un poco de aire al final
+          const SizedBox(height: 10),
+        ],
+      ),
+    );
   }
 }

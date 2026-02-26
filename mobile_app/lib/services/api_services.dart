@@ -16,7 +16,7 @@ class ApiService {
   }
 
   /// Pide la configuración de categorías al Backend Python
-  Future<Map<String, Map<String, List<String>>>> getCategories() async {
+  Future<Map<String, Map<String, List<ConfigItem>>>> getCategories() async {
     try {
       final url = Uri.parse('$_baseUrl/config');
       print("📡 Llamando a: $url");
@@ -24,18 +24,18 @@ class ApiService {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        // 1. Decodificar el JSON crudo
         final Map<String, dynamic> decodedData = json.decode(utf8.decode(response.bodyBytes));
-        
-        // 2. Convertirlo a tipos fuertes de Dart (Map<String, Map...>)
-        final Map<String, Map<String, List<String>>> result = {};
+        final Map<String, Map<String, List<ConfigItem>>> result = {};
         
         decodedData.forEach((macroKey, gruposMap) {
-          // Para cada Macro, creamos su mapa de grupos
-          final Map<String, List<String>> gruposTyped = {};
+          final Map<String, List<ConfigItem>> gruposTyped = {};
           
           (gruposMap as Map<String, dynamic>).forEach((grupoKey, itemsList) {
-            gruposTyped[grupoKey] = List<String>.from(itemsList);
+            // Mapeamos la lista de JSONs a lista de objetos ConfigItem
+            final List<ConfigItem> items = (itemsList as List)
+                .map((item) => ConfigItem.fromJson(item))
+                .toList();
+            gruposTyped[grupoKey] = items;
           });
           
           result[macroKey] = gruposTyped;
@@ -49,5 +49,19 @@ class ApiService {
       print("❌ Error de conexión: $e");
       rethrow; 
     }
+  }
+}
+
+class ConfigItem {
+  final String label;
+  final List<String> ids;
+
+  ConfigItem({required this.label, required this.ids});
+
+  factory ConfigItem.fromJson(Map<String, dynamic> json) {
+    return ConfigItem(
+      label: json['label'],
+      ids: List<String>.from(json['ids']),
+    );
   }
 }
