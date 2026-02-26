@@ -404,7 +404,7 @@ clean_centrosdeportivos_y_ocio <- raw_centrosdeportivos_ocio %>%
     
     filter(!tipo %in% c("administracion publica juzgado", "asociacion cultural", "parque mascotas", "playa mascotas")) %>%
     
-    mutate(nombre = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo),
+    mutate(tipo = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo),
            grupo = case_when(tipo %in% c("actividades deporte ocio", "puerto deportivo", "gimnasio artes marciales") ~ "Centros deportivos",
                              tipo %in% c("parques infantiles", "parque deporte urbano") ~ "Parques"))
 
