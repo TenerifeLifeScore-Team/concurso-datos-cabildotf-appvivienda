@@ -79,20 +79,40 @@ def root():
 @app.get("/config")
 def get_config_structure():
     """
-    Devuelve la estructura para construir la UI en Flutter:
-    { "Salud": ["Hospitales", "Farmacias"], ... }
+    Devuelve la jerarquía organizada por Macro-Categoría:
+    {
+      "Servicios Básicos": {
+          "Salud": ["Hospitales", "Farmacias"],
+          "Educación": ["Colegios"]
+      },
+      "Ocio": { ... }
+    }
     """
     jerarquia = {}
+    
     for key, data in memoria_config.items():
-        grupo = data.get("grupo_slider", "Otros")
+        # Extraemos los 3 niveles
+        macro = data.get("macro_categoria", "Otros")
+        grupo = data.get("grupo_slider", "General")
         nombre_ui = data.get("nombre_ui", key)
         
-        if grupo not in jerarquia:
-            jerarquia[grupo] = set()
-        jerarquia[grupo].add(nombre_ui)
+        # Construimos el árbol
+        if macro not in jerarquia:
+            jerarquia[macro] = {}
+            
+        if grupo not in jerarquia[macro]:
+            jerarquia[macro][grupo] = set()
+            
+        jerarquia[macro][grupo].add(nombre_ui)
     
-    # Convertimos sets a listas ordenadas
-    return {k: sorted(list(v)) for k, v in jerarquia.items()}
+    # Convertimos los sets a listas ordenadas para enviar JSON limpio
+    resultado = {}
+    for macro, grupos in jerarquia.items():
+        resultado[macro] = {}
+        for grupo, items in grupos.items():
+            resultado[macro][grupo] = sorted(list(items))
+            
+    return resultado
 
 @app.post("/calculate")
 def calculate_map(prefs: UserPreferences):

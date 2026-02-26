@@ -16,7 +16,7 @@ class ApiService {
   }
 
   /// Pide la configuración de categorías al Backend Python
-  Future<Map<String, List<String>>> getCategories() async {
+  Future<Map<String, Map<String, List<String>>>> getCategories() async {
     try {
       final url = Uri.parse('$_baseUrl/config');
       print("📡 Llamando a: $url");
@@ -24,14 +24,21 @@ class ApiService {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        // Decodificamos el JSON que nos manda Python
-        // Python manda algo tipo: {"Salud": ["Farmacias", "Hospitales"], ...}
+        // 1. Decodificar el JSON crudo
         final Map<String, dynamic> decodedData = json.decode(utf8.decode(response.bodyBytes));
         
-        // Lo convertimos a un Mapa tipado para Dart
-        final Map<String, List<String>> result = {};
-        decodedData.forEach((key, value) {
-          result[key] = List<String>.from(value);
+        // 2. Convertirlo a tipos fuertes de Dart (Map<String, Map...>)
+        final Map<String, Map<String, List<String>>> result = {};
+        
+        decodedData.forEach((macroKey, gruposMap) {
+          // Para cada Macro, creamos su mapa de grupos
+          final Map<String, List<String>> gruposTyped = {};
+          
+          (gruposMap as Map<String, dynamic>).forEach((grupoKey, itemsList) {
+            gruposTyped[grupoKey] = List<String>.from(itemsList);
+          });
+          
+          result[macroKey] = gruposTyped;
         });
         
         return result;
@@ -40,7 +47,6 @@ class ApiService {
       }
     } catch (e) {
       print("❌ Error de conexión: $e");
-      // Devolvemos un error vacío o lanzamos la excepción para que la UI lo sepa
       rethrow; 
     }
   }

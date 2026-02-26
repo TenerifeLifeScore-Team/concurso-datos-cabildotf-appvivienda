@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../config/theme/app_colors.dart';
-import '../services/api_services.dart'; // Importamos nuestro "teléfono"
+import '../services/api_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,15 +12,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ApiService _apiService = ApiService();
   
-  // ESTADO DE LA APP
   bool isLoading = true;
   String? errorMessage;
   
-  // Aquí guardamos lo que nos manda Python: { "Salud": ["Farmacia", ...], "Ocio": [...] }
-  Map<String, List<String>>? categoriasConfig;
+  // ESTRUCTURA DE DATOS NUEVA:
+  // Macro -> { Grupo : [Items] }
+  Map<String, Map<String, List<String>>>? arbolConfig;
   
-  // Aquí guardamos los valores de los sliders del usuario (0.0 a 5.0)
-  Map<String, double> sliderValues = {};
+  // Estado de la UI
+  String? macroSeleccionada; // ¿Qué pestaña estamos viendo? ("Servicios", "Ocio"...)
+  Map<String, double> sliderValues = {}; // Valores de los sliders (0-5)
 
   @override
   void initState() {
@@ -28,28 +29,32 @@ class _HomeScreenState extends State<HomeScreen> {
     _cargarDatosIniciales();
   }
 
-  // Función para llamar a la API al arrancar
   Future<void> _cargarDatosIniciales() async {
     try {
-      // 1. Pedimos la config a Python
       final datos = await _apiService.getCategories();
       
-      // 2. Inicializamos los sliders a 3.0 (valor medio)
+      // Inicializamos sliders a 3.0 si están vacíos
       final Map<String, double> iniciales = {};
-      datos.forEach((key, value) {
-        iniciales[key] = 3.0;
+      datos.forEach((macro, grupos) {
+        grupos.forEach((grupo, items) {
+          iniciales[grupo] = 3.0;
+        });
       });
 
-      // 3. Actualizamos la pantalla
+      // Ordenamos las macros para que siempre salgan en el mismo orden
+      final primerMacro = datos.keys.toList()..sort();
+      
       setState(() {
-        categoriasConfig = datos;
+        arbolConfig = datos;
         sliderValues = iniciales;
+        // Seleccionamos la primera pestaña por defecto
+        macroSeleccionada = primerMacro.isNotEmpty ? primerMacro.first : null;
         isLoading = false;
       });
       
     } catch (e) {
       setState(() {
-        errorMessage = "No pude conectar con el PC 😢\nRevisa la IP en api_service.dart\nError: $e";
+        errorMessage = "Error de conexión:\n$e";
         isLoading = false;
       });
     }
@@ -58,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // Evita que el teclado rompa el layout
       appBar: AppBar(
         title: const Text("Tenerife LifeScore 🇮🇨"),
         actions: [
@@ -72,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // CAPA 1: EL MAPA (Fondo)
+          // FONDO (MAPA)
           Positioned.fill(
             child: Container(
               color: AppColors.background,
@@ -89,11 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // CAPA 2: EL PANEL DESLIZANTE
+          // PANEL DESLIZANTE
           DraggableScrollableSheet(
-            initialChildSize: 0.4,
-            minChildSize: 0.1,
-            maxChildSize: 0.85,
+            initialChildSize: 0.5,
+            minChildSize: 0.15,
+            maxChildSize: 0.9,
             builder: (context, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
@@ -103,7 +109,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     BoxShadow(color: Colors.black26, blurRadius: 15, spreadRadius: 2)
                   ],
                 ),
-                child: _buildPanelContent(scrollController),
+                child: Column(
+                  children: [
+                    // 1. TIRADOR (Para arrastrar)
+                    Center(
+                      child: Container(
+                        width: 40, height: 5,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300], 
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                    ),
+
+                    // 2. CONTENIDO PRINCIPAL (Con scroll)
+                    Expanded(
+                      child: _buildPanelBody(scrollController),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -112,93 +137,135 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Contenido del panel (Gestión de estados: Cargando, Error o Lista)
-  Widget _buildPanelContent(ScrollController scrollController) {
-    // A. Si está cargando...
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+  Widget _buildPanelBody(ScrollController scrollController) {
+    if (isLoading) return const Center(child: CircularProgressIndicator());
+    if (errorMessage != null) return Center(child: Text(errorMessage!));
+    if (arbolConfig == null) return const SizedBox();
 
-    // B. Si hubo error...
-    if (errorMessage != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.wifi_off, size: 40, color: Colors.red),
-              const SizedBox(height: 10),
-              Text(errorMessage!, textAlign: TextAlign.center),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: _cargarDatosIniciales, 
-                child: const Text("Reintentar")
-              )
-            ],
+    // Obtenemos las categorías (Tabs) ordenadas
+    final macros = arbolConfig!.keys.toList()..sort();
+
+    return ListView(
+      controller: scrollController, // Importante para que el panel se deslice
+      padding: EdgeInsets.zero,
+      children: [
+        
+        // A. TÍTULO Y PESTAÑAS (Header)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          child: const Text(
+            "Personaliza tu búsqueda",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
-      );
-    }
+        const SizedBox(height: 15),
 
-    // C. Si todo fue bien: ¡LISTA DE SLIDERS! 🎚️
-    // Ordenamos las categorías alfabéticamente para que salgan bonitas
-    final listaCategorias = categoriasConfig!.keys.toList()..sort();
-
-    return ListView.separated(
-      controller: scrollController,
-      padding: const EdgeInsets.all(20),
-      itemCount: listaCategorias.length + 1, // +1 para el título
-      separatorBuilder: (_, __) => const SizedBox(height: 20),
-      itemBuilder: (context, index) {
+        // BARRA DE PESTAÑAS (Scroll Horizontal)
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            children: macros.map((macro) {
+              final isSelected = macro == macroSeleccionada;
+              return Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: ChoiceChip(
+                  label: Text(macro),
+                  selected: isSelected,
+                  onSelected: (bool selected) {
+                    if (selected) {
+                      setState(() {
+                        macroSeleccionada = macro;
+                      });
+                    }
+                  },
+                  // Estilos personalizados
+                  selectedColor: AppColors.primary,
+                  labelStyle: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black87,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  backgroundColor: Colors.grey[200],
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  showCheckmark: false, // Quitamos el check ✅ para que parezca un botón
+                  side: BorderSide.none,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
         
-        // Cabecera
-        if (index == 0) {
-          return Center(
-            child: Container(
-              width: 40, height: 5,
-              margin: const EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
-            ),
-          );
-        }
+        const Divider(height: 30, thickness: 1),
 
-        // Sliders reales
-        final categoria = listaCategorias[index - 1];
-        final valor = sliderValues[categoria] ?? 3.0;
+        // B. LISTA DE SLIDERS (Del grupo seleccionado)
+        if (macroSeleccionada != null)
+          ..._buildSlidersList(macroSeleccionada!),
+          
+        // Espacio extra al final para que no se corte
+        const SizedBox(height: 40),
+      ],
+    );
+  }
 
-        return Column(
+  List<Widget> _buildSlidersList(String macro) {
+    // Obtenemos los grupos de esa macro (ej: "Salud Vital", "Educación")
+    final gruposMap = arbolConfig![macro]!;
+    final gruposOrdenados = gruposMap.keys.toList()..sort();
+
+    return gruposOrdenados.map((grupo) {
+      final valor = sliderValues[grupo] ?? 3.0;
+      final items = gruposMap[grupo]!; // Lista de ejemplos (Farmacias, Colegios...)
+      
+      // Texto descriptivo (ej: "Farmacias, Hospitales...")
+      final descripcion = items.take(3).join(", ") + (items.length > 3 ? "..." : "");
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Encabezado del Slider
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  categoria, // Ej: "Salud", "Ocio"
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(grupo, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                      Text(descripcion, 
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  valor.toStringAsFixed(0), // Ej: "3"
-                  style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    valor.toStringAsFixed(0),
+                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
+            
+            // El Slider
             Slider(
               value: valor,
-              min: 0,
-              max: 5,
-              divisions: 5,
+              min: 0, max: 5, divisions: 5,
               label: valor.toStringAsFixed(0),
-              onChanged: (nuevoValor) {
-                setState(() {
-                  sliderValues[categoria] = nuevoValor;
-                });
-                // AQUÍ EN EL FUTURO LLAMAREMOS A _calcularMapa()
+              onChanged: (v) {
+                setState(() => sliderValues[grupo] = v);
               },
             ),
           ],
-        );
-      },
-    );
+        ),
+      );
+    }).toList();
   }
 }
