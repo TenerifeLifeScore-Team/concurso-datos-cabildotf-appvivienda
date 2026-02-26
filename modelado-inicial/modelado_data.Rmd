@@ -4,48 +4,47 @@ author: "Alejandro D., Aythami L., Tomás S."
 date: "`r Sys.Date()`"
 output: 
     html_document:
-        toc: true           # Activa la Tabla de Contenidos
-        toc_float: true     # Hace que la barra te siga al hacer scroll (flotante)
-        toc_depth: 3        # (Opcional) Hasta qué nivel de títulos muestra (###)
+        toc: true           
+        toc_float: true     
+        toc_depth: 3        
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = F, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(sf)
-library(janitor) # Para limpiar nombres de columnas sucios
+library(janitor)
 library(mapview)
 library(dplyr)
 library(stringr)
 
 
-# asociamos funciones a determinadas librerías para evitar posibles errores 
-filter <- dplyr::filter # Filtra filas según condiciones
-select <- dplyr::select # Selecciona columnas
-mutate <- dplyr::mutate # Crea o modifica columnas
-arrange <- dplyr::arrange # Ordena filas
-group_by <- dplyr::group_by # Agrupa datos
-summarise <- dplyr::summarise # Resume variables (por ejemplo, con medias, conteos)
-summarize <- dplyr::summarize # Lo mismo que summarise
-rename <- dplyr::rename # Cambia nombres de columnas
-distinct <- dplyr::distinct # Elimina filas duplicadas
-slice<- dplyr::slice # Selecciona filas por posición
-relocate<- dplyr::relocate # Reordena columnas
+
+filter <- dplyr::filter 
+select <- dplyr::select 
+mutate <- dplyr::mutate 
+arrange <- dplyr::arrange 
+group_by <- dplyr::group_by
+summarise <- dplyr::summarise
+summarize <- dplyr::summarize
+rename <- dplyr::rename 
+distinct <- dplyr::distinct 
+slice<- dplyr::slice 
+relocate<- dplyr::relocate 
 ```
 
 ```{css, echo=F}
-/* --- FUENTES Y CUERPO --- */
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    color: #2c3e50; /* Gris oscuro elegante */
+    color: #2c3e50;
     background-color: #fdfdfd;
 }
 
-/* --- CABECERAS (H1, H2...) --- */
+
 h1.title {
-    color: #005A9C; /* Azul Institucional */
+    color: #005A9C;
     font-weight: 700;
     text-align: center;
     margin-top: 20px;
@@ -61,7 +60,7 @@ h1.subtitle {
 }
 
 h1, h2, h3 {
-    color: #004a80; /* Un azul un poco más oscuro */
+    color: #004a80; 
     margin-top: 30px;
 }
 
@@ -70,22 +69,22 @@ h2 {
     padding-bottom: 5px;
 }
 
-/* --- BLOQUES DE CÓDIGO (R) --- */
+
 pre {
-    background-color: #f4f7f6 !important; /* Fondo gris azulado muy suave */
+    background-color: #f4f7f6 !important; 
     border: 1px solid #e1e8ed;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombrita suave */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
     padding: 15px !important;
 }
 
 code {
     font-family: 'Fira Code', 'Consolas', monospace;
     font-size: 0.9em;
-    color: #d63384; /* Color rosado para resaltar variables inline */
+    color: #d63384; 
 }
 
-/* --- TABLAS (Kable) --- */
+
 table {
     border-collapse: collapse;
     width: 100%;
@@ -106,14 +105,14 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: #f8f9fa; /* Efecto Cebra */
+    background-color: #f8f9fa; 
 }
 
 tr:hover {
-    background-color: #e2e6ea; /* Efecto Hover */
+    background-color: #e2e6ea; 
 }
 
-/* --- ÍNDICE LATERAL (TOC) --- */
+
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
     z-index: 2;
     color: #fff;
@@ -121,7 +120,7 @@ tr:hover {
     border-color: #005A9C;
 }
 
-/* --- PIE DE PÁGINA --- */
+
 .footer {
     text-align: center;
     font-size: 0.8em;
@@ -131,13 +130,13 @@ tr:hover {
     padding-top: 20px;
 }
 
-/* === Párrafos y texto === */
+
 p {
 text-align: justify;
 margin-bottom: 1em;
 }
 
-/* === Figuras y tablas === */
+
 figure, .figure {
 text-align: center;
 margin: 1.5em auto;
@@ -156,6 +155,7 @@ Antes de aplicar la lógica de negocio, todos los datasets brutos pasan por una 
 - **Integridad Geográfica:** Se aplica un filtro estricto `filter(!is.na(latitud))` para descartar cualquier registro que no tenga coordenadas válidas, asegurando que no haya errores de renderizado en el mapa.
 
 # Modelado de datasets utilizados
+
 ## Movilidad (Guaguas y tranvía)
 
 - **Fuente**: Unificación de `paradas-de-guagua.geojson` y `paradas-de-tranvia.geojson`.
@@ -171,48 +171,45 @@ Antes de aplicar la lógica de negocio, todos los datasets brutos pasan por una 
     - *Guaguas*: Ponderación 10 con `max_acumulable = 4`. Aquí sí premiamos la densidad: tener múltiples paradas cerca implica casi seguramente mayor frecuencia de paso y variedad de líneas (conectividad real).
 
 ```{r limpieza-movilidad}
-# 1. Cargar datos brutos
 raw_guaguas <- st_read("../data-raw/paradas-de-guagua.geojson", quiet = TRUE)
 raw_tranvia <- st_read("../data-raw/paradas-de-tranvia.geojson", quiet = TRUE)
 
-# 2. Limpieza Guaguas
+
 clean_guaguas <- raw_guaguas %>%
-  clean_names() %>%  # Pone todo en minúsculas y quita espacios
-  select(nombre = parada_nombre, geometry) %>% # Nos quedamos solo con el nombre y la pos
+  clean_names() %>%  
+  select(nombre = parada_nombre, geometry) %>% 
   mutate(
     tipo = "Guagua",
-    grupo = "Transporte publico"
-  )
+    grupo = "Transporte publico")
 
-# 3. Limpieza Tranvía
+
 clean_tranvia <- raw_tranvia %>%
   clean_names() %>%
   select(nombre = parada_nombre, geometry) %>%
   mutate(
     tipo = "Tranvia",
-    grupo = "Transporte publico"
-  )
-         
+    grupo = "Transporte publico")
 ```
 
 ```{r unificación-movilidad, fig.align="center", out.width="100%", fig.height=6}
-# 4. Unificación
+
 clean_movilidad <- bind_rows(clean_guaguas, clean_tranvia) %>%
   relocate(nombre, grupo, tipo, geometry)
 
-# 5. Verificación de Coordenadas (CRÍTICO)
-# Aseguramos que sea WGS84 (EPSG:4326) para la web
 clean_movilidad <- st_transform(clean_movilidad, crs = 4326)
 
-# Visualización rápida
-mapview(clean_movilidad, zcol = "tipo", layer.name = "Red de transporte unificada", col.regions = c("green", "red"))
+
+mapview(clean_movilidad, 
+        zcol = "tipo", 
+        layer.name = "Red de transporte unificada", 
+        col.regions = c("green", "red"))
 ```
 
 ## Salud
 
 - **Fuente:** `centros-medicos-farmacias-y-servicios-sanitarios-en-tenerife.geojson`
 
-- **Estrategia de Agrupación (Sliders):** Hemos dividido la salud en dos conceptos para que el usuario pueda priorizar según su etapa vital.
+- **Estrategia de Agrupación (Sliders):** Hemos dividido la salud en dos conceptos para que el usuario pueda priorizar según su etapa vital:
 
     - *Salud Vital*: Servicios críticos de emergencia y atención primaria.
 
@@ -220,14 +217,14 @@ mapview(clean_movilidad, zcol = "tipo", layer.name = "Red de transporte unificad
 
 - **Criterio de Valoración (Algoritmo):**
 
-    - *Ponderación*: Un "Centro de Salud" o "Hospital" recibe un 10 (máxima prioridad). Servicios como "Podología" u "Óptica" reciben puntuaciones menores (5-7).
+    - *Ponderación*: Un "Centro de Salud" o "Hospital" recibe un 10 (máxima prioridad). Servicios muy específicos como "Podología" (5) o "Logopedia" (6) reciben puntuaciones menores para no distorsionar el índice general.
 
     - *Saturación*: Se aplica la ley de rendimientos decrecientes.
 
         - Para un Hospital, `max_acumulable = 1`. Vivir cerca de uno es vital; vivir cerca de tres no triplica tu calidad de vida.
 
-        - Para Farmacias, `max_acumulable = 3`, permitiendo valorar la densidad de servicios farmacéuticos hasta un tope lógico.
-
+        - Para Farmacias, `max_acumulable = 3`, permitiendo valorar positivamente la densidad de servicios farmacéuticos (turnos de guardia, cercanía) hasta un tope lógico.
+        
 ```{r salud-inicial, echo=F}
 raw_salud <- st_read("../data-raw/centros-medicos-farmacias-y-servicios-sanitarios-en-tenerife.geojson", quiet = TRUE)
 ```
@@ -235,17 +232,17 @@ raw_salud <- st_read("../data-raw/centros-medicos-farmacias-y-servicios-sanitari
 ```{r salud-transformacion, fig.align="center", out.width="100%", fig.height=6}
 clean_salud <- raw_salud %>%
 
-  # Limpiamos nombres de columnas por si acaso (quita acentos, espacios -> guiones bajos)
+  
   janitor::clean_names() %>%
   
-  # SELECCIÓN: Nos quedamos solo con lo útil y renombramos para que sea más claro
+  
   select(
     nombre,
     actividad_tipo,
     geometry    
   ) %>%
   
-  # --- 2. FILTRADO (Excluir lo inútil) ---
+  
   filter(
     !actividad_tipo %in% c(
       "banca servicios financieros", 
@@ -257,26 +254,23 @@ clean_salud <- raw_salud %>%
     )
   ) %>%
   
-  # --- 3. CREACIÓN DE GRUPOS Y PESOS (Feature Engineering) ---
-  mutate(
-    # Creamos la categoría simplificada
-    grupo_salud = case_when(
-      actividad_tipo %in% c("servicios hospitalarios", "centro de salud", "farmacia") ~ "Vital",
-      # Todo lo demás va al grupo especialistas (dentistas, fisios, etc.)
-      TRUE ~ "Salud especializada"
-    )) %>%
+  
+  mutate(grupo_salud = case_when(
+      actividad_tipo %in% c("servicios hospitalarios", 
+                            "centro de salud", 
+                            "farmacia") ~ "Vital",
+                            TRUE ~ "Salud especializada")) %>%
   
   rename(
     grupo = grupo_salud,
-    tipo = actividad_tipo
-  ) %>%
+    tipo = actividad_tipo) %>%
   
   relocate(nombre, grupo, tipo, geometry)
 
-
-# --- 4. CHEQUEO FINAL ---
-# Visualización rápida para comprobar
-mapview(clean_salud, zcol = "grupo", layer.name = "Salud por Categoría", col.regions = c("lightblue", "green"))
+mapview(clean_salud, 
+        zcol = "grupo", 
+        layer.name = "Salud por Categoría", 
+        col.regions = c("lightblue", "green"))
 ```
 
 ## Educación
@@ -285,87 +279,71 @@ mapview(clean_salud, zcol = "grupo", layer.name = "Salud por Categoría", col.re
 
 - **Estrategia de Agrupación (Sliders):**
 
-    - *Educación*: Enfocado a familias y estudiantes (Colegios, Institutos, Guarderías).
+    - *Educación*: Enfocado a familias y estudiantes (Colegios, Institutos, Guarderías y Universidades).
 
-    - *Cultura*: Enfocado a ocio y enriquecimiento (Bibliotecas, Centros Culturales).
+    - *Cultura*: Enfocado a ocio y enriquecimiento (Bibliotecas, Centros Culturales, Museos).
 
 - **Criterio de Valoración (Algoritmo):**
 
     - *Limpieza*: Hemos filtrado y excluido tipos de enseñanza muy específicos o no reglados que introducían ruido en la valoración general de la zona.
 
     - *Ponderación*: La "Enseñanza Infantil y Primaria" y la "Obligatoria" son un 10 absoluto para perfiles familiares. Las "Academias de idiomas" o "Asociaciones culturales" ponderan más bajo (4-6) al ser servicios opcionales.
+
+    - *Saturación*: Se ha establecido un `max_acumulable = 2` para la gran mayoría de centros educativos y culturales. Esto premia las zonas que ofrecen cierta variedad (por ejemplo, tener dos colegios distintos o un colegio y un instituto cerca), pero evita inflar la puntuación de forma irreal. Como excepción, las academias de idiomas permiten acumular hasta 3.
     
 ```{r edu-inicial}
-raw_edu <- st_read("../data-raw/centros-educativos-y-culturales-en-tenerife.geojson", quiet = TRUE) %>% 
-  janitor::clean_names()
+raw_edu <- st_read("../data-raw/centros-educativos-y-culturales-en-tenerife.geojson", quiet = TRUE) 
 ```
 
 ```{r edu-transformacion, fig.align="center", out.width="100%", fig.height=6}
-# --- LIMPIEZA DE EDUCACIÓN Y CULTURA ---
 
-# 1. DEFINICIÓN DE LISTAS (Taxonomía)
-
-# Grupo 1: Colegios (Básica y Obligatoria) -> Peso 10
 cat_colegios <- c("enseñanza infantil y primaria", "enseñanza secundaria", 
                   "enseñanza obligatoria", "guarderias centros infantiles", 
                   "enseñanza infantil")
 
-# Grupo 2: Formación (Superior, Especializada y Adultos) -> Peso 6
-# Nota: 'enseñanza especial' movida aquí por decisión de diseño.
+
 cat_formacion <- c("enseñanza universitaria", "enseñanza profesional", 
                    "enseñanza idiomas", "enseñanza adultos", 
                    "enseñanza especializada", "enseñanza especial")
 
-# Grupo 3: Cultura -> Peso 4
+
 cat_cultura   <- c("biblioteca ludoteca", "centro cultural", 
                    "museos salas de arte", "asociacion cultural")
 
-# Blacklist (A eliminar)
+
 cat_borrar_edu <- c("café", "centro comercial hogar informatica telecomunicaciones", 
                     "enseñanza a distancia", "enseñanza profesorado", 
                     "residencia educativa")
 
-# 2. PROCESAMIENTO
+
 
 clean_edu <- raw_edu %>%
-  janitor::clean_names() %>% # Asegura que los nombres estén limpios (actividad_tipo, etc.)
+  janitor::clean_names() %>% 
   
-  # Selección de columnas (Usando los nombres que me has confirmado)
   select(
     nombre, 
-    actividad_tipo,          # Esta contiene la categoría ("enseñanza...", "biblioteca...")
-    geometry
-  ) %>%
+    actividad_tipo,          
+    geometry) %>%
   
-  # Filtrado de basura
   filter(!actividad_tipo %in% cat_borrar_edu) %>%
   
-  # Creación de Grupos y Pesos Base
   mutate(
-      
-    # Asignación de Grupo
     grupo_edu = case_when(
       actividad_tipo %in% c(cat_colegios, cat_formacion)  ~ "Educacion",
       actividad_tipo %in% cat_cultura   ~ "Cultura",
-      TRUE ~ "Otros"
-    )) %>%
+      TRUE ~ "Otros")) %>%
   
   rename(
     grupo = grupo_edu,
-    tipo = actividad_tipo
-  ) %>%
+    tipo = actividad_tipo) %>%
   
   relocate(nombre, grupo, tipo, geometry)
 
-# --- 3. VERIFICACIÓN Y MAPA ---
-# Definimos colores para cada grupo:
-# Colegio (Rojo/Naranja), Formación (Azul), Cultura (Verde)
 mapview(
   clean_edu, 
   zcol = "grupo", 
   layer.name = "Educación y Cultura",
-  col.regions = c("orange", "blue")
-)
+  col.regions = c("orange", "blue"))
 ```
 
 
@@ -385,46 +363,52 @@ mapview(
     
     - *Cambio de ubicación para Mascotas:* Se extrajeron las categorías "playa mascotas" y "parque mascotas" de este dataset para integrarlas junto con los servicios veterinarios en la sección de *Comercio*, creando así un único filtro integral ("Mascotas") para los usuarios con animales de compañía.
 
+    - *Ponderación*: Las actividades deportivas generales y ambos tipos de parques (infantiles y urbanos) reciben la máxima prioridad (10). Instalaciones más de nicho como los "gimnasios de artes marciales" (8) o los "puertos deportivos" (7) reciben puntuaciones altas pero ligeramente menores.
 
+    - *Saturación*: Destaca la alta acumulación permitida en "Actividades deporte ocio" (`max_acumulable = 5`), lo que nos permite identificar y premiar grandes complejos deportivos o zonas con enorme oferta de salud física. Por el contrario, los parques tienen un tope de 2, y los puertos deportivos de 1.
     
 ```{r, centros_deportivos_y_ocio-inicial}
 
-raw_centrosdeportivos_ocio <- st_read("../data-raw/centros-deportivos-y-de-ocio-en-tenerife.geojson", quiet = TRUE) %>% 
-  janitor::clean_names()
-
+raw_centrosdeportivos_ocio <- st_read("../data-raw/centros-deportivos-y-de-ocio-en-tenerife.geojson", quiet = TRUE) 
 ```
 
 
 ```{r centros_deportivos_y_ocio-transformacion}
 
 clean_centrosdeportivos_y_ocio <- raw_centrosdeportivos_ocio %>% 
+    
+    janitor::clean_names() %>% 
+    
     select(nombre,
            tipo = actividad_tipo,
            geometry) %>% 
     
-    filter(!tipo %in% c("administracion publica juzgado", "asociacion cultural", "parque mascotas", "playa mascotas")) %>%
+    filter(!tipo %in% c("administracion publica juzgado", 
+                        "asociacion cultural", 
+                        "parque mascotas", 
+                        "playa mascotas")) %>%
     
-    mutate(tipo = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales", tipo),
-           grupo = case_when(tipo %in% c("actividades deporte ocio", "puerto deportivo", "gimnasio artes marciales") ~ "Centros deportivos",
-                             tipo %in% c("parques infantiles", "parque deporte urbano") ~ "Parques"))
+    mutate(tipo = ifelse((tipo == "gimnasion artes marciales yoga"), "gimnasio artes marciales",tipo),
+           grupo = case_when(tipo %in% c("actividades deporte ocio", 
+                                         "puerto deportivo", 
+                                         "gimnasio artes marciales") ~ "Centros deportivos",
+                             tipo %in% c("parques infantiles", 
+                                         "parque deporte urbano") ~ "Parques"))
 
 
 mapview(
   clean_centrosdeportivos_y_ocio, 
   zcol = "grupo", 
-  layer.name = "Centros deportivos y Ocio",
-  col.regions = c("orange", "blue")
-)
+  layer.name = "Centros deportivos y Parques",
+  col.regions = c("orange", "blue"))
 ```
-
-
 
 
 ## Comercio
 
-- **Fuente:** `locales-comerciales-en-tenerife.geojson`
+- **Fuente:** `locales-comerciales-en-tenerife.geojson` (con integraciones de Salud y Deportes).
 
-- **Estrategia de Agrupación (Sliders):** El dataset original tenía cientos de epígrafes. Los hemos sintetizado en 5 sliders de estilo de vida:
+- **Estrategia de Agrupación (Sliders):** El dataset original tenía cientos de epígrafes. Los hemos sintetizado en 6 sliders de estilo de vida:
 
     - *Alimentación y Despensa* (Supermercados, Mercadillos).
 
@@ -432,65 +416,68 @@ mapview(
 
     - *Hogar y Bricolaje* (Ferreterías, Muebles).
 
-    - *Cuidado Personal* (Peluquerías, Estética).
+    - *Cuidado Personal y Salud* (Peluquerías, Estética, Ópticas).
 
-    - *Ocio y Tecnología* (Informática, Jugueterías, Deportes).
+    - *Ocio, Hobbies y Tecnología* (Informática, Jugueterías, Deportes).
+    
+    - *Mascotas* (Tiendas especializadas, servicios veterinarios y espacios caninos).
 
 - **Criterio de Valoración (Algoritmo):**
 
-    - Ponderación: Diferenciamos la necesidad básica del capricho. Un "Supermercado" es un 10 (necesidad diaria), mientras que una tienda de "Artesanía" es un 4.
+    - *Ponderación*: Diferenciamos la necesidad básica del capricho. Un "Supermercado" es un 10 (necesidad diaria), mientras que una tienda de "Artesanía" es un 4.
 
-    - Saturación: En categorías como "Moda", permitimos una acumulación más alta (`max_acumulable = 4`) porque la variedad es un valor positivo para el usuario (zonas comerciales abiertas).
+    - *Saturación*: En categorías como "Moda", permitimos una acumulación más alta (`max_acumulable = 4`) porque la variedad es un valor positivo para el usuario (zonas comerciales abiertas).
     
-- **Cambio de ubicación para los veterinarios:**  Se han trasladado todos los "servicios veterinarios" al dataset de *comercio*, para poder juntarlo con "tiendas de mascotas", y agrupar estas dos características para poder segmentizar por usuarios con mascotas.
-
-- **Cambio de ubicación para las instalaciones de mascotas:**  Se han trasladado todos las instalaciones y puntos de interés relacionados con mascotas al dataset de *comercio*, para poder juntarlo con 'tiendas de mascotas' y 'veterinarios', y agrupar estas características para poder segmentizar por usuarios con mascotas.
+    - *Feature Engineering (Creación del perfil "Mascotas")*: Para ofrecer un filtro integral a los usuarios con animales de compañía, se tomó la decisión técnica de trasladar a este dataset los "Servicios veterinarios" (originalmente en Salud) y las "Playas/Parques para mascotas" (originalmente en Deportes y Ocio), unificándolos bajo un único slider de estilo de vida.
+    
 
 ```{r comercio-inicial}
-raw_comercio <- st_read("../data-raw/locales-comerciales-en-tenerife.geojson", quiet = TRUE) %>% 
-  janitor::clean_names()
+raw_comercio <- st_read("../data-raw/locales-comerciales-en-tenerife.geojson", quiet = TRUE) 
 ```
 
 ```{r veterinario-a-comercio}
-temp <- raw_salud %>%
+añadir_veterinario <- raw_salud %>%
+    
   filter(actividad_tipo == "servicios veterinarios") %>%
+    
   select(nombre, actividad_tipo, geometry) %>%
-  mutate(
-    grupo = "Mascotas"
-  ) %>%
+    
+  mutate(grupo = "Mascotas") %>%
+    
   rename(tipo = actividad_tipo) %>%
+    
   relocate(nombre, grupo, tipo, geometry)
 ```
 
 ```{r mascotas-a-comercio}
-temp2 <- raw_centrosdeportivos_ocio %>% 
+añadir_mascotas <- raw_centrosdeportivos_ocio %>% 
+    
     select(nombre, 
            tipo = actividad_tipo,
            geometry) %>% 
+    
     mutate(grupo = "Mascotas") %>% 
     
-    filter(tipo %in% c("parque mascotas", "playa mascotas"))
+    filter(tipo %in% c("parque mascotas", 
+                       "playa mascotas"))
 
 ```
 
 
 
 ```{r comercio-transformacion, fig.align="center", out.width="100%", fig.height=6}
+
 clean_comercio <- raw_comercio %>%
+    
   janitor::clean_names() %>%
-  
-  # 1. SELECCIÓN DE COLUMNAS 
-  # (Ajusta 'actividad_descripcion' si tu columna se llama diferente)
-  select(
+    
+select(
     nombre,
     actividad = actividad_tipo, 
-    geometry
-  ) %>%
+    geometry) %>%
   
-  # 2. FILTRADO (Exclusión de Hostelería y Ruido)
-  filter(
-    !actividad %in% c(
-      "café", "tasca", "heladeria", # Se usarán en el dataset de Hostelería
+  filter(!actividad %in% c(
+      "café", "tasca", "heladeria", 
       "cerrado sin actividad", 
       "comercio almacen deposito", 
       "representacion distribucion comercial", 
@@ -499,117 +486,170 @@ clean_comercio <- raw_comercio %>%
       "vending", 
       "compraventa oro", 
       "compraventa productos segunda mano",
-      "videoclub"
-    )
-  ) %>%
+      "videoclub")) %>%
   
-  # 3. CATEGORIZACIÓN SIMPLIFICADA
-  mutate(
-    
-    # Lógica de Grupos
-    grupo_comercio = case_when(
-      actividad %in% c("alimentacion productos especializados herbolario", "alimentacion supermercados", "alimentacion vinoteca", "bazar multitienda estanco", "mercados y ferias", "kiosco prensa", "tabaqueria licoreria") ~ "Alimentacion y despensa",
+  mutate(grupo_comercio = case_when(
+      actividad %in% c("alimentacion productos especializados herbolario", 
+                       "alimentacion supermercados", 
+                       "alimentacion vinoteca", 
+                       "bazar multitienda estanco", 
+                       "mercados y ferias", 
+                       "kiosco prensa", 
+                       "tabaqueria licoreria") ~ "Alimentacion y despensa",
       
-      actividad %in% c("optica ortopedia audicion", "parafarmacia productos naturales", "peluqueria estetica", "perfumeria estetica complementos") ~ "Cuidado personal y salud",
+      actividad %in% c("optica ortopedia audicion", 
+                       "parafarmacia productos naturales", 
+                       "peluqueria estetica", 
+                       "perfumeria estetica complementos") ~ "Cuidado personal y salud",
       
-      actividad  %in% c("centro comercial hogar construccion", "electricidad electronica", "ferreteria", "floristeria", "hogar muebles electrodomesticos decoracion", "hogar textil") ~ "Hogar y bricolaje",
+      actividad  %in% c("centro comercial hogar construccion", 
+                        "electricidad electronica", 
+                        "ferreteria", 
+                        "floristeria", 
+                        "hogar muebles electrodomesticos decoracion", 
+                        "hogar textil") ~ "Hogar y bricolaje",
       
-      actividad %in% c("centro comercial", "centro comercial hogar moda", "artesania y productos tradicionales", "bisuteria complementos", "joyeria relojeria", "joyeria relojeria taller", "merceria textil", "moda complementos", "moda complementos infantil", "moda complementos taller", "zapateria calzado", "zapateria calzado taller") ~ "Moda y shopping",
+      actividad %in% c("centro comercial", 
+                       "centro comercial hogar moda", 
+                       "artesania y productos tradicionales", 
+                       "bisuteria complementos", 
+                       "joyeria relojeria", 
+                       "joyeria relojeria taller", 
+                       "merceria textil", 
+                       "moda complementos", 
+                       "moda complementos infantil", 
+                       "moda complementos taller", 
+                       "zapateria calzado", 
+                       "zapateria calzado taller") ~ "Moda y shopping",
       
-      actividad %in% c("centro comercial deportes", "centro comercial hogar informatica telecomunicaciones", "articulos deportivos", "articulos musicales", "bazar electronica", "comercio otro tipo", "concesionario exposicion automocion", "estudio fotografia", "informatica telecomunicaciones", "jugueteria", "libreria papeleria discoteca", "locutorio", "telefonia") ~ "Ocio, hobbies y tecnología",
+      actividad %in% c("centro comercial deportes", 
+                       "centro comercial hogar informatica telecomunicaciones", 
+                       "articulos deportivos", 
+                       "articulos musicales", 
+                       "bazar electronica", 
+                       "comercio otro tipo", 
+                       "concesionario exposicion automocion", 
+                       "estudio fotografia", 
+                       "informatica telecomunicaciones", 
+                       "jugueteria", 
+                       "libreria papeleria discoteca", 
+                       "locutorio", 
+                       "telefonia") ~ "Ocio, hobbies y tecnología",
       
-      actividad %in% c("mascotas") ~ "Mascotas"
-      
-    )) %>%
+      actividad %in% c("mascotas") ~ "Mascotas")) %>%
   
   rename(
     grupo = grupo_comercio,
-    tipo = actividad
-  ) %>%
+    tipo = actividad) %>%
   
   relocate(nombre, grupo, tipo, geometry)
 
-# Añadimos veterinarios y parques/playas mascotas de la tabla temporal temp
-clean_comercio <- bind_rows(clean_comercio, temp, temp2)
+clean_comercio <- bind_rows(clean_comercio, añadir_veterinario, añadir_mascotas)
 
-
-# --- VERIFICACIÓN ---
 mapview(
   clean_comercio, 
   zcol = "grupo", 
   layer.name = "Comercio",
-  col.regions = c("orange", "blue", "green", "pink", "purple", "red")
-)
+  col.regions = c("orange", "blue", "green", "pink", "purple", "red"))
 ```
 
 ## Restauración
 
-- **Fuente:** restauracion.geojson + Tipos de actividades - Restauración.csv
+- **Fuente:** `locales-de-hosteleria-y-restauracion-en-tenerife.geojson`
 
-- **Estrategia de Agrupación (Sliders):** Clasificación basada en el "momento de consumo":
+- **Estrategia de Agrupación (Sliders):** Clasificación basada en el "momento de consumo" y tipo de ocio:
 
-    - *Cafeterías y Mañaneo:* Desayunos y meriendas.
+    - *Cafeterías y Mañaneo:* Desayunos, dulcerías y meriendas.
 
-    - *Casual y Fast Food:* Bares de paso y comida rápida.
+    - *Casual, Fast Food y Bares de Paso:* Comida rápida, areperas, hamburgueserías y bares tradicionales.
 
-    - *Gastronomía y Guachinches:* Restauración de mesa y mantel (tradicional).
+    - *Gastronomía y Guachinches:* Restauración de mesa y mantel, tascas y comida tradicional.
+    
+    - *Vida nocturna y copas:* Pubs, discotecas y ocio nocturno.
 
 - **Criterio de Valoración (Algoritmo):**
 
-    - Se ha ponderado positivamente la identidad local ("Guachinches" = 10) frente a cadenas genéricas o bares de paso con menor impacto en la calidad de vida residencial.
+    - *Ponderación*: Se ha ponderado positivamente la identidad local y los espacios de socialización diurna ("Guachinches", "Restaurantes" y "Cafeterías" reciben un 10) frente a opciones de paso rápido con menor impacto en la calidad de vida residencial, como "Autobares" (4) o "Cibercafés" (5).
 
+    - *Saturación*: A diferencia de otros datasets, en hostelería se permite una acumulación moderada-alta (`max_acumulable = 2` o `3` en la mayoría de categorías). Esto permite al algoritmo premiar el "efecto clúster" en zonas como avenidas principales, paseos marítimos o cascos históricos, donde la concentración y variedad de restauración es un atractivo clave para el residente.
+    
 ```{r restauración-inicial}
-raw_restaur <- st_read("../data-raw/locales-de-hosteleria-y-restauracion-en-tenerife.geojson", quiet = TRUE) %>% 
-  janitor::clean_names()
+raw_restaur <- st_read("../data-raw/locales-de-hosteleria-y-restauracion-en-tenerife.geojson", quiet = TRUE) 
 ```
 
 ```{r restaur-transformacion, fig.align="center", out.width="100%", fig.height=6}
-# --- LIMPIEZA DE RESTAURACIÓN ---
-# 2. PROCESAMIENTO
+
 clean_restauracion <- raw_restaur %>%
+    
   janitor::clean_names() %>%
   
-  # Selección de columnas
   select(
     nombre,
     actividad = actividad_tipo,
-    geometry
-  ) %>%
+    geometry) %>%
   
-  # Filtrado de errores (Blacklist)
-  filter(
-    !actividad %in% c(
+  filter(!actividad %in% c(
       "peluqueria estetica", 
       "administracion publica servicios empleo", 
-      "bar piscina", # Suelen ser privados
+      "bar piscina", 
       "cerrado",
       "bar charcuteria",
-      "sin actividad"
-    )
-  ) %>%
+      "sin actividad")) %>%
+ 
+  mutate(grupo = case_when(
+      actividad %in% c("cafeteria", 
+                       "café", "
+                       heladeria", 
+                       "heladeria pasteleria", 
+                       "bar cafeteria zumeria", 
+                       "bar churreria chocolateria", 
+                       "bar croissanteria", 
+                       "bar pasteleria", 
+                       "barcafeteriachurreria", 
+                       "barcafeteriapasteleria", 
+                       "barchurreria", "bardulceria") ~ "Cafeterias y mañaneo",
+      
+      actividad %in% c("cibercafe", 
+                       "autobar", 
+                       "bar", 
+                       "bar cafeteria", 
+                       "bar cafeteria arepera", 
+                       "bar cafeteria creperia", 
+                       "bar cafeteria hamburgueseria", 
+                       "bar cibercafe", 
+                       "bar kiosco", 
+                       "bar terraza", 
+                       "barhamburgueseria") ~ "Casual, fast food y bares de paso",
+      
+      actividad %in% c("bar taberna", 
+                       "bartasca", 
+                       "guachinche", 
+                       "restaurante bodega", 
+                       "restaurante tasca", 
+                       "tasca", 
+                       "restaurante", 
+                       "restaurante buffet", 
+                       "restaurante meson", 
+                       "restaurante pizzeria") ~ "Gastronomia y guachinches",
+      
+      actividad %in% c("salon recreativo", 
+                       "bar cafeteria pub", 
+                       "bar cerveceria", 
+                       "barclub", 
+                       "discoteca", 
+                       "discoteca club", 
+                       "pub", 
+                       "sala de fiestas") ~ "Vida nocturna y copas")) %>%
   
-  mutate(
-    grupo = case_when(
-      actividad %in% c("cafeteria", "café", "heladeria", "heladeria pasteleria", "bar cafeteria zumeria", "bar churreria chocolateria", "bar croissanteria", "bar pasteleria", "barcafeteriachurreria", "barcafeteriapasteleria", "barchurreria", "bardulceria") ~ "Cafeterias y mañaneo",
-      actividad %in% c("cibercafe", "autobar", "bar", "bar cafeteria", "bar cafeteria arepera", "bar cafeteria creperia", "bar cafeteria hamburgueseria", "bar cibercafe", "bar kiosco", "bar terraza", "barhamburgueseria") ~ "Casual, fast food y bares de paso",
-      actividad %in% c("bar taberna", "bartasca", "guachinche", "restaurante bodega", "restaurante tasca", "tasca", "restaurante", "restaurante buffet", "restaurante meson", "restaurante pizzeria") ~ "Gastronomia y guachinches",
-      actividad %in% c("salon recreativo", "bar cafeteria pub", "bar cerveceria", "barclub", "discoteca", "discoteca club", "pub", "sala de fiestas") ~ "Vida nocturna y copas"
-    )) %>%
-  
-  rename(
-    tipo = actividad
-  ) %>%
+  rename(tipo = actividad) %>%
   
   relocate(nombre, grupo, tipo, geometry)
 
-# --- 3. VERIFICACIÓN Y MAPA ---
-# MAPA INTERACTIVO
 mapview(
   clean_restauracion, 
   zcol = "grupo", 
   layer.name = "Ocio y Comida",
-  col.regions = c("orange", "blue", "green", "red")
-)
+  col.regions = c("orange", "blue", "green", "red"))
 ```
 
 
@@ -617,29 +657,29 @@ mapview(
 
 - **Fuente:** `naturaleza.geojson`
 
-- **Estrategia de Agrupación (Sliders):** Se ha clasificado el entorno natural según el tipo de uso que le daría un residente local frente a un turista:
+- **Estrategia de Agrupación (Sliders):** Se ha clasificado el entorno natural en dos grandes bloques según el tipo de uso (diurno/habitual vs. esporádico/fin de semana):
 
-    - *Ocio y picnic* (Áreas recreativas y de descanso para fines de semana).
+    - *Naturaleza:* Uso diurno y esparcimiento. Engloba áreas recreativas, zonas de descanso, miradores, aulas en la naturaleza y centros de visitantes.
 
-    - *Paisaje y vistas* (Miradores y centros de visitantes).
-
-    - *Educación ambiental* (Aulas en la naturaleza, ideal para familias y centros educativos).
-
-    - *Camping* (Zonas de acampada para casetas, caravanas, campamentos y vivac).
+    - *Camping:* Uso prolongado. Zonas de acampada para casetas, caravanas, campamentos y vivac.
 
 - **Criterio de Valoración (Algoritmo):**
 
     - *Filtro de ruido:* Se han eliminado infraestructuras vacías como la "Zona de aparcamiento" que no representan un servicio por sí mismas.
     
-    - *Ponderación:* Las subcategorías de "Ocio y picnic" y "Paisaje y vistas" añaden un gran valor a la habitabilidad residencial (entorno verde y esparcimiento). El grupo de "Camping", al ser más esporádico o turístico, se segmenta para que el usuario decida si le resulta un plus o un factor irrelevante en su día a día.
+    - *Ponderación:* Dentro del uso diario, las "Áreas recreativas" y "Miradores" aportan el máximo valor paisajístico y de ocio (10 puntos). Las "Aulas en la naturaleza" o "Centros de visitantes" tienen un impacto más de nicho (5-7). El grupo de "Camping" parte de valores altos (8-10), pero se segmenta en su propio slider para que el usuario decida si le resulta un plus o un factor irrelevante.
+
+    - *Saturación*: El entorno natural tiene una de las saturaciones más estrictas del algoritmo. Casi todas las actividades tienen un `max_acumulable = 1` (tener un área recreativa cerca es genial, tener tres no aporta más valor a la rutina diaria). Solo las zonas de acampada permiten acumular hasta 2 puntos de interés.
 
 ```{r naturaleza-inicial}
-raw_naturaleza <- st_read("../data-raw/naturaleza.geojson", quiet = TRUE) %>% 
-  janitor::clean_names()
+raw_naturaleza <- st_read("../data-raw/naturaleza.geojson", quiet = TRUE)  
 ```
 
 ```{r naturaleza-transformacion}
+
 clean_naturaleza <- raw_naturaleza %>% 
+    
+    janitor::clean_names() %>% 
     
     select(nombre = equipamiento_nombre,
            tipo = equipamiento_tipo,
@@ -648,13 +688,18 @@ clean_naturaleza <- raw_naturaleza %>%
     filter(!tipo %in% c("Zona de aparcamiento")) %>% 
     
     mutate(tipo = ifelse((tipo == "Área recreativa"), "Area recreativa", tipo),
-           grupo = case_when(tipo %in% c("Area recreativa", "Área de descanso") ~ "Ocio y picnic",
-                             tipo %in% c("Mirador", "Centro de visitantes") ~ "Paisaje y vistas",
+           grupo = case_when(tipo %in% c("Area recreativa", 
+                                         "Área de descanso") ~ "Ocio y picnic",
+                             
+                             tipo %in% c("Mirador", 
+                                         "Centro de visitantes") ~ "Paisaje y vistas",
+                             
                              tipo %in% c("Aula en la Naturaleza") ~ "Educacion ambiental",
-                             tipo %in% c("Zona de acampada (caravanas)", "Zona de acampada (casetas)", "Campamento", "Zona vivac") ~ "Camping",
-                             ))
+                             
+                             tipo %in% c("Zona de acampada (caravanas)", 
+                                         "Zona de acampada (casetas)", 
+                                         "Campamento", "Zona vivac") ~ "Camping")) %>% 
 
-clean_naturaleza <- clean_naturaleza %>% 
     mutate(tipo = ifelse((tipo == "Área de descanso"), "Area de descanso", tipo))
 
 
@@ -662,8 +707,7 @@ mapview(
   clean_naturaleza, 
   zcol = "grupo", 
   layer.name = "Naturaleza",
-  col.regions = c("orange", "blue", "green", "red")
-)    
+  col.regions = c("orange", "blue", "green", "red"))    
 ```
 
 
