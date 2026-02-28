@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle; // Para cargar el GeoJSON local
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import '../config/theme/app_colors.dart';
-import '../services/api_services.dart';
+import '../services/api_services.dart'; // Asegúrate que el nombre del archivo sea api_service.dart (singular)
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,41 +15,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ApiService _apiService = ApiService();
-  
+  final MapController _mapController = MapController();
+
   bool isLoading = true;
   String? errorMessage;
-  
-  // DATOS: Macro -> { Grupo : [ConfigItem] }
+
+  // --- DATOS DEL MAPA Y CONFIG ---
   Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
-  
-  // ESTADO UI
+  List<Polygon> poligonosADibujar = [];
+  dynamic geojsonRaw; // El esqueleto del grid
+
+  // --- ESTADO UI ---
   String? macroSeleccionada;
-  Map<String, double> sliderValues = {}; // Sliders (0-5)
-  
-  // ESTADO CHECKBOXES (ID interno -> true/false)
-  // Guardamos cada ID individualmente para enviarlo fácil a Python
+  Map<String, double> sliderValues = {}; 
   Map<String, bool> checkValues = {}; 
 
   @override
   void initState() {
     super.initState();
-    _cargarDatosIniciales();
+    _inicializarTodo();
   }
 
-  Future<void> _cargarDatosIniciales() async {
+  // 1. CARGA INICIAL: API + GEOJSON LOCAL
+  Future<void> _inicializarTodo() async {
     try {
+      // A. Cargar Config de la API
       final datos = await _apiService.getCategories();
-      
+
+      // B. Cargar Esqueleto del Mapa desde Assets
+      final String response = await rootBundle.loadString('assets/data/grid_tenerife.geojson');
+      geojsonRaw = json.decode(response);
+
+      // C. Inicializar valores de Sliders y Checks
       final Map<String, double> inicialesSliders = {};
       final Map<String, bool> inicialesChecks = {};
-      
-      // Recorremos todo para inicializar valores
       datos.forEach((macro, grupos) {
         grupos.forEach((grupo, items) {
-          inicialesSliders[grupo] = 3.0; // Slider al medio
-          
+          inicialesSliders[grupo] = 3.0;
           for (var item in items) {
-            // Activamos por defecto todos los IDs internos de este item
             for (var id in item.ids) {
               inicialesChecks[id] = true;
             }
@@ -54,27 +61,72 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       final primerMacro = datos.keys.toList()..sort();
-      
+
       setState(() {
         arbolConfig = datos;
         sliderValues = inicialesSliders;
         checkValues = inicialesChecks;
         macroSeleccionada = primerMacro.isNotEmpty ? primerMacro.first : null;
-        isLoading = false;
       });
-      
+
+      // D. Pintar el mapa por primera vez
+      await _actualizarMapa();
+
     } catch (e) {
+      setState(() => errorMessage = "Error al iniciar: $e");
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  // 2. FUNCIÓN PARA RE-CALCULAR EL MAPA
+  Future<void> _actualizarMapa() async {
+    try {
+      // Llamada al endpoint /calculate de Python
+      final resultados = await _apiService.calculateScores(sliderValues, checkValues);
+
+      // Creamos un mapa de ID -> Color para buscar rápido
+      final Map<String, String> nuevosColores = {};
+      for (var res in resultados) {
+        nuevosColores[res['hex_id']] = res['color'];
+      }
+
+      List<Polygon> nuevosPoligonos = [];
+
+      // Recorremos el esqueleto local y le asignamos el color que nos dio Python
+      for (var feature in geojsonRaw['features']) {
+        final id = feature['properties']['hex_id'];
+        final colorHex = nuevosColores[id] ?? "#CCCCCC"; 
+        
+        // Convertir Hex String a Color de Flutter
+        final color = Color(int.parse(colorHex.replaceFirst('#', '0xFF')));
+
+        // Extraer coordenadas: GeoJSON [Lon, Lat] -> Flutter [Lat, Lon]
+        List<LatLng> points = [];
+        var coords = feature['geometry']['coordinates'][0];
+        for (var p in coords) {
+          points.add(LatLng(p[1].toDouble(), p[0].toDouble()));
+        }
+
+        nuevosPoligonos.add(Polygon(
+          points: points,
+          color: color.withOpacity(1.0), // Transparencia para ver calles debajo
+          borderStrokeWidth: 0.5,
+          borderColor: Colors.white24,
+          isFilled: true,
+        ));
+      }
+
       setState(() {
-        errorMessage = "Error de conexión:\n$e";
-        isLoading = false;
+        poligonosADibujar = nuevosPoligonos;
       });
+    } catch (e) {
+      print("Error actualizando mapa: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // ... (El Scaffold, AppBar y Stack son idénticos al anterior, no cambian) ...
-    // COPIA AQUÍ LA PARTE DEL SCAFFOLD QUE YA TENÍAS HASTA EL _buildPanelBody
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -83,21 +135,39 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              setState(() { isLoading = true; errorMessage = null; });
-              _cargarDatosIniciales();
+              setState(() => isLoading = true);
+              _inicializarTodo();
             },
           ),
         ],
       ),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Container(color: AppColors.background), // Placeholder mapa
-          ),
+          // CAPA 1: FONDO SÓLIDO + HEXÁGONOS 🗺️
+            FlutterMap(
+              mapController: _mapController,
+              options: const MapOptions(
+                initialCenter: LatLng(28.1400, -16.5230),
+                initialZoom: 9.4,
+              ),
+              children: [
+                // Hemos quitado el TileLayer (el mapa de satélite/ArcGIS)
+                PolygonLayer(polygons: poligonosADibujar),
+              ],
+            ),
+
+          // Pantalla de carga bloqueante al inicio
+          if (isLoading)
+            Container(
+              color: Colors.white70,
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+
+          // CAPA 2: PANEL DE CONFIGURACIÓN
           DraggableScrollableSheet(
-            initialChildSize: 0.5,
+            initialChildSize: 0.4,
             minChildSize: 0.15,
-            maxChildSize: 0.8,
+            maxChildSize: 0.75, // Ajustado para que no tape todo el mapa
             builder: (context, scrollController) {
               return Container(
                 decoration: const BoxDecoration(
@@ -120,7 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPanelBody(ScrollController scrollController) {
-    if (isLoading) return const Center(child: CircularProgressIndicator());
     if (errorMessage != null) return Center(child: Text(errorMessage!));
     if (arbolConfig == null) return const SizedBox();
 
@@ -130,9 +199,8 @@ class _HomeScreenState extends State<HomeScreen> {
       controller: scrollController,
       padding: EdgeInsets.zero,
       children: [
-        // TITULO Y TABS
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text("Personaliza tu búsqueda", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         ),
         const SizedBox(height: 15),
@@ -158,7 +226,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const Divider(height: 30, thickness: 1),
 
-        // LISTA DE GRUPOS (Sliders + Expander)
         if (macroSeleccionada != null)
           ..._buildGroupList(macroSeleccionada!),
           
@@ -172,32 +239,29 @@ class _HomeScreenState extends State<HomeScreen> {
     final gruposOrdenados = gruposMap.keys.toList()..sort();
 
     return gruposOrdenados.map((grupoKey) {
-      final valorSlider = sliderValues[grupoKey] ?? 3.0;
-      final itemsConfig = gruposMap[grupoKey]!; // Lista de objetos ConfigItem (Farmacia, Hospital...)
-      
-      // Creamos un widget personalizado para mantener limpio el código
       return _GroupCard(
         title: grupoKey,
-        sliderValue: valorSlider,
-        items: itemsConfig,
+        sliderValue: sliderValues[grupoKey] ?? 3.0,
+        items: gruposMap[grupoKey]!,
         checkValues: checkValues,
-        onSliderChanged: (val) => setState(() => sliderValues[grupoKey] = val),
+        onSliderChanged: (val) {
+          setState(() => sliderValues[grupoKey] = val);
+          _actualizarMapa(); // Llamada a Python al mover el slider
+        },
         onCheckChanged: (idsAfectados, nuevoEstado) {
           setState(() {
             for (var id in idsAfectados) {
               checkValues[id] = nuevoEstado;
             }
           });
+          _actualizarMapa(); // Llamada a Python al tocar checkboxes
         },
       );
     }).toList();
   }
 }
 
-// WIDGET AISLADO PARA LA TARJETA DEL GRUPO (Slider + Expander)
-// ... Todo el código anterior de HomeScreen permanece igual ...
-
-// WIDGET AISLADO PARA LA TARJETA DEL GRUPO (Slider + Expander)
+// --- WIDGET DE LA TARJETA (MANTENIENDO TUS MEJORAS) ---
 class _GroupCard extends StatelessWidget {
   final String title;
   final double sliderValue;
@@ -219,23 +283,21 @@ class _GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 0, // Minimalista sin sombra
+      color: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: Colors.grey.shade200), // Borde suave
+      ),
       child: ExpansionTile(
-        // Quitamos bordes raros
         shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
         collapsedShape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
         tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        
-        // CABECERA
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded( // <--- Envolvemos el texto en Expanded
-              child: Text(
-                title, 
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
+            Expanded(
+              child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             ),
             const SizedBox(width: 8),
             Container(
@@ -251,21 +313,17 @@ class _GroupCard extends StatelessWidget {
             ),
           ],
         ),
-        // Subtítulo: Ahora solo contiene el Slider
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Slider(
             value: sliderValue,
-            min: 0, 
-            max: 5, 
-            divisions: 5,
+            min: 0, max: 5, divisions: 5,
+            activeColor: AppColors.primary,
+            inactiveColor: AppColors.primary.withOpacity(0.1),
             onChanged: onSliderChanged,
           ),
         ),
-        
-        // CONTENIDO EXPANDIDO
         children: [
-          // Pequeño texto de ayuda al expandir
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Align(
@@ -276,11 +334,8 @@ class _GroupCard extends StatelessWidget {
               ),
             ),
           ),
-          
-          // Lista de checkboxes agrupados
           ...items.map((item) {
             final isChecked = item.ids.every((id) => checkValues[id] == true);
-            
             return CheckboxListTile(
               title: Text(item.label, style: const TextStyle(fontSize: 14)),
               value: isChecked,
@@ -288,14 +343,10 @@ class _GroupCard extends StatelessWidget {
               activeColor: AppColors.primary,
               controlAffinity: ListTileControlAffinity.leading,
               onChanged: (bool? val) {
-                if (val != null) {
-                  onCheckChanged(item.ids, val);
-                }
+                if (val != null) onCheckChanged(item.ids, val);
               },
             );
           }).toList(),
-          
-          // Un poco de aire al final
           const SizedBox(height: 10),
         ],
       ),

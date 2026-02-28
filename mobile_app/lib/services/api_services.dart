@@ -9,7 +9,7 @@ class ApiService {
   // Si estás en iOS, tu PC es localhost
   // Si pruebas en un móvil físico, necesitas la IP local de tu PC (ej: 192.168.1.XX)
   static String get _baseUrl {
-    const String miIpDelPc = "192.168.1.195"; 
+    const String miIpDelPc = "192.168.1.58"; 
   
   if (kIsWeb) return "http://localhost:8000";
   return "http://$miIpDelPc:8000";
@@ -50,6 +50,32 @@ class ApiService {
       rethrow; 
     }
   }
+  /// Envía las preferencias y recibe la lista de [hex_id, score, color]
+  Future<List<Map<String, dynamic>>> calculateScores(
+    Map<String, double> sliders, 
+    Map<String, bool> checks
+  ) async {
+    try {
+      final url = Uri.parse('$_baseUrl/calculate');
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "sliders": sliders,
+          "checks": checks,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(json.decode(utf8.decode(response.bodyBytes)));
+      } else {
+        throw Exception('Error en el cálculo: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("❌ Error al calcular scores: $e");
+      rethrow;
+    }
+  }
 }
 
 class ConfigItem {
@@ -65,3 +91,4 @@ class ConfigItem {
     );
   }
 }
+
