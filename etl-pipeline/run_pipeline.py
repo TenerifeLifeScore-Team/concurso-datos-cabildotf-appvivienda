@@ -68,6 +68,7 @@ def main():
         "comercio": str(DIR_CLEAN / "comercio.geojson"),
         "salud": str(DIR_CLEAN / "salud.geojson"),
         "restauracion": str(DIR_CLEAN / "restauracion.geojson"),
+        "educacion": str(DIR_CLEAN / "educacion.geojson"),
         "naturaleza": str(DIR_CLEAN / "naturaleza.geojson"),
         "deporte": str(DIR_CLEAN / "deportes_y_ocio.geojson")
     }
