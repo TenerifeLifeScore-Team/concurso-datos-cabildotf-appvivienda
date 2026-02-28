@@ -76,6 +76,35 @@ class ApiService {
       rethrow;
     }
   }
+  Future<Map<String, dynamic>> calculatePointScore({
+    required double lat,
+    required double lon,
+    required Map<String, double> sliders,
+    required Map<String, bool> checks,
+  }) async {
+    try {
+      final url = Uri.parse('$_baseUrl/calculate-point');
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "lat": lat,
+          "lon": lon,
+          "sliders": sliders,
+          "checks": checks,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(utf8.decode(response.bodyBytes));
+      } else {
+        throw Exception('Error en el radar: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("❌ Error en calculatePointScore: $e");
+      rethrow;
+    }
+  }
 }
 
 class ConfigItem {

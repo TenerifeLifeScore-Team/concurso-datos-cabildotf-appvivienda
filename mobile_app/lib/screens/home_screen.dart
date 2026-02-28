@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle; // Para cargar el GeoJSON local
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../config/theme/app_colors.dart';
-import '../services/api_services.dart'; // Asegúrate que el nombre del archivo sea api_service.dart (singular)
+import '../services/api_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,12 +23,17 @@ class _HomeScreenState extends State<HomeScreen> {
   // --- DATOS DEL MAPA Y CONFIG ---
   Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
   List<Polygon> poligonosADibujar = [];
-  dynamic geojsonRaw; // El esqueleto del grid
+  dynamic geojsonRaw;
 
   // --- ESTADO UI ---
+  int _tabSeleccionada = 0; // 0: Explorar, 1: Mi Zona
   String? macroSeleccionada;
-  Map<String, double> sliderValues = {}; 
-  Map<String, bool> checkValues = {}; 
+  Map<String, double> sliderValues = {};
+  Map<String, bool> checkValues = {};
+
+  // --- ESTADO RADAR (ZONA ESPECÍFICA) ---
+  Map<String, dynamic>? datosPuntoEspecifico;
+  bool isCalculandoPunto = false;
 
   @override
   void initState() {
@@ -36,17 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _inicializarTodo();
   }
 
-  // 1. CARGA INICIAL: API + GEOJSON LOCAL
   Future<void> _inicializarTodo() async {
     try {
-      // A. Cargar Config de la API
       final datos = await _apiService.getCategories();
-
-      // B. Cargar Esqueleto del Mapa desde Assets
       final String response = await rootBundle.loadString('assets/data/grid_tenerife.geojson');
       geojsonRaw = json.decode(response);
 
-      // C. Inicializar valores de Sliders y Checks
       final Map<String, double> inicialesSliders = {};
       final Map<String, bool> inicialesChecks = {};
       datos.forEach((macro, grupos) {
@@ -69,9 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         macroSeleccionada = primerMacro.isNotEmpty ? primerMacro.first : null;
       });
 
-      // D. Pintar el mapa por primera vez
       await _actualizarMapa();
-
     } catch (e) {
       setState(() => errorMessage = "Error al iniciar: $e");
     } finally {
@@ -79,29 +77,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // 2. FUNCIÓN PARA RE-CALCULAR EL MAPA
   Future<void> _actualizarMapa() async {
     try {
-      // Llamada al endpoint /calculate de Python
       final resultados = await _apiService.calculateScores(sliderValues, checkValues);
-
-      // Creamos un mapa de ID -> Color para buscar rápido
       final Map<String, String> nuevosColores = {};
       for (var res in resultados) {
         nuevosColores[res['hex_id']] = res['color'];
       }
 
       List<Polygon> nuevosPoligonos = [];
-
-      // Recorremos el esqueleto local y le asignamos el color que nos dio Python
       for (var feature in geojsonRaw['features']) {
         final id = feature['properties']['hex_id'];
-        final colorHex = nuevosColores[id] ?? "#CCCCCC"; 
-        
-        // Convertir Hex String a Color de Flutter
+        final colorHex = nuevosColores[id] ?? "#CCCCCC";
         final color = Color(int.parse(colorHex.replaceFirst('#', '0xFF')));
 
-        // Extraer coordenadas: GeoJSON [Lon, Lat] -> Flutter [Lat, Lon]
         List<LatLng> points = [];
         var coords = feature['geometry']['coordinates'][0];
         for (var p in coords) {
@@ -110,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         nuevosPoligonos.add(Polygon(
           points: points,
-          color: color.withOpacity(1.0), // Transparencia para ver calles debajo
+          color: color.withOpacity(1.0),
           borderStrokeWidth: 0.5,
           borderColor: Colors.white24,
           isFilled: true,
@@ -123,6 +112,74 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print("Error actualizando mapa: $e");
     }
+  }
+
+  Future<void> _obtenerScoreDePunto(double lat, double lon) async {
+    setState(() => isCalculandoPunto = true);
+    try {
+      final resultado = await _apiService.calculatePointScore(
+        lat: lat,
+        lon: lon,
+        sliders: sliderValues,
+        checks: checkValues,
+      );
+      setState(() {
+        datosPuntoEspecifico = resultado;
+        isCalculandoPunto = false;
+      });
+    } catch (e) {
+      setState(() => isCalculandoPunto = false);
+      print("Error en radar: $e");
+    }
+  }
+
+  void _abrirConfiguracionModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        // 1. Envolvemos todo en StatefulBuilder para tener estado dentro del modal
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return DraggableScrollableSheet(
+              initialChildSize: 0.6,
+              minChildSize: 0.4,
+              maxChildSize: 0.9,
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                  ),
+                  child: Column(
+                    children: [
+                      Center(child: Container(width: 40, height: 5, margin: const EdgeInsets.symmetric(vertical: 10), decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)))),
+                      
+                      // 2. Pasamos el 'setModalState' y el 'scrollController'
+                      Expanded(
+                        child: _buildPanelBody(
+                          scrollController, 
+                          extraSetState: setModalState // <--- ESTO ES LA CLAVE
+                        )
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        );
+      },
+    ).whenComplete(() {
+      // Al cerrar, si estamos en 'Mi Zona', recalculamos
+      if (_tabSeleccionada == 1) {
+        _obtenerScoreDePunto(
+          _mapController.camera.center.latitude,
+          _mapController.camera.center.longitude,
+        );
+      }
+    });
   }
 
   @override
@@ -143,53 +200,184 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // CAPA 1: FONDO SÓLIDO + HEXÁGONOS 🗺️
-            FlutterMap(
-              mapController: _mapController,
-              options: const MapOptions(
-                initialCenter: LatLng(28.1400, -16.5230),
-                initialZoom: 9.4,
-              ),
-              children: [
-                // Hemos quitado el TileLayer (el mapa de satélite/ArcGIS)
-                PolygonLayer(polygons: poligonosADibujar),
-              ],
+          // CAPA DE FONDO (Solo visible si no hay TileLayer encima, para el modo Explorar)
+          if (_tabSeleccionada == 0)
+            Positioned.fill(
+              child: Container(color: const Color(0xFFF5F7FA)),
             ),
 
-          // Pantalla de carga bloqueante al inicio
+          // MAPA INTERACTIVO
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: const LatLng(28.1400, -16.5230),
+              initialZoom: 9.4,
+              onMapEvent: (event) {
+                if (event is MapEventMoveEnd && _tabSeleccionada == 1) {
+                  _obtenerScoreDePunto(
+                    event.camera.center.latitude,
+                    event.camera.center.longitude,
+                  );
+                }
+              },
+            ),
+            children: [
+              // 1. TILE LAYER CONDICIONAL
+              // Solo mostramos el mapa de calles si estamos en "Mi Zona" (Tab 1)
+              if (_tabSeleccionada == 1)
+                TileLayer(
+                  // Usamos CartoDB Positron porque es limpio y tiene nombres de calles
+                  urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+                  subdomains: const ['a', 'b', 'c', 'd'],
+                  userAgentPackageName: 'com.tenerifelifescore.app',
+                ),
+
+              // 2. CAPA DE HEXÁGONOS
+              // Solo mostramos los colores si estamos en "Explorar" (Tab 0)
+              if (_tabSeleccionada == 0) 
+                PolygonLayer(polygons: poligonosADibujar),
+            ],
+          ),
+
+          // CHINCHETA CENTRAL (MODO MI ZONA)
+          if (_tabSeleccionada == 1)
+            const IgnorePointer(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 40),
+                  child: Icon(Icons.location_on, color: Colors.red, size: 50),
+                ),
+              ),
+            ),
+
+          // PANTALLA DE CARGA
           if (isLoading)
             Container(
               color: Colors.white70,
               child: const Center(child: CircularProgressIndicator()),
             ),
 
-          // CAPA 2: PANEL DE CONFIGURACIÓN
-          DraggableScrollableSheet(
-            initialChildSize: 0.4,
-            minChildSize: 0.15,
-            maxChildSize: 0.75, // Ajustado para que no tape todo el mapa
-            builder: (context, scrollController) {
-              return Container(
-                decoration: const BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 15)],
-                ),
-                child: Column(
-                  children: [
-                    Center(child: Container(width: 40, height: 5, margin: const EdgeInsets.symmetric(vertical: 10), decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)))),
-                    Expanded(child: _buildPanelBody(scrollController)),
-                  ],
-                ),
-              );
-            },
-          ),
+          // PANELES DESLIZANTES
+          if (_tabSeleccionada == 0)
+            DraggableScrollableSheet(
+              initialChildSize: 0.4,
+              minChildSize: 0.15,
+              maxChildSize: 0.75,
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                    boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 15)],
+                  ),
+                  child: Column(
+                    children: [
+                      Center(child: Container(width: 40, height: 5, margin: const EdgeInsets.symmetric(vertical: 10), decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)))),
+                      Expanded(child: _buildPanelBody(scrollController)),
+                    ],
+                  ),
+                );
+              },
+            ),
+
+          if (_tabSeleccionada == 1) _buildResumenZonaPunto(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _tabSeleccionada,
+        selectedItemColor: AppColors.primary,
+        onTap: (index) {
+          setState(() => _tabSeleccionada = index);
+          
+          // Al cambiar de pestaña, recalculamos cosas si hace falta
+          if (index == 1) {
+            // Si pasamos a Mi Zona, hacemos un cálculo inicial en el centro actual
+             _obtenerScoreDePunto(
+              _mapController.camera.center.latitude,
+              _mapController.camera.center.longitude,
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: "Explorar"),
+          BottomNavigationBarItem(icon: Icon(Icons.gps_fixed), label: "Mi Zona"),
         ],
       ),
     );
   }
 
-  Widget _buildPanelBody(ScrollController scrollController) {
+  // ... (El resto de métodos _buildResumenZonaPunto, _buildPanelBody y _buildGroupList y la clase _GroupCard SE MANTIENEN IGUAL QUE ANTES) ...
+  // COPIA AQUÍ ABAJO TUS MÉTODOS AUXILIARES QUE YA TENÍAS
+  
+  Widget _buildResumenZonaPunto() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isCalculandoPunto)
+              const LinearProgressIndicator()
+            else if (datosPuntoEspecifico != null) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("LifeScore en este punto:", style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        "${datosPuntoEspecifico!['score']}/10",
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primary),
+                      ),
+                    ],
+                  ),
+                  // --- BOTÓN NUEVO PARA EDITAR PERFIL ---
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.tune),
+                    onPressed: _abrirConfiguracionModal, // <--- Nueva función
+                    tooltip: "Ajustar mis preferencias",
+                  ),
+                ],
+              ),
+              const Divider(),
+              const Text("Desglose de servicios cercanos:", style: TextStyle(fontSize: 12, color: Colors.grey)),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 100,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: (datosPuntoEspecifico!['detalles'] as Map<String, dynamic>).entries.map((e) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(e.key, style: const TextStyle(fontSize: 13)),
+                          Text(e.value.toStringAsFixed(2), style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ] else
+              const Text("Mueve el mapa para escanear una zona"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Añadimos el parámetro opcional {StateSetter? extraSetState}
+  Widget _buildPanelBody(ScrollController scrollController, {StateSetter? extraSetState}) {
     if (errorMessage != null) return Center(child: Text(errorMessage!));
     if (arbolConfig == null) return const SizedBox();
 
@@ -215,7 +403,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ChoiceChip(
                   label: Text(macro),
                   selected: isSelected,
-                  onSelected: (sel) => setState(() => macroSeleccionada = macro),
+                  onSelected: (sel) {
+                    // Aquí actualizamos tanto la pantalla principal como el modal
+                    setState(() => macroSeleccionada = macro);
+                    if (extraSetState != null) extraSetState(() => macroSeleccionada = macro);
+                  },
                   selectedColor: AppColors.primary,
                   labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black87),
                   showCheckmark: false,
@@ -225,16 +417,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const Divider(height: 30, thickness: 1),
-
-        if (macroSeleccionada != null)
-          ..._buildGroupList(macroSeleccionada!),
+        
+        // Pasamos el extraSetState hacia abajo
+        if (macroSeleccionada != null) 
+          ..._buildGroupList(macroSeleccionada!, extraSetState: extraSetState),
           
         const SizedBox(height: 40),
       ],
     );
   }
 
-  List<Widget> _buildGroupList(String macro) {
+  // Añadimos el parámetro opcional {StateSetter? extraSetState}
+  List<Widget> _buildGroupList(String macro, {StateSetter? extraSetState}) {
     final gruposMap = arbolConfig![macro]!;
     final gruposOrdenados = gruposMap.keys.toList()..sort();
 
@@ -245,29 +439,46 @@ class _HomeScreenState extends State<HomeScreen> {
         items: gruposMap[grupoKey]!,
         checkValues: checkValues,
         onSliderChanged: (val) {
-          setState(() => sliderValues[grupoKey] = val);
-          _actualizarMapa(); // Llamada a Python al mover el slider
+          // 1. Actualizamos el dato real
+          sliderValues[grupoKey] = val;
+
+          // 2. Si estamos en el modal, usamos su setState especial
+          if (extraSetState != null) {
+            extraSetState(() {}); 
+          } 
+          // 3. Siempre actualizamos el estado principal por si acaso
+          setState(() {}); 
+        },
+        onSliderEnd: (val) {
+          // Solo llamamos a la API si estamos en la pestaña principal
+          // (Si estamos en el modal, se calcula al cerrar)
+          if (_tabSeleccionada == 0) {
+            _actualizarMapa();
+          }
         },
         onCheckChanged: (idsAfectados, nuevoEstado) {
-          setState(() {
-            for (var id in idsAfectados) {
-              checkValues[id] = nuevoEstado;
-            }
-          });
-          _actualizarMapa(); // Llamada a Python al tocar checkboxes
+          // Misma lógica para los checkboxes
+          for (var id in idsAfectados) {
+            checkValues[id] = nuevoEstado;
+          }
+          
+          if (extraSetState != null) extraSetState(() {});
+          setState(() {});
+
+          if (_tabSeleccionada == 0) _actualizarMapa();
         },
       );
     }).toList();
   }
 }
 
-// --- WIDGET DE LA TARJETA (MANTENIENDO TUS MEJORAS) ---
 class _GroupCard extends StatelessWidget {
   final String title;
   final double sliderValue;
   final List<ConfigItem> items;
   final Map<String, bool> checkValues;
   final ValueChanged<double> onSliderChanged;
+  final ValueChanged<double> onSliderEnd;
   final Function(List<String>, bool) onCheckChanged;
 
   const _GroupCard({
@@ -276,6 +487,7 @@ class _GroupCard extends StatelessWidget {
     required this.items,
     required this.checkValues,
     required this.onSliderChanged,
+    required this.onSliderEnd,
     required this.onCheckChanged,
   });
 
@@ -283,11 +495,11 @@ class _GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      elevation: 0, // Minimalista sin sombra
+      elevation: 0,
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-        side: BorderSide(color: Colors.grey.shade200), // Borde suave
+        side: BorderSide(color: Colors.grey.shade200),
       ),
       child: ExpansionTile(
         shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
@@ -296,9 +508,7 @@ class _GroupCard extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            ),
+            Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
             const SizedBox(width: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -317,18 +527,11 @@ class _GroupCard extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8.0),
           child: Slider(
             value: sliderValue,
-            min: 0, 
-            max: 5, 
-            divisions: 5,
+            min: 0, max: 5, divisions: 5,
             activeColor: AppColors.primary,
             inactiveColor: AppColors.primary.withOpacity(0.1),
-            // 1. Esto actualiza la bolita visualmente (rápido)
-            onChanged: onSliderChanged, 
-            // 2. Esto llama a Python solo cuando el usuario suelta el dedo (un solo clic)
-            onChangeEnd: (nuevoValor) {
-              // Aquí es donde realmente lanzamos la petición pesada
-              onSliderChanged(nuevoValor); 
-            },
+            onChanged: onSliderChanged,
+            onChangeEnd: onSliderEnd,
           ),
         ),
         children: [
