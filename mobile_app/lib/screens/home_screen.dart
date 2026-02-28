@@ -317,10 +317,18 @@ class _GroupCard extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8.0),
           child: Slider(
             value: sliderValue,
-            min: 0, max: 5, divisions: 5,
+            min: 0, 
+            max: 5, 
+            divisions: 5,
             activeColor: AppColors.primary,
             inactiveColor: AppColors.primary.withOpacity(0.1),
-            onChanged: onSliderChanged,
+            // 1. Esto actualiza la bolita visualmente (rápido)
+            onChanged: onSliderChanged, 
+            // 2. Esto llama a Python solo cuando el usuario suelta el dedo (un solo clic)
+            onChangeEnd: (nuevoValor) {
+              // Aquí es donde realmente lanzamos la petición pesada
+              onSliderChanged(nuevoValor); 
+            },
           ),
         ),
         children: [
