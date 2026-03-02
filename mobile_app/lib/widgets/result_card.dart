@@ -27,10 +27,18 @@ class ResultCard extends StatelessWidget {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch, // Para que ocupe todo el ancho
           children: [
             if (isLoading)
-              const LinearProgressIndicator()
+              Column(
+                children: const [
+                  Text("Analizando zona con IA...", style: TextStyle(color: Colors.grey)),
+                  SizedBox(height: 10),
+                  LinearProgressIndicator(),
+                ],
+              )
             else if (data != null) ...[
+              // 1. CABECERA: Puntuación y Botón Ajustes
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -51,9 +59,39 @@ class ResultCard extends StatelessWidget {
                   ),
                 ],
               ),
+              
+              const SizedBox(height: 15),
+
+              // 2. RESUMEN IA (NUEVO BLOQUE) ✨
+              if (data!.containsKey('resumen_ia')) 
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1), // Fondo suave
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.auto_awesome, size: 20, color: AppColors.primary), // Icono de IA
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          data!['resumen_ia'],
+                          style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.black87),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              const SizedBox(height: 15),
               const Divider(),
               const Text("Desglose de servicios cercanos:", style: TextStyle(fontSize: 12, color: Colors.grey)),
               const SizedBox(height: 10),
+              
+              // 3. LISTA DE DETALLES
               SizedBox(
                 height: 100,
                 child: ListView(
@@ -73,7 +111,7 @@ class ResultCard extends StatelessWidget {
                 ),
               ),
             ] else
-              const Text("Mueve el mapa para escanear una zona"),
+              const Center(child: Text("Mueve el mapa para escanear una zona")),
           ],
         ),
       ),

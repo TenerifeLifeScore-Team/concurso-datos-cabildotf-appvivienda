@@ -14,13 +14,21 @@ if not API_KEY:
 
 genai.configure(api_key=API_KEY)
 
-def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict) -> str:
+def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict, score: float) -> str:
     try:
         # 1. Preparamos los datos limpios
         contexto = preparar_resumen_contexto(detalles_zona, sliders_usuario)
         
         # 2. Configuramos el modelo rápido (Flash es gratis y veloz)
         model = genai.GenerativeModel('models/gemini-flash-lite-latest')
+
+        instruccion_tono = ""
+        if score >= 6:
+            instruccion_tono = "La puntuación es EXCELENTE. Sé entusiasta y felicita al usuario por la elección."
+        elif score >= 3:
+            instruccion_tono = "La puntuación es MEDIA/ACEPTABLE. Sé equilibrado: destaca lo bueno pero menciona lo que falta sin ser dramático."
+        else:
+            instruccion_tono = "La puntuación es BAJA/MALA. Sé empático pero realista. Advierte educadamente de que esta zona no cumple sus expectativas principales."
         
         # 3. El Prompt Maestro
         prompt = f"""
@@ -28,12 +36,20 @@ def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict) -> str:
         Usa estrictamente los siguientes datos para generar un micro-resumen (máximo 2 frases cortas).
         Solo las dos frases, tu resumen va a ir ubicado como resumen junto a una puntuación para una zona en concreto de la isla.
         
-        DATOS:
+        DATOS TÉCNICOS:
+        - Puntuación de compatibilidad calculada: {score}/10.
+        - Perfil y Entorno:
         {contexto}
         
+        INSTRUCCIONES DE TONO:
+        {instruccion_tono}.
+        Esta es una app para el cabildo, por lo que siempre debes ser algo optimista, pero también realista.
+        
         OBJETIVO:
-        Dime si es una buena zona para este usuario y destaca UN punto fuerte clave o UNA carencia crítica según sus gustos.
-        Usa un tono cercano y que sea fácil de entender para el usuario. No menciones números exactos.
+        Escribe un micro-resumen (máximo 2 frases) justificando la puntuación.
+        Céntrate en la relación entre lo que el usuario pide y lo que hay (o lo que falta).
+        No menciones la nota numérica en el texto, solo explica el porqué.
+        Usa un tono cercano y que sea fácil de entender para el usuario.
         """
 
         # 4. Llamada a la API
