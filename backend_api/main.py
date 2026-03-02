@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, List, Optional
+from llm_service import generar_resumen_ia
 
 # Importamos el motor (Añadimos calcular_lifescore_punto)
 from engine import calcular_lifescore, calcular_lifescore_punto # <--- NUEVO
@@ -151,15 +152,19 @@ def calculate_map(prefs: UserPreferences):
     
     return df_resultado[['hex_id', 'score_final', 'color']].to_dict(orient="records")
 
-# --- ENDPOINT NUEVO: CÁLCULO DE PUNTO ESPECÍFICO ---
+
 @app.post("/calculate-point")
 def get_point_score(prefs: PointPreferences):
     """
-    Recibe lat/lon y preferencias, devuelve Score exacto y detalles.
+    Recibe lat/lon y preferencias, devuelve Score exacto, detalles y el resumen de IA.
     """
+    # Debug para confirmar en la terminal que estás en la versión correcta
+    print("📢 DEBUG: ¡Calculando punto con IA!") 
+
     if gdf_puntos is None:
         raise HTTPException(status_code=503, detail="Radar no cargado (revisa logs del servidor)")
     
+    # 1. Cálculo Matemático (Rápido)
     score, conteo_final = calcular_lifescore_punto(
         prefs.lat, 
         prefs.lon, 
@@ -169,7 +174,17 @@ def get_point_score(prefs: PointPreferences):
         prefs.checks
     )
     
+    # 2. Cálculo Semántico (IA)
+    # Valor por defecto por si no hay nada cerca o falla la IA
+    resumen_texto = "Zona sin datos suficientes para análisis."
+    
+    # Solo llamamos a la IA si la zona tiene algo interesante (Score > 0)
+    if score > 0:
+        resumen_texto = generar_resumen_ia(conteo_final, prefs.sliders)
+    
+    # 3. Return con los 3 campos clave
     return {
         "score": score,
+        "resumen_ia": resumen_texto, # <--- ¡ESTE ES EL CAMPO NUEVO!
         "detalles": {k: round(v, 2) for k, v in conteo_final.items() if v > 0}
     }
