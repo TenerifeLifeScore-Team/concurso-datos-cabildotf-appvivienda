@@ -5,10 +5,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../config/theme/app_colors.dart';
 import '../services/api_services.dart';
-
-// Importamos nuestros nuevos widgets
 import '../widgets/config_panel.dart';
 import '../widgets/result_card.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,6 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
   // --- ESTADO RADAR (ZONA ESPECÍFICA) ---
   Map<String, dynamic>? datosPuntoEspecifico;
   bool isCalculandoPunto = false;
+  LatLng? _ultimaPosicionMiZona;
+
+  // Controlador para el texto de búsqueda
+  final TextEditingController _searchController = TextEditingController();
+  
+  // Para controlar si mostramos el botón de "Analizar"
+  bool mostrarBotonAnalizar = true;
 
   @override
   void initState() {
@@ -171,12 +178,84 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-    void _cerrarTarjeta() {
+    // --- FUNCIÓN 1: IR A MI UBICACIÓN (GPS) ---
+  Future<void> _irAMiUbicacion() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // 1. Verificar si el GPS está encendido
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El GPS está desactivado')));
+      return;
+    }
+
+    // 2. Pedir permisos
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return;
+    }
+
+    if (permission == LocationPermission.deniedForever) return;
+
+    // 3. Obtener posición y mover mapa
+    Position position = await Geolocator.getCurrentPosition();
+    _mapController.move(LatLng(position.latitude, position.longitude), 15.0);
+    setState(() => mostrarBotonAnalizar = true);
+  }
+
+  // --- FUNCIÓN 2: BUSCAR DIRECCIÓN (TEXTO) ---
+  Future<void> _buscarDireccion(String query) async {
+    if (query.isEmpty) return;
+    
+    // 1. Limpiamos cualquier resultado anterior para que no tape el mapa
+    _cerrarTarjeta(); 
+    setState(() => mostrarBotonAnalizar = false);
+    // Añadimos "Tenerife" para que no busque en otros sitios
+    final queryFinal = "$query, Tenerife"; 
+    final url = Uri.parse('https://nominatim.openstreetmap.org/search?q=$queryFinal&format=json&limit=1');
+
+    try {
+      // Nominatim requiere User-Agent
+      final response = await http.get(url, headers: {'User-Agent': 'com.tlife.app'});
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data.isNotEmpty) {
+          final lat = double.parse(data[0]['lat']);
+          final lon = double.parse(data[0]['lon']);
+          
+          _mapController.move(LatLng(lat, lon), 15.0);
+          setState(() => mostrarBotonAnalizar = true);
+          FocusScope.of(context).unfocus(); // Cerrar teclado
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Dirección no encontrada')));
+        }
+      }
+    } catch (e) {
+      print("Error búsqueda: $e");
+    }
+  }
+
+  // --- FUNCIÓN 3: EL BOTÓN MÁGICO "ANALIZAR" ---
+  void _analizarZonaActual() {
+    // Cogemos el centro EXACTO de donde esté mirando el usuario
+    final centro = _mapController.camera.center;
+    
+    // Llamamos a tu función de siempre
+    _obtenerScoreDePunto(centro.latitude, centro.longitude);
+    
+    // Ocultamos el botón para dejar ver el resultado
+    setState(() => mostrarBotonAnalizar = false);
+  }
+  
+  // Actualiza tu función de cerrar tarjeta para que vuelva a salir el botón
+  void _cerrarTarjeta() {
     setState(() {
       datosPuntoEspecifico = null;
       resumenIA = null;
-      // Opcional: Quitar la chincheta del mapa si quieres
-      // _tabSeleccionada = 0; 
+      mostrarBotonAnalizar = true; // <--- Importante: Que vuelva a salir el botón
     });
   }
 
@@ -262,53 +341,145 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // CAPA FONDO
+          // ---------------------------------------------------------
+          // 1. CAPA DE FONDO (Solo visible en modo Explorar para rellenar huecos)
+          // ---------------------------------------------------------
           if (_tabSeleccionada == 0)
             Positioned.fill(child: Container(color: const Color(0xFFF5F7FA))),
 
-          // MAPA
+          // ---------------------------------------------------------
+          // 2. MAPA INTERACTIVO
+          // ---------------------------------------------------------
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              initialCenter: const LatLng(28.1400, -16.5230),
+              initialCenter: const LatLng(28.1400, -16.5230), // Santa Cruz
               initialZoom: 9.4,
-              onMapEvent: (event) {
-                if (event is MapEventMoveEnd && _tabSeleccionada == 1) {
-                  _obtenerScoreDePunto(event.camera.center.latitude, event.camera.center.longitude);
+              // DETECCIÓN DE MOVIMIENTO:
+              // Si el usuario arrastra el mapa, ocultamos resultados y mostramos el botón de analizar
+              onPositionChanged: (pos, hasGesture) {
+                _ultimaPosicionMiZona = pos.center;
+                if (hasGesture) {
+                  // Solo actuamos si el botón no estaba ya visible (para no repintar a lo loco)
+                  if (!mostrarBotonAnalizar) {
+                    setState(() {
+                      mostrarBotonAnalizar = true;
+                      datosPuntoEspecifico = null; // Ocultamos la tarjeta vieja
+                      resumenIA = null;
+                    });
+                  }
                 }
               },
             ),
             children: [
+              // MODO MI ZONA: Mapa de calles (CartoDB Voyager)
               if (_tabSeleccionada == 1)
                 TileLayer(
+                  key: const ValueKey("capa_callejero_mi_zona"),  // Forzar que se pinte siempre
                   urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
                   subdomains: const ['a', 'b', 'c', 'd'],
                   userAgentPackageName: 'com.tenerifelifescore.app',
                 ),
+              
+              // MODO EXPLORAR: Capa de Hexágonos (Polígonos)
               if (_tabSeleccionada == 0) 
                 PolygonLayer(polygons: poligonosADibujar),
             ],
           ),
 
-          // CHINCHETA
+          // ---------------------------------------------------------
+          // 3. BARRA DE BÚSQUEDA Y GPS (Solo Mi Zona)
+          // ---------------------------------------------------------
           if (_tabSeleccionada == 1)
-            const IgnorePointer(
+            Positioned(
+              top: 30, // Margen superior para salvar el Notch/Cámara
+              left: 20,
+              right: 20,
+              child: Card(
+                elevation: 4,
+                shadowColor: Colors.black26,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search, color: Colors.grey),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: const InputDecoration(
+                            hintText: "Buscar calle o zona...",
+                            border: InputBorder.none,
+                          ),
+                          textInputAction: TextInputAction.search,
+                          onSubmitted: (val) => _buscarDireccion(val),
+                        ),
+                      ),
+                      // Separador vertical
+                      Container(width: 1, height: 24, color: Colors.grey[300]), 
+                      IconButton(
+                        icon: const Icon(Icons.my_location, color: AppColors.primary),
+                        onPressed: _irAMiUbicacion,
+                        tooltip: "Ir a mi ubicación",
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+          // ---------------------------------------------------------
+          // 4. CHINCHETA CENTRAL (Solo Mi Zona)
+          // ---------------------------------------------------------
+          if (_tabSeleccionada == 1)
+            const IgnorePointer( // IgnorePointer para que el toque pase al mapa
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 40),
+                  padding: EdgeInsets.only(bottom: 40), // Elevamos para que la punta toque el centro
                   child: Icon(Icons.location_on, color: Colors.red, size: 50),
                 ),
               ),
             ),
 
-          // LOADING
+          // ---------------------------------------------------------
+          // 5. BOTÓN FLOTANTE "ANALIZAR" (Solo si no hay resultados)
+          // ---------------------------------------------------------
+          if (_tabSeleccionada == 1 && mostrarBotonAnalizar && !isLoading)
+            Positioned(
+              bottom: 40,
+              left: 60,
+              right: 60,
+              child: ElevatedButton.icon(
+                onPressed: _analizarZonaActual,
+                icon: const Icon(Icons.analytics_outlined, color: Colors.white),
+                label: const Text(
+                  "ANALIZAR AQUÍ", 
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  elevation: 6,
+                  shadowColor: AppColors.primary.withOpacity(0.5),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                ),
+              ),
+            ),
+
+          // ---------------------------------------------------------
+          // 6. PANTALLA DE CARGA (Global)
+          // ---------------------------------------------------------
           if (isLoading)
             Container(
-              color: Colors.white70,
+              color: Colors.white.withOpacity(0.8),
               child: const Center(child: CircularProgressIndicator()),
             ),
 
-          // PANEL EXPLORAR (Draggable Sheet)
+          // ---------------------------------------------------------
+          // 7. PANEL DE CONFIGURACIÓN (Modo Explorar)
+          // ---------------------------------------------------------
           if (_tabSeleccionada == 0)
             DraggableScrollableSheet(
               initialChildSize: 0.4,
@@ -323,6 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Column(
                     children: [
+                      // Tirador gris
                       Center(child: Container(width: 40, height: 5, margin: const EdgeInsets.symmetric(vertical: 10), decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)))),
                       Expanded(
                         child: ConfigPanel(
@@ -353,15 +525,17 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-          // TARJETA RESULTADO (Tab 1)
-          if (_tabSeleccionada == 1 && datosPuntoEspecifico != null) // Solo si hay datos
-              ResultCard(
-                score: datosPuntoEspecifico!['score'], // Pasamos el dato limpio
-                iaSummary: resumenIA,
-                isLoadingIA: isLoadingIA,
-                onTunePressed: _abrirConfiguracionModal,
-                onClosePressed: _cerrarTarjeta, // <--- Conectamos la función de cerrar
-              ),
+          // ---------------------------------------------------------
+          // 8. TARJETA DE RESULTADO (Modo Mi Zona)
+          // ---------------------------------------------------------
+          if (_tabSeleccionada == 1 && datosPuntoEspecifico != null) 
+            ResultCard(
+              score: datosPuntoEspecifico!['score'],
+              iaSummary: resumenIA,
+              isLoadingIA: isLoadingIA,
+              onTunePressed: _abrirConfiguracionModal,
+              onClosePressed: _cerrarTarjeta,
+            ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -369,9 +543,37 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: AppColors.primary,
         onTap: (index) {
           setState(() => _tabSeleccionada = index);
-          if (index == 1) {
-            _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
-          }
+
+          // TRUCO: Esperamos a que termine de repintar la pantalla (1 frame)
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            
+            if (index == 0) {
+              // MODO EXPLORAR: Lejano
+              _mapController.move(
+                const LatLng(28.1400, -16.5230), 
+                9.4
+              );
+            } else if (index == 1) {
+              // MODO MI ZONA: Santa Cruz o ultima posición usuario
+              final destino = _ultimaPosicionMiZona ?? const LatLng(28.4636, -16.2518);
+              
+              _mapController.move(
+                destino, 
+                13.0 // Mantenemos un zoom cercano para ver calles
+              );
+              
+              // IMPORTANTE:
+              // He quitado el '_obtenerScoreDePunto' aquí.
+              // Como me pediste antes que el cálculo fuera MANUAL (con botón),
+              // al cambiar de pestaña solo movemos el mapa y mostramos el botón.
+              setState(() {
+                mostrarBotonAnalizar = true;
+                datosPuntoEspecifico = null; // Limpiamos resultados viejos
+                resumenIA = null;
+              });
+            }
+            
+          });
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.map), label: "Explorar"),
