@@ -6,6 +6,10 @@ import 'package:latlong2/latlong.dart';
 import '../config/theme/app_colors.dart';
 import '../services/api_services.dart';
 
+// Importamos nuestros nuevos widgets
+import '../widgets/config_panel.dart';
+import '../widgets/result_card.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -139,7 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        // 1. Envolvemos todo en StatefulBuilder para tener estado dentro del modal
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             return DraggableScrollableSheet(
@@ -155,13 +158,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       Center(child: Container(width: 40, height: 5, margin: const EdgeInsets.symmetric(vertical: 10), decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)))),
-                      
-                      // 2. Pasamos el 'setModalState' y el 'scrollController'
                       Expanded(
-                        child: _buildPanelBody(
-                          scrollController, 
-                          extraSetState: setModalState // <--- ESTO ES LA CLAVE
-                        )
+                        child: ConfigPanel(
+                          scrollController: scrollController,
+                          arbolConfig: arbolConfig,
+                          macroSeleccionada: macroSeleccionada,
+                          sliderValues: sliderValues,
+                          checkValues: checkValues,
+                          errorMessage: errorMessage,
+                          extraSetState: setModalState,
+                          
+                          // LÓGICA DE ACTUALIZACIÓN
+                          onMacroChanged: (val) => setState(() => macroSeleccionada = val),
+                          onSliderChanged: (group, val) => setState(() => sliderValues[group] = val),
+                          onSliderEnd: (val) {
+                             if (_tabSeleccionada == 1) {
+                                _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
+                             }
+                          },
+                          onCheckChanged: (ids, val) {
+                            setState(() {
+                              for (var id in ids) { checkValues[id] = val; }
+                            });
+                            if (_tabSeleccionada == 1) {
+                               _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -172,12 +195,8 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     ).whenComplete(() {
-      // Al cerrar, si estamos en 'Mi Zona', recalculamos
       if (_tabSeleccionada == 1) {
-        _obtenerScoreDePunto(
-          _mapController.camera.center.latitude,
-          _mapController.camera.center.longitude,
-        );
+        _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
       }
     });
   }
@@ -200,13 +219,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // CAPA DE FONDO (Solo visible si no hay TileLayer encima, para el modo Explorar)
+          // CAPA FONDO
           if (_tabSeleccionada == 0)
-            Positioned.fill(
-              child: Container(color: const Color(0xFFF5F7FA)),
-            ),
+            Positioned.fill(child: Container(color: const Color(0xFFF5F7FA))),
 
-          // MAPA INTERACTIVO
+          // MAPA
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
@@ -214,32 +231,23 @@ class _HomeScreenState extends State<HomeScreen> {
               initialZoom: 9.4,
               onMapEvent: (event) {
                 if (event is MapEventMoveEnd && _tabSeleccionada == 1) {
-                  _obtenerScoreDePunto(
-                    event.camera.center.latitude,
-                    event.camera.center.longitude,
-                  );
+                  _obtenerScoreDePunto(event.camera.center.latitude, event.camera.center.longitude);
                 }
               },
             ),
             children: [
-              // 1. TILE LAYER CONDICIONAL
-              // Solo mostramos el mapa de calles si estamos en "Mi Zona" (Tab 1)
               if (_tabSeleccionada == 1)
                 TileLayer(
-                  // Usamos CartoDB Positron porque es limpio y tiene nombres de calles
                   urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
                   subdomains: const ['a', 'b', 'c', 'd'],
                   userAgentPackageName: 'com.tenerifelifescore.app',
                 ),
-
-              // 2. CAPA DE HEXÁGONOS
-              // Solo mostramos los colores si estamos en "Explorar" (Tab 0)
               if (_tabSeleccionada == 0) 
                 PolygonLayer(polygons: poligonosADibujar),
             ],
           ),
 
-          // CHINCHETA CENTRAL (MODO MI ZONA)
+          // CHINCHETA
           if (_tabSeleccionada == 1)
             const IgnorePointer(
               child: Center(
@@ -250,19 +258,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-          // PANTALLA DE CARGA
+          // LOADING
           if (isLoading)
             Container(
               color: Colors.white70,
               child: const Center(child: CircularProgressIndicator()),
             ),
 
-          // PANELES DESLIZANTES
+          // PANEL EXPLORAR (Draggable Sheet)
           if (_tabSeleccionada == 0)
             DraggableScrollableSheet(
               initialChildSize: 0.4,
               minChildSize: 0.15,
-              maxChildSize: 0.75,
+              maxChildSize: 0.60,
               builder: (context, scrollController) {
                 return Container(
                   decoration: const BoxDecoration(
@@ -273,14 +281,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       Center(child: Container(width: 40, height: 5, margin: const EdgeInsets.symmetric(vertical: 10), decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)))),
-                      Expanded(child: _buildPanelBody(scrollController)),
+                      Expanded(
+                        child: ConfigPanel(
+                          scrollController: scrollController,
+                          arbolConfig: arbolConfig,
+                          macroSeleccionada: macroSeleccionada,
+                          sliderValues: sliderValues,
+                          checkValues: checkValues,
+                          errorMessage: errorMessage,
+                          
+                          // LÓGICA DE ACTUALIZACIÓN (TAB 0)
+                          onMacroChanged: (val) => setState(() => macroSeleccionada = val),
+                          onSliderChanged: (group, val) => setState(() => sliderValues[group] = val),
+                          onSliderEnd: (val) {
+                             if (_tabSeleccionada == 0) _actualizarMapa();
+                          },
+                          onCheckChanged: (ids, val) {
+                            setState(() {
+                              for (var id in ids) { checkValues[id] = val; }
+                            });
+                            if (_tabSeleccionada == 0) _actualizarMapa();
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 );
               },
             ),
 
-          if (_tabSeleccionada == 1) _buildResumenZonaPunto(),
+          // TARJETA RESULTADO (Tab 1)
+          if (_tabSeleccionada == 1) 
+            ResultCard(
+              data: datosPuntoEspecifico,
+              isLoading: isCalculandoPunto,
+              onTunePressed: _abrirConfiguracionModal,
+            ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -288,277 +324,13 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: AppColors.primary,
         onTap: (index) {
           setState(() => _tabSeleccionada = index);
-          
-          // Al cambiar de pestaña, recalculamos cosas si hace falta
           if (index == 1) {
-            // Si pasamos a Mi Zona, hacemos un cálculo inicial en el centro actual
-             _obtenerScoreDePunto(
-              _mapController.camera.center.latitude,
-              _mapController.camera.center.longitude,
-            );
+            _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
           }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.map), label: "Explorar"),
           BottomNavigationBarItem(icon: Icon(Icons.gps_fixed), label: "Mi Zona"),
-        ],
-      ),
-    );
-  }
-
-  // ... (El resto de métodos _buildResumenZonaPunto, _buildPanelBody y _buildGroupList y la clase _GroupCard SE MANTIENEN IGUAL QUE ANTES) ...
-  // COPIA AQUÍ ABAJO TUS MÉTODOS AUXILIARES QUE YA TENÍAS
-  
-  Widget _buildResumenZonaPunto() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        margin: const EdgeInsets.all(20),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isCalculandoPunto)
-              const LinearProgressIndicator()
-            else if (datosPuntoEspecifico != null) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("LifeScore en este punto:", style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(
-                        "${datosPuntoEspecifico!['score']}/10",
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primary),
-                      ),
-                    ],
-                  ),
-                  // --- BOTÓN NUEVO PARA EDITAR PERFIL ---
-                  IconButton.filledTonal(
-                    icon: const Icon(Icons.tune),
-                    onPressed: _abrirConfiguracionModal, // <--- Nueva función
-                    tooltip: "Ajustar mis preferencias",
-                  ),
-                ],
-              ),
-              const Divider(),
-              const Text("Desglose de servicios cercanos:", style: TextStyle(fontSize: 12, color: Colors.grey)),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 100,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: (datosPuntoEspecifico!['detalles'] as Map<String, dynamic>).entries.map((e) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(e.key, style: const TextStyle(fontSize: 13)),
-                          Text(e.value.toStringAsFixed(2), style: const TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ] else
-              const Text("Mueve el mapa para escanear una zona"),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Añadimos el parámetro opcional {StateSetter? extraSetState}
-  Widget _buildPanelBody(ScrollController scrollController, {StateSetter? extraSetState}) {
-    if (errorMessage != null) return Center(child: Text(errorMessage!));
-    if (arbolConfig == null) return const SizedBox();
-
-    final macros = arbolConfig!.keys.toList()..sort();
-
-    return ListView(
-      controller: scrollController,
-      padding: EdgeInsets.zero,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text("Personaliza tu búsqueda", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-        ),
-        const SizedBox(height: 15),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: macros.map((macro) {
-              final isSelected = macro == macroSeleccionada;
-              return Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: ChoiceChip(
-                  label: Text(macro),
-                  selected: isSelected,
-                  onSelected: (sel) {
-                    // Aquí actualizamos tanto la pantalla principal como el modal
-                    setState(() => macroSeleccionada = macro);
-                    if (extraSetState != null) extraSetState(() => macroSeleccionada = macro);
-                  },
-                  selectedColor: AppColors.primary,
-                  labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black87),
-                  showCheckmark: false,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-        const Divider(height: 30, thickness: 1),
-        
-        // Pasamos el extraSetState hacia abajo
-        if (macroSeleccionada != null) 
-          ..._buildGroupList(macroSeleccionada!, extraSetState: extraSetState),
-          
-        const SizedBox(height: 40),
-      ],
-    );
-  }
-
-  // Añadimos el parámetro opcional {StateSetter? extraSetState}
-  List<Widget> _buildGroupList(String macro, {StateSetter? extraSetState}) {
-    final gruposMap = arbolConfig![macro]!;
-    final gruposOrdenados = gruposMap.keys.toList()..sort();
-
-    return gruposOrdenados.map((grupoKey) {
-      return _GroupCard(
-        title: grupoKey,
-        sliderValue: sliderValues[grupoKey] ?? 3.0,
-        items: gruposMap[grupoKey]!,
-        checkValues: checkValues,
-        onSliderChanged: (val) {
-          // 1. Actualizamos el dato real
-          sliderValues[grupoKey] = val;
-
-          // 2. Si estamos en el modal, usamos su setState especial
-          if (extraSetState != null) {
-            extraSetState(() {}); 
-          } 
-          // 3. Siempre actualizamos el estado principal por si acaso
-          setState(() {}); 
-        },
-        onSliderEnd: (val) {
-          // Solo llamamos a la API si estamos en la pestaña principal
-          // (Si estamos en el modal, se calcula al cerrar)
-          if (_tabSeleccionada == 0) {
-            _actualizarMapa();
-          }
-        },
-        onCheckChanged: (idsAfectados, nuevoEstado) {
-          // Misma lógica para los checkboxes
-          for (var id in idsAfectados) {
-            checkValues[id] = nuevoEstado;
-          }
-          
-          if (extraSetState != null) extraSetState(() {});
-          setState(() {});
-
-          if (_tabSeleccionada == 0) _actualizarMapa();
-        },
-      );
-    }).toList();
-  }
-}
-
-class _GroupCard extends StatelessWidget {
-  final String title;
-  final double sliderValue;
-  final List<ConfigItem> items;
-  final Map<String, bool> checkValues;
-  final ValueChanged<double> onSliderChanged;
-  final ValueChanged<double> onSliderEnd;
-  final Function(List<String>, bool) onCheckChanged;
-
-  const _GroupCard({
-    required this.title,
-    required this.sliderValue,
-    required this.items,
-    required this.checkValues,
-    required this.onSliderChanged,
-    required this.onSliderEnd,
-    required this.onCheckChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      elevation: 0,
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-        side: BorderSide(color: Colors.grey.shade200),
-      ),
-      child: ExpansionTile(
-        shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
-        collapsedShape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                sliderValue.toStringAsFixed(0),
-                style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Slider(
-            value: sliderValue,
-            min: 0, max: 5, divisions: 5,
-            activeColor: AppColors.primary,
-            inactiveColor: AppColors.primary.withOpacity(0.1),
-            onChanged: onSliderChanged,
-            onChangeEnd: onSliderEnd,
-          ),
-        ),
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "(Desmarca las que no necesites)",
-                style: TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
-              ),
-            ),
-          ),
-          ...items.map((item) {
-            final isChecked = item.ids.every((id) => checkValues[id] == true);
-            return CheckboxListTile(
-              title: Text(item.label, style: const TextStyle(fontSize: 14)),
-              value: isChecked,
-              dense: true,
-              activeColor: AppColors.primary,
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (bool? val) {
-                if (val != null) onCheckChanged(item.ids, val);
-              },
-            );
-          }).toList(),
-          const SizedBox(height: 10),
         ],
       ),
     );
