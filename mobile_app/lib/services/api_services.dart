@@ -105,6 +105,31 @@ class ApiService {
       rethrow;
     }
   }
+  
+  // Nuevo método solo para pedir el texto a la IA
+  Future<String> getIaExplanation({
+    required double lat,
+    required double lon,
+    required Map<String, double> sliders,
+    required Map<String, bool> checks,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/explain-point'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        "sliders": sliders,
+        "checks": checks,
+        "lat": lat,
+        "lon": lon,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(utf8.decode(response.bodyBytes))['resumen_ia'];
+    } else {
+      return "No se pudo conectar con el asesor virtual.";
+    }
+  }
 }
 
 class ConfigItem {

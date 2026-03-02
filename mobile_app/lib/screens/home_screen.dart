@@ -23,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool isLoading = true;
   String? errorMessage;
+  String? resumenIA; // Variable separada para el texto
+  bool isLoadingIA = false; // Estado de carga solo para el texto
 
   // --- DATOS DEL MAPA Y CONFIG ---
   Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
@@ -119,22 +121,63 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _obtenerScoreDePunto(double lat, double lon) async {
-    setState(() => isCalculandoPunto = true);
+    // 1. Limpiamos datos anteriores para que no se mezclen
+    setState(() {
+      isCalculandoPunto = true; // Carga general (Score)
+      isLoadingIA = false;
+      datosPuntoEspecifico = null;
+      resumenIA = null;
+    });
+
     try {
+      // 2. LLAMADA RÁPIDA: Obtenemos solo el Score
       final resultado = await _apiService.calculatePointScore(
         lat: lat,
         lon: lon,
         sliders: sliderValues,
         checks: checkValues,
       );
+
+      // ¡PINTAMOS LA NOTA YA! El usuario ve el resultado en 0.1s
       setState(() {
         datosPuntoEspecifico = resultado;
-        isCalculandoPunto = false;
+        isCalculandoPunto = false; 
+        
+        // Activamos la carga secundaria
+        isLoadingIA = true;
       });
+
+      // 3. LLAMADA LENTA: Pedimos la explicación a la IA en segundo plano
+      final textoIA = await _apiService.getIaExplanation(
+        lat: lat,
+        lon: lon,
+        sliders: sliderValues,
+        checks: checkValues,
+      );
+
+      // Cuando llegue la IA, actualizamos solo ese trocito
+      if (mounted) {
+        setState(() {
+          resumenIA = textoIA;
+          isLoadingIA = false;
+        });
+      }
     } catch (e) {
-      setState(() => isCalculandoPunto = false);
-      print("Error en radar: $e");
+      setState(() {
+        isCalculandoPunto = false;
+        isLoadingIA = false;
+      });
+      print("Error: $e");
     }
+  }
+
+    void _cerrarTarjeta() {
+    setState(() {
+      datosPuntoEspecifico = null;
+      resumenIA = null;
+      // Opcional: Quitar la chincheta del mapa si quieres
+      // _tabSeleccionada = 0; 
+    });
   }
 
   void _abrirConfiguracionModal() {
@@ -311,12 +354,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
           // TARJETA RESULTADO (Tab 1)
-          if (_tabSeleccionada == 1) 
-            ResultCard(
-              data: datosPuntoEspecifico,
-              isLoading: isCalculandoPunto,
-              onTunePressed: _abrirConfiguracionModal,
-            ),
+          if (_tabSeleccionada == 1 && datosPuntoEspecifico != null) // Solo si hay datos
+              ResultCard(
+                score: datosPuntoEspecifico!['score'], // Pasamos el dato limpio
+                iaSummary: resumenIA,
+                isLoadingIA: isLoadingIA,
+                onTunePressed: _abrirConfiguracionModal,
+                onClosePressed: _cerrarTarjeta, // <--- Conectamos la función de cerrar
+              ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

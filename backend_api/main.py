@@ -153,35 +153,39 @@ def calculate_map(prefs: UserPreferences):
     return df_resultado[['hex_id', 'score_final', 'color']].to_dict(orient="records")
 
 
+# --- 1. ENDPOINT RÁPIDO (SOLO MATEMÁTICAS) ---
 @app.post("/calculate-point")
 def get_point_score(prefs: PointPreferences):
     """
-    Recibe lat/lon y preferencias, devuelve Score exacto, detalles y el resumen de IA.
+    Devuelve el Score INSTANTÁNEAMENTE. No llama a la IA.
     """
     if gdf_puntos is None:
-        raise HTTPException(status_code=503, detail="Radar no cargado (revisa logs del servidor)")
+        raise HTTPException(status_code=503, detail="Radar no cargado")
     
-    # 1. Cálculo Matemático (Rápido)
     score, conteo_final = calcular_lifescore_punto(
-        prefs.lat, 
-        prefs.lon, 
-        gdf_puntos, 
-        memoria_config, 
-        prefs.sliders, 
-        prefs.checks
+        prefs.lat, prefs.lon, gdf_puntos, memoria_config, prefs.sliders, prefs.checks
     )
     
-    # 2. Cálculo Semántico (IA)
-    # Valor por defecto por si no hay nada cerca o falla la IA
-    resumen_texto = "Zona sin datos suficientes para análisis."
-    
-    # Solo llamamos a la IA si la zona tiene algo interesante (Score > 0)
-    if score > 0:
-        resumen_texto = generar_resumen_ia(conteo_final, prefs.sliders, score)
-    
-    # 3. Return con los 3 campos clave
     return {
         "score": score,
-        "resumen_ia": resumen_texto, # <--- ¡ESTE ES EL CAMPO NUEVO!
-        "detalles": {k: round(v, 2) for k, v in conteo_final.items() if v > 0}
+        "detalles": conteo_final # Lo enviamos porque la IA lo necesitará en el paso 2
     }
+
+# --- 2. ENDPOINT LENTO (SOLO IA) ---
+@app.post("/explain-point")
+def explain_point_score(prefs: PointPreferences):
+    """
+    Recalcula los datos y se los pasa a la IA. Tarda 2-3 segundos.
+    """
+    # Recalculamos los datos (es muy rápido, no importa hacerlo 2 veces)
+    score, conteo_final = calcular_lifescore_punto(
+        prefs.lat, prefs.lon, gdf_puntos, memoria_config, prefs.sliders, prefs.checks
+    )
+    
+    if score == 0:
+        return {"resumen_ia": "No hay datos suficientes en esta zona."}
+
+    # Llamamos a la IA con el score para que ajuste el tono
+    resumen = generar_resumen_ia(conteo_final, prefs.sliders, score)
+    
+    return {"resumen_ia": resumen}
