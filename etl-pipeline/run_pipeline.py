@@ -126,8 +126,7 @@ def main():
     generar_tabla_maestra(
         ruta_grid=str(ruta_grid_main),
         rutas_datasets=rutas_datasets,
-        carpeta_salida=str(DIR_PRINCIPAL),
-        ruta_municipios=str(ruta_municipios)
+        carpeta_salida=str(DIR_PRINCIPAL)
     )
     
     # Asumimos que la función genera este nombre de archivo
