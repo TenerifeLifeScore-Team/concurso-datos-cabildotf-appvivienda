@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Polygon> poligonosADibujar = [];
   List<Map<String, dynamic>> propiedadesHexagonos = []; // NUEVO: Para guardar municipio y centroide
   dynamic geojsonRaw;
+  Map<String, double> scoresHexagonos = {};
 
   // --- ESTADO UI ---
   int _tabSeleccionada = 0; // 0: Explorar, 1: Mi Zona
@@ -96,12 +97,17 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final resultados = await _apiService.calculateScores(sliderValues, checkValues);
       final Map<String, String> nuevosColores = {};
+      final Map<String, double> nuevosScores = {};
+
       for (var res in resultados) {
         nuevosColores[res['hex_id']] = res['color'];
+        if (res['score_final'] != null) {
+          nuevosScores[res['hex_id']] = (res['score_final'] as num).toDouble();
+        }
       }
 
       List<Polygon> nuevosPoligonos = [];
-      List<Map<String, dynamic>> nuevasPropiedades = []; // NUEVO
+      List<Map<String, dynamic>> nuevasPropiedades = [];
 
       for (var feature in geojsonRaw['features']) {
         final props = feature['properties'];
@@ -128,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         poligonosADibujar = nuevosPoligonos;
         propiedadesHexagonos = nuevasPropiedades;
+        scoresHexagonos = nuevosScores;
       });
     } catch (e) {
       print("Error actualizando mapa: $e");
@@ -168,28 +175,51 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // --- ANALIZAR HEXÁGONO (NUEVO) ---
-  Future<void> _analizarHexagono(String centroidString, String municipio) async {
+  // --- ANALIZAR HEXÁGONO (ACTUALIZADO) ---
+  Future<void> _analizarHexagono(String hexId, String centroidString, String municipio) async {
     final partes = centroidString.split(',');
     final lat = double.parse(partes[0].trim());
     final lon = double.parse(partes[1].trim());
 
+    // 1. Obtenemos la nota que ya calculamos para ese hexágono
+    double notaDelHexagono = scoresHexagonos[hexId] ?? 0.0;
+
     setState(() {
-      isLoading = true;
-      datosPuntoEspecifico = {'score': 0.0, 'detalles': {}}; 
+      isLoading = false; // No bloqueamos toda la pantalla
+      // Mostramos la nota INMEDIATAMENTE
+      datosPuntoEspecifico = {'score': notaDelHexagono}; 
       resumenIA = null;
+      isLoadingIA = true; // Empieza a pensar la IA
       nombreZonaActual = "Buscando zona..."; 
-      mostrarBotonAnalizar = false; 
     });
 
+    // 2. Buscamos el nombre del barrio
     final barrio = await _obtenerBarrio(lat, lon);
+    if (mounted) {
+      setState(() {
+        nombreZonaActual = barrio != "Zona" ? "$barrio ($municipio)" : "Zona en $municipio";
+      });
+    }
 
-    setState(() {
-      nombreZonaActual = barrio != "Zona" ? "$barrio ($municipio)" : "Zona en $municipio";
-    });
-
-    await _obtenerScoreDePunto(lat, lon);
-    
-    setState(() => isLoading = false);
+    // 3. Llamamos SOLO a la IA (porque la nota ya la tenemos)
+    try {
+      final textoIA = await _apiService.getIaExplanation(
+        lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
+      );
+      if (mounted) {
+        setState(() {
+          resumenIA = textoIA;
+          isLoadingIA = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          resumenIA = "No se pudo conectar con el asesor virtual.";
+          isLoadingIA = false;
+        });
+      }
+    }
   }
 
   // --- OBTENER SCORE GENERAL (API) ---
@@ -414,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   if (indexTocado != -1) {
                     final props = propiedadesHexagonos[indexTocado];
-                    _analizarHexagono(props['centroide'], props['municipio']);
+                    _analizarHexagono(props['hex_id'], props['centroide'], props['municipio']);
                   } else {
                     _cerrarTarjeta();
                   }
@@ -573,12 +603,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
           // --- CAMBIO: La tarjeta ahora sale en AMBAS pestañas si hay datos ---
+          // --- TARJETA DE RESULTADO DINÁMICA ---
           if (datosPuntoEspecifico != null) 
             ResultCard(
-              placeName: nombreZonaActual, // Pasamos el nombre
+              placeName: nombreZonaActual,
               score: datosPuntoEspecifico!['score'],
               iaSummary: resumenIA,
               isLoadingIA: isLoadingIA,
+              
+              // ¡LA MAGIA DE LA POSICIÓN!
+              // Si estamos en Explorar (0), sale arriba. Si en Mi Zona (1), abajo.
+              positionAlignment: _tabSeleccionada == 0 
+                  ? Alignment.topCenter 
+                  : Alignment.bottomCenter,
+                  
               onTunePressed: _abrirConfiguracionModal,
               onClosePressed: _cerrarTarjeta,
             ),

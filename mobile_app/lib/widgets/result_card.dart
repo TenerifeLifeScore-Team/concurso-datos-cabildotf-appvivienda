@@ -7,6 +7,7 @@ class ResultCard extends StatelessWidget {
   final String? iaSummary; 
   final bool isLoadingIA; 
   final VoidCallback onTunePressed;
+  final Alignment positionAlignment;
   final VoidCallback onClosePressed; 
 
   const ResultCard({
@@ -17,6 +18,7 @@ class ResultCard extends StatelessWidget {
     required this.isLoadingIA,
     required this.onTunePressed,
     required this.onClosePressed,
+    this.positionAlignment = Alignment.bottomCenter,  // Por defecto abajo
   });
 
   @override
@@ -26,9 +28,14 @@ class ResultCard extends StatelessWidget {
     String scoreText = score >= 8 ? "¡Zona Excelente!" : (score >= 5 ? "Zona Aceptable" : "Zona Baja");
 
     return Align(
-      alignment: Alignment.bottomCenter,
+      alignment: positionAlignment, // <--- 1. Usamos la variable en lugar de dejarlo fijo
       child: Container(
-        margin: const EdgeInsets.all(20),
+        margin: EdgeInsets.only( // <--- 2. Hacemos el margen dinámico
+          left: 20, 
+          right: 20, 
+          top: positionAlignment == Alignment.topCenter ? 25 : 20, 
+          bottom: 20,
+        ),
         padding: const EdgeInsets.fromLTRB(20, 15, 20, 20),
         decoration: BoxDecoration(
           color: Colors.white,
