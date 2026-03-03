@@ -33,8 +33,6 @@ class ResultCard extends StatelessWidget {
       scoreColor = const Color.fromARGB(255, 255, 160, 0); // Naranja
       scoreText = "Zona Media";
     } else if (score <= 7.0) {
-      // Nota: El amarillo de tu Python (255, 220, 0) no se lee bien sobre fondo blanco.
-      // Lo he oscurecido un 10% (230, 190, 0) para que sea legible y quede pro.
       scoreColor = const Color.fromARGB(255, 230, 190, 0); 
       scoreText = "Zona Media-Alta";
     } else if (score <= 8.5) {
