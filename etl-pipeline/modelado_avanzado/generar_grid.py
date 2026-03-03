@@ -77,7 +77,7 @@ def calcular_grid_hexagonal(gdf, radio=500, porcentaje_tierra=0.45):
     
     # Busca la columna del nombre del municipio en el geojson original
     # OJO: Pon aquí el nombre exacto de la columna si no es 'name' (ej: 'nombre', 'NAMEUNIT', etc.)
-    col_muni = 'name' if 'name' in gdf_4326.columns else gdf_4326.columns[0]
+    col_muni = 'NOMBRE' if 'NOMBRE' in gdf_4326.columns else gdf_4326.columns[0]
     
     # Cruzamos usando los centroides para mayor precisión
     grid_puntos = grid_final.copy()

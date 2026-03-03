@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // --- DATOS DEL MAPA Y CONFIG ---
   Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
   List<Polygon> poligonosADibujar = [];
+  List<Map<String, dynamic>> propiedadesHexagonos = []; // NUEVO: Para guardar municipio y centroide
   dynamic geojsonRaw;
 
   // --- ESTADO UI ---
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic>? datosPuntoEspecifico;
   bool isCalculandoPunto = false;
   LatLng? _ultimaPosicionMiZona;
+  String? nombreZonaActual;
 
   // Controlador para el texto de búsqueda
   final TextEditingController _searchController = TextEditingController();
@@ -99,8 +101,11 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       List<Polygon> nuevosPoligonos = [];
+      List<Map<String, dynamic>> nuevasPropiedades = []; // NUEVO
+
       for (var feature in geojsonRaw['features']) {
-        final id = feature['properties']['hex_id'];
+        final props = feature['properties'];
+        final id = props['hex_id'];
         final colorHex = nuevosColores[id] ?? "#CCCCCC";
         final color = Color(int.parse(colorHex.replaceFirst('#', '0xFF')));
 
@@ -117,52 +122,100 @@ class _HomeScreenState extends State<HomeScreen> {
           borderColor: Colors.white24,
           isFilled: true,
         ));
+        nuevasPropiedades.add(props);
       }
 
       setState(() {
         poligonosADibujar = nuevosPoligonos;
+        propiedadesHexagonos = nuevasPropiedades;
       });
     } catch (e) {
       print("Error actualizando mapa: $e");
     }
   }
 
-  Future<void> _obtenerScoreDePunto(double lat, double lon) async {
-    // 1. Limpiamos datos anteriores para que no se mezclen
+  // ¿El punto está en el polígono?
+  bool _isPointInPolygon(LatLng point, List<LatLng> polygonPoints) {
+    bool isInside = false;
+    int j = polygonPoints.length - 1;
+    for (int i = 0; i < polygonPoints.length; i++) {
+      if (((polygonPoints[i].latitude > point.latitude) != 
+          (polygonPoints[j].latitude > point.latitude)) &&
+          (point.longitude < (polygonPoints[j].longitude - polygonPoints[i].longitude) * (point.latitude - polygonPoints[i].latitude) / 
+          (polygonPoints[j].latitude - polygonPoints[i].latitude) + polygonPoints[i].longitude)) {
+        isInside = !isInside;
+      }
+      j = i;
+    }
+    return isInside;
+  }
+
+  // --- OBTENER BARRIO (NOMINATIM) ---
+  Future<String> _obtenerBarrio(double lat, double lon) async {
+    try {
+      final url = Uri.parse('https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lon&format=json&zoom=14&addressdetails=1');
+      final response = await http.get(url, headers: {'User-Agent': 'com.tenerifelifescore.app'});
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final address = data['address'];
+        if (address != null) {
+          return address['suburb'] ?? address['neighbourhood'] ?? address['quarter'] ?? address['village'] ?? "Zona";
+        }
+      }
+    } catch (e) { print("Error barrio: $e"); }
+    return "Zona seleccionada";
+  }
+
+  // --- ANALIZAR HEXÁGONO (NUEVO) ---
+  Future<void> _analizarHexagono(String centroidString, String municipio) async {
+    final partes = centroidString.split(',');
+    final lat = double.parse(partes[0].trim());
+    final lon = double.parse(partes[1].trim());
+
     setState(() {
-      isCalculandoPunto = true; // Carga general (Score)
+      isLoading = true;
+      datosPuntoEspecifico = {'score': 0.0, 'detalles': {}}; 
+      resumenIA = null;
+      nombreZonaActual = "Buscando zona..."; 
+      mostrarBotonAnalizar = false; 
+    });
+
+    final barrio = await _obtenerBarrio(lat, lon);
+
+    setState(() {
+      nombreZonaActual = barrio != "Zona" ? "$barrio ($municipio)" : "Zona en $municipio";
+    });
+
+    await _obtenerScoreDePunto(lat, lon);
+    
+    setState(() => isLoading = false);
+  }
+
+  // --- OBTENER SCORE GENERAL (API) ---
+  Future<void> _obtenerScoreDePunto(double lat, double lon) async {
+    setState(() {
+      isCalculandoPunto = true;
       isLoadingIA = false;
       datosPuntoEspecifico = null;
       resumenIA = null;
     });
 
     try {
-      // 2. LLAMADA RÁPIDA: Obtenemos solo el Score
       final resultado = await _apiService.calculatePointScore(
-        lat: lat,
-        lon: lon,
-        sliders: sliderValues,
-        checks: checkValues,
+        lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      // ¡PINTAMOS LA NOTA YA! El usuario ve el resultado en 0.1s
       setState(() {
         datosPuntoEspecifico = resultado;
         isCalculandoPunto = false; 
-        
-        // Activamos la carga secundaria
         isLoadingIA = true;
       });
 
-      // 3. LLAMADA LENTA: Pedimos la explicación a la IA en segundo plano
       final textoIA = await _apiService.getIaExplanation(
-        lat: lat,
-        lon: lon,
-        sliders: sliderValues,
-        checks: checkValues,
+        lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      // Cuando llegue la IA, actualizamos solo ese trocito
       if (mounted) {
         setState(() {
           resumenIA = textoIA;
@@ -178,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-    // --- FUNCIÓN 1: IR A MI UBICACIÓN (GPS) ---
+  // --- FUNCIONES DE UBICACIÓN Y BÚSQUEDA ---
   Future<void> _irAMiUbicacion() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -205,21 +258,17 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => mostrarBotonAnalizar = true);
   }
 
-  // --- FUNCIÓN 2: BUSCAR DIRECCIÓN (TEXTO) ---
   Future<void> _buscarDireccion(String query) async {
     if (query.isEmpty) return;
     
     // 1. Limpiamos cualquier resultado anterior para que no tape el mapa
     _cerrarTarjeta(); 
     setState(() => mostrarBotonAnalizar = false);
-    // Añadimos "Tenerife" para que no busque en otros sitios
     final queryFinal = "$query, Tenerife"; 
     final url = Uri.parse('https://nominatim.openstreetmap.org/search?q=$queryFinal&format=json&limit=1');
 
     try {
-      // Nominatim requiere User-Agent
       final response = await http.get(url, headers: {'User-Agent': 'com.tlife.app'});
-      
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data.isNotEmpty) {
@@ -238,24 +287,27 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // --- FUNCIÓN 3: EL BOTÓN MÁGICO "ANALIZAR" ---
-  void _analizarZonaActual() {
-    // Cogemos el centro EXACTO de donde esté mirando el usuario
+  void _analizarZonaActual() async {
     final centro = _mapController.camera.center;
     
-    // Llamamos a tu función de siempre
+    // Al analizar manualmente, buscamos también el nombre de la calle/barrio
+    setState(() {
+      mostrarBotonAnalizar = false;
+      nombreZonaActual = "Calculando...";
+    });
+
+    final nombre = await _obtenerBarrio(centro.latitude, centro.longitude);
+    setState(() => nombreZonaActual = nombre);
+
     _obtenerScoreDePunto(centro.latitude, centro.longitude);
-    
-    // Ocultamos el botón para dejar ver el resultado
-    setState(() => mostrarBotonAnalizar = false);
   }
   
-  // Actualiza tu función de cerrar tarjeta para que vuelva a salir el botón
   void _cerrarTarjeta() {
     setState(() {
       datosPuntoEspecifico = null;
       resumenIA = null;
-      mostrarBotonAnalizar = true; // <--- Importante: Que vuelva a salir el botón
+      nombreZonaActual = null;
+      mostrarBotonAnalizar = true; 
     });
   }
 
@@ -296,6 +348,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           onSliderEnd: (val) {
                              if (_tabSeleccionada == 1) {
                                 _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
+                             } else {
+                                _actualizarMapa();
                              }
                           },
                           onCheckChanged: (ids, val) {
@@ -304,6 +358,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                             if (_tabSeleccionada == 1) {
                                _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
+                            } else {
+                               _actualizarMapa();
                             }
                           },
                         ),
@@ -316,11 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         );
       },
-    ).whenComplete(() {
-      if (_tabSeleccionada == 1) {
-        _obtenerScoreDePunto(_mapController.camera.center.latitude, _mapController.camera.center.longitude);
-      }
-    });
+    );
   }
 
   @override
@@ -341,58 +393,70 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          // ---------------------------------------------------------
-          // 1. CAPA DE FONDO (Solo visible en modo Explorar para rellenar huecos)
-          // ---------------------------------------------------------
           if (_tabSeleccionada == 0)
             Positioned.fill(child: Container(color: const Color(0xFFF5F7FA))),
 
-          // ---------------------------------------------------------
-          // 2. MAPA INTERACTIVO
-          // ---------------------------------------------------------
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              initialCenter: const LatLng(28.1400, -16.5230), // Santa Cruz
+              initialCenter: const LatLng(28.1400, -16.5230), 
               initialZoom: 9.4,
-              // DETECCIÓN DE MOVIMIENTO:
-              // Si el usuario arrastra el mapa, ocultamos resultados y mostramos el botón de analizar
+              
+              // --- NUEVO: DETECCIÓN DE CLICK PARA HEXÁGONOS ---
+              onTap: (tapPosition, point) {
+                if (_tabSeleccionada == 0) {
+                  int indexTocado = -1;
+                  for (int i = 0; i < poligonosADibujar.length; i++) {
+                    if (_isPointInPolygon(point, poligonosADibujar[i].points)) {
+                      indexTocado = i;
+                      break;
+                    }
+                  }
+                  if (indexTocado != -1) {
+                    final props = propiedadesHexagonos[indexTocado];
+                    _analizarHexagono(props['centroide'], props['municipio']);
+                  } else {
+                    _cerrarTarjeta();
+                  }
+                } else {
+                   _cerrarTarjeta();
+                }
+              },
+
               onPositionChanged: (pos, hasGesture) {
-                _ultimaPosicionMiZona = pos.center;
+                if (_tabSeleccionada == 1) {
+                  _ultimaPosicionMiZona = pos.center;
+                }
                 if (hasGesture) {
-                  // Solo actuamos si el botón no estaba ya visible (para no repintar a lo loco)
                   if (!mostrarBotonAnalizar) {
                     setState(() {
                       mostrarBotonAnalizar = true;
-                      datosPuntoEspecifico = null; // Ocultamos la tarjeta vieja
+                      datosPuntoEspecifico = null; 
                       resumenIA = null;
+                      nombreZonaActual = null;
                     });
                   }
                 }
               },
             ),
             children: [
-              // MODO MI ZONA: Mapa de calles (CartoDB Voyager)
               if (_tabSeleccionada == 1)
                 TileLayer(
-                  key: const ValueKey("capa_callejero_mi_zona"),  // Forzar que se pinte siempre
+                  key: ValueKey("capa_calle_$_tabSeleccionada"), 
                   urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
                   subdomains: const ['a', 'b', 'c', 'd'],
                   userAgentPackageName: 'com.tenerifelifescore.app',
+                  tileDisplay: const TileDisplay.instantaneous(), // Sin efecto borroso
                 ),
               
-              // MODO EXPLORAR: Capa de Hexágonos (Polígonos)
               if (_tabSeleccionada == 0) 
                 PolygonLayer(polygons: poligonosADibujar),
             ],
           ),
 
-          // ---------------------------------------------------------
-          // 3. BARRA DE BÚSQUEDA Y GPS (Solo Mi Zona)
-          // ---------------------------------------------------------
           if (_tabSeleccionada == 1)
             Positioned(
-              top: 30, // Margen superior para salvar el Notch/Cámara
+              top: 30, 
               left: 20,
               right: 20,
               child: Card(
@@ -416,7 +480,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           onSubmitted: (val) => _buscarDireccion(val),
                         ),
                       ),
-                      // Separador vertical
                       Container(width: 1, height: 24, color: Colors.grey[300]), 
                       IconButton(
                         icon: const Icon(Icons.my_location, color: AppColors.primary),
@@ -429,22 +492,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-          // ---------------------------------------------------------
-          // 4. CHINCHETA CENTRAL (Solo Mi Zona)
-          // ---------------------------------------------------------
           if (_tabSeleccionada == 1)
-            const IgnorePointer( // IgnorePointer para que el toque pase al mapa
+            const IgnorePointer( 
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 40), // Elevamos para que la punta toque el centro
+                  padding: EdgeInsets.only(bottom: 40), 
                   child: Icon(Icons.location_on, color: Colors.red, size: 50),
                 ),
               ),
             ),
 
-          // ---------------------------------------------------------
-          // 5. BOTÓN FLOTANTE "ANALIZAR" (Solo si no hay resultados)
-          // ---------------------------------------------------------
           if (_tabSeleccionada == 1 && mostrarBotonAnalizar && !isLoading)
             Positioned(
               bottom: 40,
@@ -468,18 +525,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-          // ---------------------------------------------------------
-          // 6. PANTALLA DE CARGA (Global)
-          // ---------------------------------------------------------
           if (isLoading)
             Container(
               color: Colors.white.withOpacity(0.8),
               child: const Center(child: CircularProgressIndicator()),
             ),
 
-          // ---------------------------------------------------------
-          // 7. PANEL DE CONFIGURACIÓN (Modo Explorar)
-          // ---------------------------------------------------------
           if (_tabSeleccionada == 0)
             DraggableScrollableSheet(
               initialChildSize: 0.4,
@@ -504,18 +555,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           sliderValues: sliderValues,
                           checkValues: checkValues,
                           errorMessage: errorMessage,
-                          
-                          // LÓGICA DE ACTUALIZACIÓN (TAB 0)
                           onMacroChanged: (val) => setState(() => macroSeleccionada = val),
                           onSliderChanged: (group, val) => setState(() => sliderValues[group] = val),
-                          onSliderEnd: (val) {
-                             if (_tabSeleccionada == 0) _actualizarMapa();
-                          },
+                          onSliderEnd: (val) => _actualizarMapa(),
                           onCheckChanged: (ids, val) {
                             setState(() {
                               for (var id in ids) { checkValues[id] = val; }
                             });
-                            if (_tabSeleccionada == 0) _actualizarMapa();
+                            _actualizarMapa();
                           },
                         ),
                       ),
@@ -525,11 +572,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-          // ---------------------------------------------------------
-          // 8. TARJETA DE RESULTADO (Modo Mi Zona)
-          // ---------------------------------------------------------
-          if (_tabSeleccionada == 1 && datosPuntoEspecifico != null) 
+          // --- CAMBIO: La tarjeta ahora sale en AMBAS pestañas si hay datos ---
+          if (datosPuntoEspecifico != null) 
             ResultCard(
+              placeName: nombreZonaActual, // Pasamos el nombre
               score: datosPuntoEspecifico!['score'],
               iaSummary: resumenIA,
               isLoadingIA: isLoadingIA,
@@ -543,19 +589,19 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: AppColors.primary,
         onTap: (index) {
           setState(() => _tabSeleccionada = index);
-
+          
           // TRUCO: Esperamos a que termine de repintar la pantalla (1 frame)
           WidgetsBinding.instance.addPostFrameCallback((_) {
             
-            if (index == 0) {
+          if (index == 0) {
               // MODO EXPLORAR: Lejano
               _mapController.move(
                 const LatLng(28.1400, -16.5230), 
                 9.4
               );
-            } else if (index == 1) {
+          } else if (index == 1) {
               // MODO MI ZONA: Santa Cruz o ultima posición usuario
-              final destino = _ultimaPosicionMiZona ?? const LatLng(28.4636, -16.2518);
+            final destino = _ultimaPosicionMiZona ?? const LatLng(28.4636, -16.2518);
               
               _mapController.move(
                 destino, 
@@ -566,14 +612,13 @@ class _HomeScreenState extends State<HomeScreen> {
               // He quitado el '_obtenerScoreDePunto' aquí.
               // Como me pediste antes que el cálculo fuera MANUAL (con botón),
               // al cambiar de pestaña solo movemos el mapa y mostramos el botón.
-              setState(() {
-                mostrarBotonAnalizar = true;
+          setState(() {
+               mostrarBotonAnalizar = true;
                 datosPuntoEspecifico = null; // Limpiamos resultados viejos
-                resumenIA = null;
+               resumenIA = null;
               });
-            }
-            
-          });
+             }            
+          });          
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.map), label: "Explorar"),
