@@ -13,6 +13,8 @@ def generar_tabla_maestra(ruta_grid, rutas_datasets, carpeta_salida):
     grid = gpd.read_file(ruta_grid)
     grid = grid.to_crs(epsg=4326) # Aseguramos sistema de coordenadas estándar
 
+    grid = grid[['hex_id', 'geometry']]  # Eliminamos la información de los municipios y centroides aquí
+
     todos_los_puntos = []
 
     for nombre, ruta in rutas_datasets.items():
