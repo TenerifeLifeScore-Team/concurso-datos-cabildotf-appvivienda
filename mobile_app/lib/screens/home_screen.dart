@@ -158,7 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // --- OBTENER BARRIO (NOMINATIM) ---
-  Future<String> _obtenerBarrio(double lat, double lon) async {
+  // --- OBTENER NOMBRE COMPLETO (Barrio + Municipio) ---
+  Future<String> _obtenerNombreZona(double lat, double lon, {String? municipioGeoJson}) async {
     try {
       final url = Uri.parse('https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lon&format=json&zoom=14&addressdetails=1');
       final response = await http.get(url, headers: {'User-Agent': 'com.tenerifelifescore.app'});
@@ -166,15 +167,26 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final address = data['address'];
+        
         if (address != null) {
-          return address['suburb'] ?? address['neighbourhood'] ?? address['quarter'] ?? address['village'] ?? "Zona";
+          // 1. Sacamos el Barrio
+          String barrio = address['suburb'] ?? address['neighbourhood'] ?? address['quarter'] ?? address['village'] ?? "Zona";
+          
+          // 2. Sacamos el Municipio (Si no viene del GeoJSON, lo saca de internet)
+          String municipio = municipioGeoJson ?? address['city'] ?? address['town'] ?? address['municipality'] ?? "Tenerife";
+          
+          // 3. Formateamos bonito
+          if (barrio != "Zona" && barrio != municipio) {
+            return "$barrio ($municipio)"; // Ej: "Salud Bajo (Santa Cruz de Tenerife)"
+          } else {
+            return "Zona en $municipio";
+          }
         }
       }
-    } catch (e) { print("Error barrio: $e"); }
+    } catch (e) { print("Error Nominatim: $e"); }
     return "Zona seleccionada";
   }
 
-  // --- ANALIZAR HEXÁGONO (NUEVO) ---
   // --- ANALIZAR HEXÁGONO (ACTUALIZADO) ---
   Future<void> _analizarHexagono(String hexId, String centroidString, String municipio) async {
     final partes = centroidString.split(',');
@@ -194,10 +206,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     // 2. Buscamos el nombre del barrio
-    final barrio = await _obtenerBarrio(lat, lon);
+    final nombreFormateado = await _obtenerNombreZona(lat, lon, municipioGeoJson: municipio);
+
     if (mounted) {
       setState(() {
-        nombreZonaActual = barrio != "Zona" ? "$barrio ($municipio)" : "Zona en $municipio";
+        nombreZonaActual = nombreFormateado;
       });
     }
 
@@ -326,8 +339,8 @@ class _HomeScreenState extends State<HomeScreen> {
       nombreZonaActual = "Calculando...";
     });
 
-    final nombre = await _obtenerBarrio(centro.latitude, centro.longitude);
-    setState(() => nombreZonaActual = nombre);
+    final nombreFormateado = await _obtenerNombreZona(centro.latitude, centro.longitude);
+    setState(() => nombreZonaActual = nombreFormateado);
 
     _obtenerScoreDePunto(centro.latitude, centro.longitude);
   }
@@ -625,38 +638,39 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabSeleccionada,
         selectedItemColor: AppColors.primary,
-        onTap: (index) {
-          setState(() => _tabSeleccionada = index);
-          
-          // TRUCO: Esperamos a que termine de repintar la pantalla (1 frame)
-          WidgetsBinding.instance.addPostFrameCallback((_) {
+        onTap: (index) {          
+          // 1. Cambiamos de pestaña y CERRAMOS LA TARJETA siempre
+          setState(() {
+            _tabSeleccionada = index;
             
-          if (index == 0) {
+            // Limpiamos los resultados viejos incondicionalmente
+            datosPuntoEspecifico = null; 
+            resumenIA = null;
+            nombreZonaActual = null;
+            
+            // Si vamos a Mi Zona, reactivamos su botón
+            if (index == 1) {
+              mostrarBotonAnalizar = true;
+            }
+          });
+          
+          // 2. TRUCO: Esperamos a que termine de repintar la pantalla (1 frame)
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (index == 0) {
               // MODO EXPLORAR: Lejano
               _mapController.move(
                 const LatLng(28.1400, -16.5230), 
                 9.4
               );
-          } else if (index == 1) {
+            } else if (index == 1) {
               // MODO MI ZONA: Santa Cruz o ultima posición usuario
-            final destino = _ultimaPosicionMiZona ?? const LatLng(28.4636, -16.2518);
-              
+              final destino = _ultimaPosicionMiZona ?? const LatLng(28.4636, -16.2518);
               _mapController.move(
                 destino, 
                 13.0 // Mantenemos un zoom cercano para ver calles
               );
-              
-              // IMPORTANTE:
-              // He quitado el '_obtenerScoreDePunto' aquí.
-              // Como me pediste antes que el cálculo fuera MANUAL (con botón),
-              // al cambiar de pestaña solo movemos el mapa y mostramos el botón.
-          setState(() {
-               mostrarBotonAnalizar = true;
-                datosPuntoEspecifico = null; // Limpiamos resultados viejos
-               resumenIA = null;
-              });
-             }            
-          });          
+            }
+          });
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.map), label: "Explorar"),

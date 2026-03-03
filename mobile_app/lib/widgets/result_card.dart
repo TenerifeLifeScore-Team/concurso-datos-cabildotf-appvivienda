@@ -24,8 +24,26 @@ class ResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Definimos color según la nota para el círculo
-    Color scoreColor = score >= 8 ? Colors.green : (score >= 5 ? Colors.orange : Colors.red);
-    String scoreText = score >= 8 ? "¡Zona Excelente!" : (score >= 5 ? "Zona Aceptable" : "Zona Baja");
+    Color scoreColor;
+    String scoreText;
+    if (score <= 1.5) {
+      scoreColor = const Color.fromARGB(255, 255, 60, 60); // Rojo
+      scoreText = "Zona Baja";
+    } else if (score <= 4.0) {
+      scoreColor = const Color.fromARGB(255, 255, 160, 0); // Naranja
+      scoreText = "Zona Media";
+    } else if (score <= 7.0) {
+      // Nota: El amarillo de tu Python (255, 220, 0) no se lee bien sobre fondo blanco.
+      // Lo he oscurecido un 10% (230, 190, 0) para que sea legible y quede pro.
+      scoreColor = const Color.fromARGB(255, 230, 190, 0); 
+      scoreText = "Zona Media-Alta";
+    } else if (score <= 8.5) {
+      scoreColor = const Color.fromARGB(255, 50, 200, 80); // Verde
+      scoreText = "Zona Alta";
+    } else {
+      scoreColor = const Color.fromARGB(255, 0, 110, 255); // Azul
+      scoreText = "Zona Excelente";
+    }
 
     return Align(
       alignment: positionAlignment, // <--- 1. Usamos la variable en lugar de dejarlo fijo
