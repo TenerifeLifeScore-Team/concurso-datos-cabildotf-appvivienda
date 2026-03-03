@@ -121,7 +121,10 @@ def aplicar_suavizado_espacial(ruta_entrada, ruta_salida):
     df_suavizado = pd.DataFrame(nuevos_datos)
     
     # Merge seguro
-    gdf_final = gdf[['hex_id', 'geometry']].merge(df_suavizado, on='hex_id', how='left')
+    cols_base = [c for c in gdf.columns if not c.startswith('sat_')]
+    
+    # Merge seguro conservando toda la riqueza de los datos
+    gdf_final = gdf[cols_base].merge(df_suavizado, on='hex_id', how='left')
     
     # Redondeo final
     for col in cols_a_suavizar:
