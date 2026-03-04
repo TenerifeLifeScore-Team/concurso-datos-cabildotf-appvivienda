@@ -1,19 +1,11 @@
 import 'dart:convert';
 // import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 
 class ApiService {
-  // CONFIGURACIÓN DE LA IP
-  // Si estás en el emulador de Android, tu PC es 10.0.2.2
-  // Si estás en iOS, tu PC es localhost
-  // Si pruebas en un móvil físico, necesitas la IP local de tu PC (ej: 192.168.1.XX)
-  static String get _baseUrl {
-    const String miIpDelPc = "10.58.85.131"; 
-  
-  if (kIsWeb) return "http://localhost:8000";
-  return "http://$miIpDelPc:8000";
-  }
+  // CONFIGURACIÓN DE LA IP (Render)
+  // Declaramos la variable _baseUrl con tu URL de la nube
+  final String _baseUrl = "https://tenerife-lifescore-api.onrender.com";
 
   /// Pide la configuración de categorías al Backend Python
   Future<Map<String, Map<String, List<ConfigItem>>>> getCategories() async {
