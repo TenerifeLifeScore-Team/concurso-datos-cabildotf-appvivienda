@@ -582,7 +582,6 @@ raw_restaur <- st_read("../data-raw/locales-de-hosteleria-y-restauracion-en-tene
 ```
 
 ```{r restaur-transformacion}
-unique(raw_restaur$actividad_tipo)
 clean_restauracion <- raw_restaur %>%
     
   janitor::clean_names() %>%
@@ -802,7 +801,7 @@ Este proceso genera un mapa de calor continuo y orgánico, acercando el modelo d
 ```{r grafico-suavizado, echo=FALSE, warning=FALSE, message=FALSE, fig.width=10}
 
 grid_bruto <- st_read("../data-processed/tabla_saturada.geojson", quiet = TRUE)
-grid_suavizado <- st_read("../data-procesed/tabla_saturada_suavizada.geojson", quiet = TRUE)
+grid_suavizado <- st_read("../data-processed/tabla_saturada_suavizada.geojson", quiet = TRUE)
 
 variable_plot <- "sat_farmacia" 
 
