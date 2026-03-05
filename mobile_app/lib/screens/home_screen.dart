@@ -541,7 +541,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           if (_tabSeleccionada == 1)
             Positioned(
-              top: 30, 
+              top: 65, 
               left: 20,
               right: 20,
               child: Card(
