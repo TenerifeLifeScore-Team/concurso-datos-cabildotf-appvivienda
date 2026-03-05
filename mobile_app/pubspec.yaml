@@ -1,4 +1,4 @@
-name: mobile_app
+name: TenerifeLifeScore
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -43,6 +43,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -94,3 +95,16 @@ flutter:
   # see https://flutter.dev/to/font-from-package
   assets:
     - assets/data/grid_tenerife.geojson
+
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  # Este es el icono principal (el azulito) que se usará en iOS y Android por defecto
+  image_path: "assets/icons/icono_full.png"
+  
+  # Configuración especial para Android (Iconos Adaptativos)
+  # Ponemos un fondo azul (ajusta el código HEX a tu gusto) y tu icono transparente encima
+  # adaptive_icon_background: "#2B65F5" 
+  # adaptive_icon_foreground: "assets/icons/icono_binario.png"

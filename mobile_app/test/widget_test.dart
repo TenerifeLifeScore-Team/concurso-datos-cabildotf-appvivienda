@@ -1,7 +1,7 @@
 // Test básico de humo (Smoke Test) para verificar que la app arranca
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile_app/main.dart';
+import 'package:TenerifeLifeScore/main.dart';
 
 void main() {
   testWidgets('La app debería arrancar y mostrar el mensaje inicial', (WidgetTester tester) async {
