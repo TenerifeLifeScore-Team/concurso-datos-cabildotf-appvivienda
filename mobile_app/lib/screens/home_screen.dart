@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> propiedadesHexagonos = []; // NUEVO: Para guardar municipio y centroide
   dynamic geojsonRaw;
   Map<String, double> scoresHexagonos = {};
+  int _indexSeleccionado = -1;
 
   // --- ESTADO UI ---
   int _tabSeleccionada = 0; // 0: Explorar, 1: Mi Zona
@@ -142,6 +143,43 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // --- NUEVA FUNCIÓN PARA RESALTAR ---
+  void _refrescarBordes() {
+    if (poligonosADibujar.isEmpty) return;
+
+    List<Polygon> poligonosRepintados = [];
+    Polygon? poligonoDestacado; // Creamos una variable para guardar el seleccionado
+
+    for (int i = 0; i < poligonosADibujar.length; i++) {
+      final poly = poligonosADibujar[i];
+      final bool isSelected = (i == _indexSeleccionado);
+
+      final nuevoPoly = Polygon(
+        points: poly.points,
+        color: poly.color, // Mantenemos el color que ya calculó la API
+        borderStrokeWidth: isSelected ? 3.0 : 0.5, // Borde ancho (3.0 queda más elegante)
+        borderColor: isSelected ? Colors.black : Colors.white24, // Borde negro
+        isFilled: true,
+      );
+
+      // Si es el seleccionado, lo guardamos para el final. Si no, a la lista normal.
+      if (isSelected) {
+        poligonoDestacado = nuevoPoly;
+      } else {
+        poligonosRepintados.add(nuevoPoly);
+      }
+    }
+
+    // ¡EL TRUCO! Añadimos el seleccionado AL FINAL de la lista para que nadie lo pise
+    if (poligonoDestacado != null) {
+      poligonosRepintados.add(poligonoDestacado);
+    }
+
+    setState(() {
+      poligonosADibujar = poligonosRepintados;
+    });
+  }
+
   // ¿El punto está en el polígono?
   bool _isPointInPolygon(LatLng point, List<LatLng> polygonPoints) {
     bool isInside = false;
@@ -193,6 +231,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final partes = centroidString.split(',');
     final lat = double.parse(partes[0].trim());
     final lon = double.parse(partes[1].trim());
+
+    // 0. Hacemos zoom al hexágono
+    _mapController.move(LatLng(lat, lon), 11.5);
 
     // 1. Obtenemos la nota que ya calculamos para ese hexágono
     double notaDelHexagono = scoresHexagonos[hexId] ?? 0.0;
@@ -348,11 +389,13 @@ class _HomeScreenState extends State<HomeScreen> {
   
   void _cerrarTarjeta() {
     setState(() {
+      _indexSeleccionado = -1;
       datosPuntoEspecifico = null;
       resumenIA = null;
       nombreZonaActual = null;
       mostrarBotonAnalizar = true; 
     });
+    _refrescarBordes();
   }
 
   void _abrirConfiguracionModal() {
@@ -462,6 +505,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   }
                   if (indexTocado != -1) {
+                    // 1. Guardamos cuál se ha tocado y pintamos el borde negro
+                    _indexSeleccionado = indexTocado;
+                    _refrescarBordes(); 
+                    
+                    // 2. Llamamos a tu función de siempre
                     final props = propiedadesHexagonos[indexTocado];
                     _analizarHexagono(props['hex_id'], props['centroide'], props['municipio']);
                   } else {
