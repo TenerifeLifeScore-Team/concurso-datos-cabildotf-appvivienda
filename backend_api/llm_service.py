@@ -64,7 +64,7 @@ def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict, score: float)
                 {"role": "system", "content": mensaje_sistema.strip()},
                 {"role": "user", "content": mensaje_usuario.strip()}
             ],
-            model="llama-3.1-8b-instant", # El modelo más rápido de Llama 3
+            model="llama-3.3-70b-versatile", # El modelo más rápido de Llama 3
             temperature=0.7, # Creatividad balanceada
             max_tokens=150,  # Límite para que no se enrolle
         )
