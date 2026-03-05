@@ -471,18 +471,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Tenerife LifeScore 🇮🇨"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              setState(() => isLoading = true);
-              _inicializarTodo();
-            },
-          ),
-        ],
-      ),
       body: Stack(
         children: [
           if (_tabSeleccionada == 0)

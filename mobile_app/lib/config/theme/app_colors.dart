@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Colores principales de marca
-  static const Color primary = Color(0xFF006EFF); // El azul "Top"
-  static const Color secondary = Color(0xFF32C850); // El verde "Bueno"
+  static const Color primary = Color(0xFF3c7ce3);
+  static const Color secondary = Color(0xFF32C850);
+  static const Color terciary = Color(0xFF5ac7fe); 
+  static const Color cuaternary = Color(0xFF1413bf); 
   
   // Gradiente del LifeScore (Extraídos de tu utils.py)
   static const Color scoreCritical = Color(0xFFFF3C3C); // Rojo [255, 60, 60]
@@ -16,5 +18,5 @@ class AppColors {
   static const Color background = Color(0xFFF5F7FA);
   static const Color surface = Colors.white;
   static const Color textPrimary = Color(0xFF1A1A1A);
-  static const Color textSecondary = Color(0xFF757575);
+  static const Color textSecondary = Color.fromARGB(255, 200, 200, 200);
 }
