@@ -7,6 +7,7 @@ import '../config/theme/app_colors.dart';
 import '../services/api_services.dart';
 import '../widgets/config_panel.dart';
 import '../widgets/result_card.dart';
+import '../widgets/smart_loading_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
@@ -420,6 +421,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: SmartLoadingScreen(),
+      );
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

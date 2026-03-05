@@ -95,6 +95,7 @@ flutter:
   # see https://flutter.dev/to/font-from-package
   assets:
     - assets/data/grid_tenerife.geojson
+    - assets/icons/icono_binario.png
 
 
 
