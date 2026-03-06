@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? errorMessage;
   String? resumenIA; // Variable separada para el texto
   bool isLoadingIA = false; // Estado de carga solo para el texto
+  bool _mostrarAjustes = false;
 
   // --- DATOS DEL MAPA Y CONFIG ---
   Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
@@ -538,44 +539,95 @@ class _HomeScreenState extends State<HomeScreen> {
                 PolygonLayer(polygons: poligonosADibujar),
             ],
           ),
+          // ---------------------------------------------------------
+          // HEADER RESPONSIVE: Botones + Barra de Búsqueda
+          // ---------------------------------------------------------
+          Positioned(
+            top: 50,
+            left: 15,
+            right: 15,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center, // Alinea todo verticalmente al centro
+              children: [
+                
+                // --- 1. BOTÓN IZQUIERDO: PERFILES ---
+                FloatingActionButton(
+                  heroTag: "btn_perfiles",
+                  backgroundColor: Colors.white,
+                  elevation: 4,
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Menú de Perfiles próximamente 🚀')),
+                    );
+                  },
+                  child: const Icon(Icons.groups_3, color: AppColors.primary, size: 32),
+                ),
 
-          if (_tabSeleccionada == 1)
-            Positioned(
-              top: 65, 
-              left: 20,
-              right: 20,
-              child: Card(
-                elevation: 4,
-                shadowColor: Colors.black26,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.search, color: Colors.grey),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: const InputDecoration(
-                            hintText: "Buscar calle o zona...",
-                            border: InputBorder.none,
-                          ),
-                          textInputAction: TextInputAction.search,
-                          onSubmitted: (val) => _buscarDireccion(val),
+                const SizedBox(width: 10), // Separación
+
+                // --- 2. BARRA DE BÚSQUEDA
+                Expanded(
+                  child: _tabSeleccionada == 1 
+                  ? Card(
+                      color: Colors.white,
+                      surfaceTintColor: Colors.transparent,
+                      elevation: 4,
+                      margin: EdgeInsets.zero, // Quitamos márgenes extra para que cuadre bien
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), // Más redondita
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.search, color: Colors.grey),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: _searchController,
+                                decoration: const InputDecoration(
+                                  hintText: "Buscar zona...",
+                                  border: InputBorder.none,
+                                  isDense: true, // Hace que la barra de texto sea más compacta
+                                ),
+                                textInputAction: TextInputAction.search,
+                                onSubmitted: (val) => _buscarDireccion(val),
+                              ),
+                            ),
+                            Container(width: 1, height: 24, color: Colors.grey[300]), 
+                            IconButton(
+                              icon: const Icon(Icons.my_location, color: AppColors.primary),
+                              onPressed: _irAMiUbicacion,
+                              tooltip: "Ir a mi ubicación",
+                              padding: EdgeInsets.zero, // Ajuste para que no desborde
+                              constraints: const BoxConstraints(), // Ajuste compacto
+                            ),
+                          ],
                         ),
                       ),
-                      Container(width: 1, height: 24, color: Colors.grey[300]), 
-                      IconButton(
-                        icon: const Icon(Icons.my_location, color: AppColors.primary),
-                        onPressed: _irAMiUbicacion,
-                        tooltip: "Ir a mi ubicación",
-                      ),
-                    ],
+                    )
+                  : const SizedBox(), // Si estamos en la pestaña 0, dejamos el hueco vacío
+                ),
+
+                const SizedBox(width: 10), // Separación
+
+                // --- 3. BOTÓN DERECHO: AJUSTES ---
+                FloatingActionButton(
+                  heroTag: "btn_ajustes",
+                  backgroundColor: _mostrarAjustes ? AppColors.primary : Colors.white,
+                  elevation: 4,
+                  onPressed: () {
+                    setState(() {
+                      _mostrarAjustes = !_mostrarAjustes;
+                    });
+                  },
+                  child: Icon(
+                    Icons.tune, 
+                    color: _mostrarAjustes ? Colors.white : AppColors.primary,
+                    size: 30,
                   ),
                 ),
-              ),
+              ],
             ),
+          ),
 
           if (_tabSeleccionada == 1)
             const IgnorePointer( 
@@ -616,7 +668,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Center(child: CircularProgressIndicator()),
             ),
 
-          if (_tabSeleccionada == 0)
+          if (_mostrarAjustes)
             DraggableScrollableSheet(
               initialChildSize: 0.4,
               minChildSize: 0.15,
