@@ -8,6 +8,7 @@ import '../services/api_services.dart';
 import '../widgets/config_panel.dart';
 import '../widgets/result_card.dart';
 import '../widgets/smart_loading_screen.dart';
+import '../screens/onboarding_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
@@ -648,8 +649,8 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_tabSeleccionada == 1 && mostrarBotonAnalizar && !isLoading)
             Positioned(
               bottom: 40,
-              left: 60,
-              right: 60,
+              left: 80,
+              right: 80,
               child: ElevatedButton.icon(
                 onPressed: _analizarZonaActual,
                 icon: const Icon(Icons.analytics_outlined, color: Colors.white),
@@ -661,7 +662,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  elevation: 6,
+                  elevation: 4,
                   shadowColor: AppColors.primary.withOpacity(0.5),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
@@ -714,6 +715,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+
+          Positioned(
+            top: 110, 
+            right: 15,
+            child: FloatingActionButton.small( // Usamos .small para que no estorbe mucho
+              heroTag: "btn_info",
+              backgroundColor: Colors.white,
+              elevation: 4,
+              onPressed: () {
+                // Navegamos a la pantalla de instrucciones
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+                );
+              },
+              child: const Icon(Icons.help_outline, color: AppColors.primary, size: 24),
+            ),
+          ),
 
           // --- CAMBIO: La tarjeta ahora sale en AMBAS pestañas si hay datos ---
           // --- TARJETA DE RESULTADO DINÁMICA ---
