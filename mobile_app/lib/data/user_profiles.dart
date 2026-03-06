@@ -129,7 +129,7 @@ final Map<String, UserProfile> perfilesPredefinidos = {
 
   "Familia": UserProfile(
     nombre: "Familia",
-    icono: "",
+    icono: "👨‍👩‍👧‍👦",
     sliders: {
       "Salud vital": 5.0,
       "Salud especializada": 4.0,
