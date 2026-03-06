@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ListView.separated(
                   itemCount: perfilesPredefinidos.length,
-                  separatorBuilder: (context, index) => const Divider(height: 1, indent: 70),
+                  separatorBuilder: (context, index) => const Divider(height: 1, indent: 25, endIndent: 25,),
                   itemBuilder: (context, index) {
                     // Sacamos el perfil de nuestro diccionario
                     String key = perfilesPredefinidos.keys.elementAt(index);
