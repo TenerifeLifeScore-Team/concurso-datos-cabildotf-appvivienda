@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../data/user_profiles.dart';
 import '../config/theme/app_colors.dart';
 import '../services/api_services.dart';
 import '../widgets/config_panel.dart';
@@ -95,6 +96,152 @@ class _HomeScreenState extends State<HomeScreen> {
     } finally {
       setState(() => isLoading = false);
     }
+  }
+
+  // --- APLICAR PERFIL DE USUARIO ---
+  void _aplicarPerfil(UserProfile perfil) {
+    setState(() {
+      // 1. Aplicamos los valores de los sliders
+      perfil.sliders.forEach((key, value) {
+        if (sliderValues.containsKey(key)) {
+          sliderValues[key] = value;
+        }
+      });
+
+      // 2. Apagamos TODOS los checkboxes por defecto
+      checkValues.updateAll((key, val) => false);
+
+      // 3. Encendemos SOLO los que dice el perfil
+      for (var checkId in perfil.checksMarcados) {
+        if (checkValues.containsKey(checkId)) {
+          checkValues[checkId] = true;
+        } else {
+          print("⚠️ Ojo: El checkbox '$checkId' no existe en la app.");
+        }
+      }
+    });
+
+    // 4. Recalculamos el mapa con los nuevos filtros
+    _actualizarMapa();
+
+    // 5. Le damos un aviso al usuario
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Cargando perfil: ${perfil.icono} ${perfil.nombre}...'),
+        backgroundColor: AppColors.primary,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  // --- ABRIR MENÚ DE PERFILES ---
+  void _abrirMenuPerfiles() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent, // Para poder hacer los bordes redondos
+      isScrollControlled: true, // Permite ajustar bien el tamaño
+      builder: (context) {
+        return Container(
+          // Ocupará la mitad de la pantalla
+          height: MediaQuery.of(context).size.height * 0.5, 
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            children: [
+              // 1. Tirador gris (igual que en los ajustes)
+              Container(
+                width: 40, 
+                height: 5,
+                margin: const EdgeInsets.only(top: 12, bottom: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300], 
+                  borderRadius: BorderRadius.circular(10)
+                ),
+              ),
+              
+              // 2. Título
+              const Text(
+                "Elige tu Perfil", 
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "Cargaremos los filtros ideales para ti al instante.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+                leading: const Text("🌍", style: TextStyle(fontSize: 32)),
+                title: const Text("Perfil por defecto", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                subtitle: const Text("Todos los filtros equilibrados", style: TextStyle(fontSize: 12)),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                onTap: () {
+                  Navigator.pop(context); // Cerramos el panel
+                  _aplicarPerfilPorDefecto(); // Aplicamos el reseteo
+                },
+              ),
+              
+              // Una línea separadora para distinguirlo de los demás
+              const Divider(height: 1, indent: 25, endIndent: 25),
+
+              // 3. La lista de perfiles generada automáticamente
+              Expanded(
+                child: ListView.separated(
+                  itemCount: perfilesPredefinidos.length,
+                  separatorBuilder: (context, index) => const Divider(height: 1, indent: 70),
+                  itemBuilder: (context, index) {
+                    // Sacamos el perfil de nuestro diccionario
+                    String key = perfilesPredefinidos.keys.elementAt(index);
+                    UserProfile perfil = perfilesPredefinidos[key]!;
+                    
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                      leading: Text(perfil.icono, style: const TextStyle(fontSize: 32)),
+                      title: Text(perfil.nombre, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                      onTap: () {
+                        Navigator.pop(context); // 1. Cerramos el panel
+                        _aplicarPerfil(perfil); // 2. ¡Aplicamos la magia!
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    );
+  }
+
+  // --- APLICAR PERFIL POR DEFECTO ---
+  void _aplicarPerfilPorDefecto() {
+    setState(() {
+      // 1. Ponemos TODOS los sliders a 3.0
+      sliderValues.updateAll((key, val) => 3.0);
+      
+      // 2. Encendemos TODOS los checkboxes
+      checkValues.updateAll((key, val) => true);
+    });
+
+    // 3. Recalculamos el mapa
+    _actualizarMapa();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Cargando perfil: 🌍 Por Defecto...'),
+        backgroundColor: AppColors.primary,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> _actualizarMapa() async {
@@ -559,11 +706,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Colors.white,
                   elevation: 4,
                   onPressed: () {
-                    _cerrarTarjeta();
+                    _cerrarTarjeta(); // Cerramos tarjeta si estaba abierta
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Menú de Perfiles próximamente 🚀')),
-                    );
+                    setState(() {
+                      _mostrarAjustes = false; 
+                    });
+                    
+                    _abrirMenuPerfiles();
                   },
                   child: const Icon(Icons.groups_3, color: AppColors.primary, size: 32),
                 ),
