@@ -234,7 +234,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final lon = double.parse(partes[1].trim());
 
     // 0. Hacemos zoom al hexágono
-    _mapController.move(LatLng(lat, lon), 11.5);
+    double latAjustada = lat - 0.06; 
+    
+    _mapController.move(LatLng(latAjustada, lon), 11.5);
 
     // 1. Obtenemos la nota que ya calculamos para ese hexágono
     double notaDelHexagono = scoresHexagonos[hexId] ?? 0.0;
@@ -556,6 +558,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: Colors.white,
                   elevation: 4,
                   onPressed: () {
+                    _cerrarTarjeta();
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Menú de Perfiles próximamente 🚀')),
                     );
@@ -615,6 +619,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: _mostrarAjustes ? AppColors.primary : Colors.white,
                   elevation: 4,
                   onPressed: () {
+                    _cerrarTarjeta();
+
                     setState(() {
                       _mostrarAjustes = !_mostrarAjustes;
                     });
@@ -718,11 +724,8 @@ class _HomeScreenState extends State<HomeScreen> {
               iaSummary: resumenIA,
               isLoadingIA: isLoadingIA,
               
-              // ¡LA MAGIA DE LA POSICIÓN!
-              // Si estamos en Explorar (0), sale arriba. Si en Mi Zona (1), abajo.
-              positionAlignment: _tabSeleccionada == 0 
-                  ? Alignment.topCenter 
-                  : Alignment.bottomCenter,
+              // Siempre anclada en la parte inferior, sin importar la pestaña
+              positionAlignment: Alignment.bottomCenter,
                   
               onTunePressed: _abrirConfiguracionModal,
               onClosePressed: _cerrarTarjeta,
