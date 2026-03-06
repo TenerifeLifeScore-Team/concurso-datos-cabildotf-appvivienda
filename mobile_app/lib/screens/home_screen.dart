@@ -81,13 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       });
 
-      final primerMacro = datos.keys.toList()..sort();
-
       setState(() {
         arbolConfig = datos;
         sliderValues = inicialesSliders;
         checkValues = inicialesChecks;
-        macroSeleccionada = primerMacro.isNotEmpty ? primerMacro.first : null;
+        String pestanaPorDefecto = "Servicios básicos"; 
+        
+        // Comprobamos que existe por seguridad, y si no, pillamos cualquiera
+        macroSeleccionada = datos.containsKey(pestanaPorDefecto) ? pestanaPorDefecto : datos.keys.first;
       });
 
       await _actualizarMapa();
@@ -163,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
               
               // 2. Título
               const Text(
-                "Elige tu Perfil", 
+                "Elige tu perfil", 
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),

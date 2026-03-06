@@ -40,7 +40,23 @@ class ConfigPanel extends StatelessWidget {
     if (errorMessage != null) return Center(child: Text(errorMessage!));
     if (arbolConfig == null) return const SizedBox();
 
-    final macros = arbolConfig!.keys.toList()..sort();
+    final List<String> ordenDeseado = [
+      "Servicios básicos",
+      "Ocio y estilo de vida",
+      "Restauración y socialización",
+      "Consumo y vida diaria",
+    ];
+
+    // 2. Ordenamos las pestañas basándonos en tu lista manual
+    final macros = arbolConfig!.keys.toList()
+      ..sort((a, b) {
+        int indexA = ordenDeseado.indexOf(a);
+        int indexB = ordenDeseado.indexOf(b);
+        // Si hay una macro nueva que no está en la lista, se va al final
+        if (indexA == -1) indexA = 999;
+        if (indexB == -1) indexB = 999;
+        return indexA.compareTo(indexB);
+      });
 
     return ListView(
       controller: scrollController,

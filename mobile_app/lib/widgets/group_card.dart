@@ -24,6 +24,11 @@ class GroupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // MAGIA UX: Comprobamos si TODOS están desmarcados para cambiar el texto del botón
+    final bool todosDesmarcados = items.every(
+      (item) => item.ids.every((id) => checkValues[id] == false)
+    );
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       elevation: 0,
@@ -68,16 +73,46 @@ class GroupCard extends StatelessWidget {
           ),
         ),
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "(Desmarca las que no necesites)",
-                style: TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
-              ),
+          // --- FILA DEL BOTÓN MARCAR/DESMARCAR ---
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 8, top: 0, bottom: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "(Personaliza tus opciones)",
+                  style: TextStyle(fontSize: 12, color: Colors.grey, fontStyle: FontStyle.italic),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () {
+                    // Recogemos todos los IDs de este grupo
+                    List<String> todosLosIds = [];
+                    for (var item in items) {
+                      todosLosIds.addAll(item.ids);
+                    }
+                    
+                    // Si están todos desmarcados, los marcamos (true). Si no, los desmarcamos (false).
+                    onCheckChanged(todosLosIds, todosDesmarcados);
+                  },
+                  child: Text(
+                    todosDesmarcados ? "Marcar todo" : "Desmarcar todo",
+                    style: TextStyle(
+                      fontSize: 12, 
+                      fontWeight: FontWeight.bold, 
+                      color: AppColors.primary.withOpacity(0.8)
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+          
+          // --- LISTA DE CHECKBOXES ---
           ...items.map((item) {
             final isChecked = item.ids.every((id) => checkValues[id] == true);
             return CheckboxListTile(
@@ -90,7 +125,7 @@ class GroupCard extends StatelessWidget {
                 if (val != null) onCheckChanged(item.ids, val);
               },
             );
-          }).toList(),
+          }).toList(), // El toList() ya no necesita ser forzado si usas map de esta forma, pero lo dejamos por seguridad.
           const SizedBox(height: 10),
         ],
       ),
