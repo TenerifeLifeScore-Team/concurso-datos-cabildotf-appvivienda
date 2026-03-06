@@ -630,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen> {
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              initialCenter: const LatLng(28.1400, -16.5230), 
+              initialCenter: const LatLng(28.2600, -16.5230), 
               initialZoom: 9.4,
               
               // --- NUEVO: DETECCIÓN DE CLICK PARA HEXÁGONOS ---
@@ -711,7 +711,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     setState(() {
                       _mostrarAjustes = false; 
                     });
-                    
+
                     _abrirMenuPerfiles();
                   },
                   child: const Icon(Icons.groups_3, color: AppColors.primary, size: 32),
@@ -797,7 +797,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           if (_tabSeleccionada == 1 && mostrarBotonAnalizar && !isLoading)
             Positioned(
-              bottom: 40,
+              bottom: 30,
               left: 80,
               right: 80,
               child: ElevatedButton.icon(
@@ -865,6 +865,74 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
+          // ---------------------------------------------------------
+          // LEYENDA DE COLORES (Pestaña Explorar)
+          // ---------------------------------------------------------
+          if (_tabSeleccionada == 0 && !_mostrarAjustes) // Solo en el mapa y si no está el panel abierto
+            Positioned(
+              bottom: 30,
+              left: 15,
+              right: 15,
+              child: IgnorePointer( // Para que los toques traspasen la leyenda y puedas mover el mapa
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.95), // Casi sólido para que se lea bien
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Puntuación LifeScore", 
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey[800])
+                      ),
+                      const SizedBox(height: 8),
+                      
+                      // 1. EL GRADIENTE (Con los porcentajes de tu Python)
+                      Container(
+                        height: 12,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppColors.scoreCritical, // Rojo (0)
+                              AppColors.scoreLow,      // Naranja (1.5)
+                              AppColors.scoreMedium,   // Amarillo (4.0)
+                              AppColors.scoreHigh,     // Verde (7.0)
+                              AppColors.scoreTop,      // Azul (10)
+                            ],
+                            // Los 'stops' son los cortes matemáticos de tu Python:
+                            // 0/10=0.0, 1.5/10=0.15, 4/10=0.40, 7/10=0.70, 10/10=1.0
+                            stops: [0.0, 0.15, 0.40, 0.70, 1.0], 
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      
+                      // 2. LOS NÚMEROS (De 2 en 2 alineados matemáticamente)
+                      SizedBox(
+                        height: 16,
+                        child: Stack(
+                          children: [
+                            const Align(alignment: Alignment(-1.0, 0), child: Text("0", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
+                            const Align(alignment: Alignment(-0.6, 0), child: Text("2", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                            const Align(alignment: Alignment(-0.2, 0), child: Text("4", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                            const Align(alignment: Alignment(0.2, 0), child: Text("6", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                            const Align(alignment: Alignment(0.6, 0), child: Text("8", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                            const Align(alignment: Alignment(1.0, 0), child: Text("10", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
           Positioned(
             top: 110, 
             right: 15,
@@ -924,7 +992,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (index == 0) {
               // MODO EXPLORAR: Lejano
               _mapController.move(
-                const LatLng(28.1400, -16.5230), 
+                const LatLng(28.2600, -16.5230), 
                 9.4
               );
             } else if (index == 1) {
