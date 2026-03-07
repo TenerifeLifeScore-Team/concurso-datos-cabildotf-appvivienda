@@ -51,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isCalculandoPunto = false;
   LatLng? _ultimaPosicionMiZona;
   String? nombreZonaActual;
+  bool _callesListas = false;
 
   // Controlador para el texto de búsqueda
   final TextEditingController _searchController = TextEditingController();
@@ -702,7 +703,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               children: [
-                if (_tabSeleccionada == 1)
+                if (_tabSeleccionada == 1 && _callesListas)
                   TileLayer(
                     key: ValueKey("capa_calle_$_tabSeleccionada"), 
                     urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -1060,36 +1061,33 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _tabSeleccionada,
         selectedItemColor: AppColors.primary,
         onTap: (index) {          
-          // 1. Cambiamos de pestaña y CERRAMOS LA TARJETA siempre
+          // 1. Cambiamos de pestaña y APAGAMOS las calles temporalmente
           setState(() {
             _tabSeleccionada = index;
+            _callesListas = false; // ¡El truco!
             
-            // Limpiamos los resultados viejos incondicionalmente
+            // Limpiamos resultados
             datosPuntoEspecifico = null; 
             resumenIA = null;
             nombreZonaActual = null;
             
-            // Si vamos a Mi Zona, reactivamos su botón
-            if (index == 1) {
-              mostrarBotonAnalizar = true;
-            }
+            if (index == 1) mostrarBotonAnalizar = true;
           });
           
-          // 2. TRUCO: Esperamos a que termine de repintar la pantalla (1 frame)
+          // 2. Mantenemos TU lógica intacta de esperar 1 frame
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (index == 0) {
-              // MODO EXPLORAR: Lejano
-              _mapController.move(
-                const LatLng(28.2600, -16.5230), 
-                9.4
-              );
+              _mapController.move(const LatLng(28.2600, -16.5230), 9.4);
             } else if (index == 1) {
-              // MODO MI ZONA: Santa Cruz o ultima posición usuario
               final destino = _ultimaPosicionMiZona ?? const LatLng(28.4636, -16.2518);
-              _mapController.move(
-                destino, 
-                13.0 // Mantenemos un zoom cercano para ver calles
-              );
+              _mapController.move(destino, 13.0);
+            }
+
+            // 3. La cámara ya saltó al zoom 13.0, ¡ahora sí encendemos las calles!
+            if (mounted) {
+              setState(() {
+                _callesListas = true;
+              });
             }
           });
         },
