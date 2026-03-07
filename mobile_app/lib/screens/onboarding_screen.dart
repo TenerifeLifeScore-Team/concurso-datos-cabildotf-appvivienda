@@ -14,21 +14,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _paginaActual = 0;
 
-  // INSTRUCCIONES
   final List<Map<String, dynamic>> _paginas = [
     {
-      "titulo": "Bienvenido a LifeScore 🇮🇨",
-      "texto": "Descubre tu zona ideal para vivir en Tenerife basándote en lo que realmente te importa.",
-      "icono": Icons.travel_explore_rounded, // Cámbialo por "imagen": "assets/images/tu_foto.png" si usas fotos
+      "titulo": "Bienvenido a Tenerife LifeScore",
+      "texto": "Descubre tu zona ideal para vivir en Tenerife. Nuestra app evalúa cada rincón de la isla basándose en lo que realmente te importa para encontrar tu lugar perfecto.",
+      "imagen": "assets/icons/icono_binario.png", 
     },
     {
-      "titulo": "Ajusta tus Preferencias",
-      "texto": "Abre el menú de ajustes y usa los sliders para darle más importancia a zonas verdes, ocio, transporte...",
+      "titulo": "Explorar vs Mi Zona",
+      "texto": "Usa la pestaña 'Explorar' para ver el mapa de calor interactivo de toda la isla. Cambia a 'Mi Zona' si prefieres buscar una dirección concreta y analizar todo su entorno.",
+      "icono": Icons.map_rounded,
+    },
+    {
+      "titulo": "Perfiles Rápidos",
+      "texto": "¿Eres estudiante, vienes en familia o buscas salir de fiesta? Toca el icono de perfil arriba a la izquierda para cargar al instante los filtros ideales para tu estilo de vida.",
+      "icono": Icons.people_alt_rounded,
+    },
+    {
+      "titulo": "Ajusta a tu Medida",
+      "texto": "Abre el menú de ajustes para usar los sliders y darle más importancia a los servicios que quieras. ¡Abre las tarjetas para afinar marcando o desmarcando servicios específicos!",
       "icono": Icons.tune_rounded,
     },
     {
       "titulo": "IA a tu servicio",
-      "texto": "Toca cualquier zona en el mapa y nuestro asesor virtual analizará los datos para darte un resumen al instante.",
+      "texto": "Toca cualquier hexágono en el mapa o analiza una ubicación en \"Mi Zona\" y nuestro asesor virtual analizará cientos de datos al instante para darte un resumen detallado de los pros y contras de esa zona.",
       "icono": Icons.auto_awesome_rounded,
     }
   ];
@@ -85,10 +94,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // Aquí pones tu icono o imagen
-                        Icon(pagina["icono"], size: 120, color: AppColors.primary),
-                        /* SI QUIERES USAR TUS IMÁGENES, QUITA EL ICON Y USA ESTO:
-                           Image.asset(pagina["imagen"], height: 250),
-                        */
+                        if (pagina.containsKey("imagen"))
+                          Image.asset(pagina["imagen"], height: 130, color: AppColors.primary),
+                          
+                        // Si la página tiene el campo "icono", dibuja el icono de Flutter
+                        if (pagina.containsKey("icono"))
+                          Icon(pagina["icono"], size: 120, color: AppColors.primary),
                         const SizedBox(height: 40),
                         Text(
                           pagina["titulo"],

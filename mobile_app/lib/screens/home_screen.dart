@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import '../data/user_profiles.dart';
 import '../config/theme/app_colors.dart';
 import '../services/api_services.dart';
@@ -10,8 +14,6 @@ import '../widgets/config_panel.dart';
 import '../widgets/result_card.dart';
 import '../widgets/smart_loading_screen.dart';
 import '../screens/onboarding_screen.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -56,10 +58,30 @@ class _HomeScreenState extends State<HomeScreen> {
   // Para controlar si mostramos el botón de "Analizar"
   bool mostrarBotonAnalizar = true;
 
+  // Variables para el internet
+  bool _hayInternet = true;
+  StreamSubscription? _suscripcionInternet;
+
   @override
   void initState() {
+    // --- ESCUCHADOR DE INTERNET ---
+    _suscripcionInternet = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+      if (mounted) {
+        setState(() {
+          // Comprobamos si el resultado es que NO hay ninguna conexión
+          _hayInternet = !result.every((r) => r == ConnectivityResult.none);
+        });
+      }
+    });
+
     super.initState();
     _inicializarTodo();
+  }
+
+  @override
+  void dispose() {
+    _suscripcionInternet?.cancel(); // Apagamos el escuchador
+    super.dispose();
   }
 
   Future<void> _inicializarTodo() async {
@@ -721,45 +743,50 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 10), // Separación
 
                 // --- 2. BARRA DE BÚSQUEDA
+                // --- 2. BARRA DE BÚSQUEDA ANIMADA (FADE) ---
                 Expanded(
-                  child: _tabSeleccionada == 1 
-                  ? Card(
-                      color: Colors.white,
-                      surfaceTintColor: Colors.transparent,
-                      elevation: 4,
-                      margin: EdgeInsets.zero, // Quitamos márgenes extra para que cuadre bien
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), // Más redondita
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.search, color: Colors.grey),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: TextField(
-                                controller: _searchController,
-                                decoration: const InputDecoration(
-                                  hintText: "Buscar zona...",
-                                  border: InputBorder.none,
-                                  isDense: true, // Hace que la barra de texto sea más compacta
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 500),
+                    child: _tabSeleccionada == 1 
+                    ? Card(
+                        key: const ValueKey("barra_busqueda"), // ¡La llave es obligatoria para animar!
+                        color: Colors.white,
+                        surfaceTintColor: Colors.transparent,
+                        elevation: 4,
+                        margin: EdgeInsets.zero, 
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)), 
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.search, color: Colors.grey),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: TextField(
+                                  controller: _searchController,
+                                  decoration: const InputDecoration(
+                                    hintText: "Buscar zona...",
+                                    border: InputBorder.none,
+                                    isDense: true, 
+                                  ),
+                                  textInputAction: TextInputAction.search,
+                                  onSubmitted: (val) => _buscarDireccion(val),
                                 ),
-                                textInputAction: TextInputAction.search,
-                                onSubmitted: (val) => _buscarDireccion(val),
                               ),
-                            ),
-                            Container(width: 1, height: 24, color: Colors.grey[300]), 
-                            IconButton(
-                              icon: const Icon(Icons.my_location, color: AppColors.primary),
-                              onPressed: _irAMiUbicacion,
-                              tooltip: "Ir a mi ubicación",
-                              padding: EdgeInsets.zero, // Ajuste para que no desborde
-                              constraints: const BoxConstraints(), // Ajuste compacto
-                            ),
-                          ],
+                              Container(width: 1, height: 24, color: Colors.grey[300]), 
+                              IconButton(
+                                icon: const Icon(Icons.my_location, color: AppColors.primary),
+                                onPressed: _irAMiUbicacion,
+                                tooltip: "Ir a mi ubicación",
+                                padding: EdgeInsets.zero, 
+                                constraints: const BoxConstraints(), 
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  : const SizedBox(), // Si estamos en la pestaña 0, dejamos el hueco vacío
+                      )
+                    : const SizedBox.shrink(key: ValueKey("hueco_vacio")), // Hueco vacío si estamos en la pestaña Explorar
+                  ),
                 ),
 
                 const SizedBox(width: 10), // Separación
@@ -825,8 +852,15 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Center(child: CircularProgressIndicator()),
             ),
 
-          if (_mostrarAjustes)
-            DraggableScrollableSheet(
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOutExpo, // Curva premium para que empiece rápido y frene suave
+            // Aquí está la magia: Si es true, top es 0. Si es false, lo hundimos debajo de la pantalla.
+            top: _mostrarAjustes ? 0 : MediaQuery.of(context).size.height,
+            bottom: _mostrarAjustes ? 0 : -MediaQuery.of(context).size.height,
+            left: 0,
+            right: 0,
+            child: DraggableScrollableSheet(
               initialChildSize: 0.4,
               minChildSize: 0.15,
               maxChildSize: 0.60,
@@ -865,6 +899,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+          ),
 
           // ---------------------------------------------------------
           // LEYENDA DE COLORES (Pestaña Explorar)
@@ -954,21 +989,69 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // --- CAMBIO: La tarjeta ahora sale en AMBAS pestañas si hay datos ---
           // --- TARJETA DE RESULTADO DINÁMICA ---
-          if (datosPuntoEspecifico != null) 
-            ResultCard(
-              placeName: nombreZonaActual,
-              score: datosPuntoEspecifico!['score'],
-              iaSummary: resumenIA,
-              isLoadingIA: isLoadingIA,
-              
-              // Siempre anclada en la parte inferior, sin importar la pestaña
-              positionAlignment: Alignment.bottomCenter,
-                  
-              onTunePressed: _abrirConfiguracionModal,
-              onClosePressed: _cerrarTarjeta,
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            child: datosPuntoEspecifico != null 
+              ? ResultCard(
+                  key: const ValueKey("tarjeta_resultados"), // ¡La llave es obligatoria para animar!
+                  placeName: nombreZonaActual,
+                  score: datosPuntoEspecifico!['score'],
+                  iaSummary: resumenIA,
+                  isLoadingIA: isLoadingIA,
+                  positionAlignment: Alignment.bottomCenter,
+                  onTunePressed: _abrirConfiguracionModal,
+                  onClosePressed: _cerrarTarjeta,
+                )
+              : const SizedBox.shrink(key: ValueKey("tarjeta_vacia")), // Se vuelve un pixel invisible cuando no hay datos
+          ),
+            
+          // ---------------------------------------------------------
+          // PANTALLA DE SIN CONEXIÓN (Bloquea la app)
+          // ---------------------------------------------------------
+          if (!_hayInternet)
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.white, // Tapa la app con un blanco casi sólido
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.wifi_off_rounded, size: 100, color: Colors.grey),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "¡Vaya! Sin conexión", 
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87)
+                  ),
+                  const SizedBox(height: 12),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: Text(
+                      "Tenerife LifeScore necesita internet para conectarse con nuestra IA y descargar los datos del mapa.\n\nRevisa tu conexión Wi-Fi o datos móviles para continuar descubriendo la isla.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16, color: Colors.black54, height: 1.5),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  // Un botón visual que anima al usuario a reintentar (aunque se quita solo al volver la red)
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
+                    onPressed: () {}, // No hace falta código, el listener de arriba lo quita automáticamente
+                    icon: const Icon(Icons.refresh),
+                    label: const Text("Buscando red..."),
+                  )
+                ],
+              ),
             ),
         ],
       ),
+      
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabSeleccionada,
         selectedItemColor: AppColors.primary,
