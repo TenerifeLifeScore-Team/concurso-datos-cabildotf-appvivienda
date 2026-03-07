@@ -650,67 +650,71 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_tabSeleccionada == 0)
             Positioned.fill(child: Container(color: const Color(0xFFF5F7FA))),
 
-          FlutterMap(
-            mapController: _mapController,
-            options: MapOptions(
-              initialCenter: const LatLng(28.2600, -16.5230), 
-              initialZoom: 9.4,
-              
-              // --- NUEVO: DETECCIÓN DE CLICK PARA HEXÁGONOS ---
-              onTap: (tapPosition, point) {
-                if (_tabSeleccionada == 0) {
-                  int indexTocado = -1;
-                  for (int i = 0; i < poligonosADibujar.length; i++) {
-                    if (_isPointInPolygon(point, poligonosADibujar[i].points)) {
-                      indexTocado = i;
-                      break;
+          // Envolvemos el mapa en Semantics para accesibilidad (VoiceOver / TalkBack)
+          Semantics(
+            label: "Mapa interactivo de Tenerife. Mueve el mapa y pulsa en las zonas para ver su puntuación.",
+            child: FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: const LatLng(28.2600, -16.5230), 
+                initialZoom: 9.4,
+                
+                // --- DETECCIÓN DE CLICK PARA HEXÁGONOS ---
+                onTap: (tapPosition, point) {
+                  if (_tabSeleccionada == 0) {
+                    int indexTocado = -1;
+                    for (int i = 0; i < poligonosADibujar.length; i++) {
+                      if (_isPointInPolygon(point, poligonosADibujar[i].points)) {
+                        indexTocado = i;
+                        break;
+                      }
+                    }
+                    if (indexTocado != -1) {
+                      // 1. Guardamos cuál se ha tocado y pintamos el borde negro
+                      _indexSeleccionado = indexTocado;
+                      _refrescarBordes(); 
+                      
+                      // 2. Llamamos a tu función de siempre
+                      final props = propiedadesHexagonos[indexTocado];
+                      _analizarHexagono(props['hex_id'], props['centroide'], props['municipio']);
+                    } else {
+                      _cerrarTarjeta();
+                    }
+                  } else {
+                     _cerrarTarjeta();
+                  }
+                },
+
+                onPositionChanged: (pos, hasGesture) {
+                  if (_tabSeleccionada == 1) {
+                    _ultimaPosicionMiZona = pos.center;
+                  }
+                  if (hasGesture) {
+                    if (!mostrarBotonAnalizar) {
+                      setState(() {
+                        mostrarBotonAnalizar = true;
+                        datosPuntoEspecifico = null; 
+                        resumenIA = null;
+                        nombreZonaActual = null;
+                      });
                     }
                   }
-                  if (indexTocado != -1) {
-                    // 1. Guardamos cuál se ha tocado y pintamos el borde negro
-                    _indexSeleccionado = indexTocado;
-                    _refrescarBordes(); 
-                    
-                    // 2. Llamamos a tu función de siempre
-                    final props = propiedadesHexagonos[indexTocado];
-                    _analizarHexagono(props['hex_id'], props['centroide'], props['municipio']);
-                  } else {
-                    _cerrarTarjeta();
-                  }
-                } else {
-                   _cerrarTarjeta();
-                }
-              },
-
-              onPositionChanged: (pos, hasGesture) {
-                if (_tabSeleccionada == 1) {
-                  _ultimaPosicionMiZona = pos.center;
-                }
-                if (hasGesture) {
-                  if (!mostrarBotonAnalizar) {
-                    setState(() {
-                      mostrarBotonAnalizar = true;
-                      datosPuntoEspecifico = null; 
-                      resumenIA = null;
-                      nombreZonaActual = null;
-                    });
-                  }
-                }
-              },
+                },
+              ),
+              children: [
+                if (_tabSeleccionada == 1)
+                  TileLayer(
+                    key: ValueKey("capa_calle_$_tabSeleccionada"), 
+                    urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+                    subdomains: const ['a', 'b', 'c', 'd'],
+                    userAgentPackageName: 'com.tenerifelifescore.app',
+                    tileDisplay: const TileDisplay.instantaneous(), // Sin efecto borroso
+                  ),
+                
+                if (_tabSeleccionada == 0) 
+                  PolygonLayer(polygons: poligonosADibujar),
+              ],
             ),
-            children: [
-              if (_tabSeleccionada == 1)
-                TileLayer(
-                  key: ValueKey("capa_calle_$_tabSeleccionada"), 
-                  urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-                  subdomains: const ['a', 'b', 'c', 'd'],
-                  userAgentPackageName: 'com.tenerifelifescore.app',
-                  tileDisplay: const TileDisplay.instantaneous(), // Sin efecto borroso
-                ),
-              
-              if (_tabSeleccionada == 0) 
-                PolygonLayer(polygons: poligonosADibujar),
-            ],
           ),
           // ---------------------------------------------------------
           // HEADER RESPONSIVE: Botones + Barra de Búsqueda
@@ -726,6 +730,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // --- 1. BOTÓN IZQUIERDO: PERFILES ---
                 FloatingActionButton(
                   heroTag: "btn_perfiles",
+                  tooltip: "Abrir menú de perfiles de usuario",
                   backgroundColor: Colors.white,
                   elevation: 4,
                   onPressed: () {
@@ -743,7 +748,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(width: 10), // Separación
 
                 // --- 2. BARRA DE BÚSQUEDA
-                // --- 2. BARRA DE BÚSQUEDA ANIMADA (FADE) ---
                 Expanded(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
@@ -794,6 +798,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // --- 3. BOTÓN DERECHO: AJUSTES ---
                 FloatingActionButton(
                   heroTag: "btn_ajustes",
+                  tooltip: _mostrarAjustes ? "Cerrar ajustes" : "Abrir ajustes de filtros",
                   backgroundColor: _mostrarAjustes ? AppColors.primary : Colors.white,
                   elevation: 4,
                   onPressed: () {
@@ -854,8 +859,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           AnimatedPositioned(
             duration: const Duration(milliseconds: 400),
-            curve: Curves.easeOutExpo, // Curva premium para que empiece rápido y frene suave
-            // Aquí está la magia: Si es true, top es 0. Si es false, lo hundimos debajo de la pantalla.
+            curve: Curves.easeOutExpo, 
             top: _mostrarAjustes ? 0 : MediaQuery.of(context).size.height,
             bottom: _mostrarAjustes ? 0 : -MediaQuery.of(context).size.height,
             left: 0,
@@ -904,76 +908,76 @@ class _HomeScreenState extends State<HomeScreen> {
           // ---------------------------------------------------------
           // LEYENDA DE COLORES (Pestaña Explorar)
           // ---------------------------------------------------------
-          if (_tabSeleccionada == 0 && !_mostrarAjustes) // Solo en el mapa y si no está el panel abierto
+          if (_tabSeleccionada == 0 && !_mostrarAjustes) 
             Positioned(
               bottom: 30,
               left: 15,
               right: 15,
-              child: IgnorePointer( // Para que los toques traspasen la leyenda y puedas mover el mapa
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.95), // Casi sólido para que se lea bien
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Puntuación LifeScore", 
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey[800])
-                      ),
-                      const SizedBox(height: 8),
-                      
-                      // 1. EL GRADIENTE (Con los porcentajes de tu Python)
-                      Container(
-                        height: 12,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.scoreCritical, // Rojo (0)
-                              AppColors.scoreLow,      // Naranja (1.5)
-                              AppColors.scoreMedium,   // Amarillo (4.0)
-                              AppColors.scoreHigh,     // Verde (7.0)
-                              AppColors.scoreTop,      // Azul (10)
-                            ],
-                            // Los 'stops' son los cortes matemáticos de tu Python:
-                            // 0/10=0.0, 1.5/10=0.15, 4/10=0.40, 7/10=0.70, 10/10=1.0
-                            stops: [0.0, 0.15, 0.40, 0.70, 1.0], 
+              child: Semantics( // <--- AQUÍ ESTÁ LA MAGIA PARA LA ACCESIBILIDAD
+                label: "Puntuación LifeScore. Leyenda de puntuación: de 0 a 10. El 0 es rojo, indicando la puntuación más baja, y el 10 es azul, indicando la puntuación máxima.",
+                child: IgnorePointer( 
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.95), 
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Puntuación LifeScore", 
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey[800])
+                        ),
+                        const SizedBox(height: 8),
+                        
+                        Container(
+                          height: 12,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(
+                              colors: [
+                                AppColors.scoreCritical, // Rojo (0)
+                                AppColors.scoreLow,      // Naranja (1.5)
+                                AppColors.scoreMedium,   // Amarillo (4.0)
+                                AppColors.scoreHigh,     // Verde (7.0)
+                                AppColors.scoreTop,      // Azul (10)
+                              ],
+                              stops: [0.0, 0.15, 0.40, 0.70, 1.0], 
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      
-                      // 2. LOS NÚMEROS (De 2 en 2 alineados matemáticamente)
-                      SizedBox(
-                        height: 16,
-                        child: Stack(
-                          children: [
-                            const Align(alignment: Alignment(-1.0, 0), child: Text("0", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
-                            const Align(alignment: Alignment(-0.6, 0), child: Text("2", style: TextStyle(fontSize: 10, color: Colors.grey))),
-                            const Align(alignment: Alignment(-0.2, 0), child: Text("4", style: TextStyle(fontSize: 10, color: Colors.grey))),
-                            const Align(alignment: Alignment(0.2, 0), child: Text("6", style: TextStyle(fontSize: 10, color: Colors.grey))),
-                            const Align(alignment: Alignment(0.6, 0), child: Text("8", style: TextStyle(fontSize: 10, color: Colors.grey))),
-                            const Align(alignment: Alignment(1.0, 0), child: Text("10", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
-                          ],
-                        ),
-                      )
-                    ],
+                        const SizedBox(height: 6),
+                        
+                        const SizedBox(
+                          height: 16,
+                          child: Stack(
+                            children: [
+                              Align(alignment: Alignment(-1.0, 0), child: Text("0", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
+                              Align(alignment: Alignment(-0.6, 0), child: Text("2", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                              Align(alignment: Alignment(-0.2, 0), child: Text("4", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                              Align(alignment: Alignment(0.2, 0), child: Text("6", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                              Align(alignment: Alignment(0.6, 0), child: Text("8", style: TextStyle(fontSize: 10, color: Colors.grey))),
+                              Align(alignment: Alignment(1.0, 0), child: Text("10", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold))),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-
+          
           Positioned(
             top: 110, 
             right: 15,
             child: FloatingActionButton.small( // Usamos .small para que no estorbe mucho
               heroTag: "btn_info",
+              tooltip: "Ver instrucciones y ayuda",
               backgroundColor: Colors.white,
               elevation: 4,
               onPressed: () {
