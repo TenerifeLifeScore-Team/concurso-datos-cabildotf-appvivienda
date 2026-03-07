@@ -31,17 +31,20 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
     super.dispose();
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: Container(
+    // CAMBIO: Quitamos Positioned.fill y usamos Scaffold para que sea una pantalla real
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,      // Empieza arriba
-            end: Alignment.bottomRight,     // Termina abajo
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [
-              AppColors.terciary,             // Color normal arriba
-              AppColors.cuaternary, // Un toque de tu color principal abajo
+              AppColors.terciary,
+              AppColors.cuaternary,
             ],
           ),
         ),
@@ -53,13 +56,16 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
               padding: const EdgeInsets.all(20),
               child: Image.asset(
                 'assets/icons/icono_binario.png', 
-                width: 150, // Ajusta el tamaño como veas que queda mejor
+                width: 150,
                 height: 150,
                 fit: BoxFit.contain,
-                color: Colors.white
+                color: Colors.white,
+                // Añadimos esto por si acaso la imagen tarda un pelo en cargar
+                errorBuilder: (context, error, stackTrace) => 
+                    const Icon(Icons.location_on, size: 100, color: Colors.white),
               ),
             ),
-            const SizedBox(height: 0),
+            const SizedBox(height: 10),
             
             // --- Título ---
             const Text(
@@ -72,9 +78,9 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
             const CircularProgressIndicator(color: Colors.white),
             const SizedBox(height: 30),
 
-            // --- MENSAJE DINÁMICO (Aparece a los 5 segundos) ---
+            // --- MENSAJE DINÁMICO ---
             AnimatedOpacity(
-              opacity: _showDelayedMessage ? 1.0 : 0.0, // Animación suave
+              opacity: _showDelayedMessage ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 800),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -85,10 +91,10 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
                     ),
                     const SizedBox(height: 8),
-                    Text(
+                    const Text(
                       "Como usamos un servidor gratuito, el primer arranque del día tarda un poquito. ¡Gracias por la paciencia! 🦦",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 14, height: 1.4),
+                      style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
                     ),
                   ],
                 ),
