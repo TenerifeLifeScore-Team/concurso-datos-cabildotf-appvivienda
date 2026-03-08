@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>LifeScore necesita acceso a tu ubicación para centrar el mapa y analizar tu entorno en Tenerife.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>LifeScore necesita tu ubicación para mostrar tu zona actual.</string>
 </dict>
 </plist>
