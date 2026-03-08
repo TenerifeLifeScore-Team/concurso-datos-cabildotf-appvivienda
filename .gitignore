@@ -1,0 +1,22 @@
+# 0. R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# 1. Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 2. Entornos Virtuales
+venv/
+env/
+.env
+
+# 3. Jupyter Notebooks
+.ipynb_checkpoints/
+
+# 4. Archivos del Sistema Operativo
+.DS_Store
+Thumbs.db

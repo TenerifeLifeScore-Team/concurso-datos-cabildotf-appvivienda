@@ -1,0 +1,456 @@
+{
+  "type": "FeatureCollection",
+  "name": "Paradas de tranvía",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 1,
+        "parada_nombre": "Intercambiador",
+        "parada_descripcion": "Parada y Oficina Comercial del Metropolitano",
+        "parada_latitud": 28.45893894,
+        "parada_longitud": -16.25105038,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/INT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.25105038,
+          28.45893894
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 2,
+        "parada_nombre": "Fundación",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46451144,
+        "parada_longitud": -16.2482308,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/FUN"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.2482308,
+          28.46451144
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 3,
+        "parada_nombre": "Teatro Guimerá",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46628303,
+        "parada_longitud": -16.2516372,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/GUI"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.2516372,
+          28.46628303
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 4,
+        "parada_nombre": "Weyler",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46731878,
+        "parada_longitud": -16.2557679,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/WEY"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.2557679,
+          28.46731878
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 5,
+        "parada_nombre": "La Paz",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46775658,
+        "parada_longitud": -16.26066277,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/PAZ"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.26066277,
+          28.46775658
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 6,
+        "parada_nombre": "Puente Zurita",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46784198,
+        "parada_longitud": -16.26474376,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/ZUR"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.26474376,
+          28.46784198
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 7,
+        "parada_nombre": "Cruz del Senor",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46435389,
+        "parada_longitud": -16.27203173,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/CRS"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.27203173,
+          28.46435389
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 8,
+        "parada_nombre": "Conservatorio",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46206183,
+        "parada_longitud": -16.27783832,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/CON"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.27783832,
+          28.46206183
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 9,
+        "parada_nombre": "Chimisay",
+        "parada_descripcion": null,
+        "parada_latitud": 28.45734859,
+        "parada_longitud": -16.28118555,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/CHI"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.28118555,
+          28.45734859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 10,
+        "parada_nombre": "Príncipes de Espana",
+        "parada_descripcion": null,
+        "parada_latitud": 28.45330559,
+        "parada_longitud": -16.28503032,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/PPE"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.28503032,
+          28.45330559
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 11,
+        "parada_nombre": "Hospital La Candelaria",
+        "parada_descripcion": null,
+        "parada_latitud": 28.44907883,
+        "parada_longitud": -16.28694351,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/CAN"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.28694351,
+          28.44907883
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 12,
+        "parada_nombre": "Taco",
+        "parada_descripcion": null,
+        "parada_latitud": 28.44692754,
+        "parada_longitud": -16.29543796,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/TAC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.29543796,
+          28.44692754
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 13,
+        "parada_nombre": "El Cardonal",
+        "parada_descripcion": "Parada con transbordo Linea 1 y 2",
+        "parada_latitud": 28.45167366,
+        "parada_longitud": -16.29374333,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/CAR"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.29374333,
+          28.45167366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 14,
+        "parada_nombre": "Hospital Universitario",
+        "parada_descripcion": "Parada con transbordo Linea 1 y 2",
+        "parada_latitud": 28.45757884,
+        "parada_longitud": -16.29273265,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/HOS"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.29273265,
+          28.45757884
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 15,
+        "parada_nombre": "Las Mantecas",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46359628,
+        "parada_longitud": -16.29690095,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/MAN"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.29690095,
+          28.46359628
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 16,
+        "parada_nombre": "Campus Guajara",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46874336,
+        "parada_longitud": -16.30216762,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/GUA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.30216762,
+          28.46874336
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 17,
+        "parada_nombre": "Gracia",
+        "parada_descripcion": null,
+        "parada_latitud": 28.47338359,
+        "parada_longitud": -16.30543852,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/GRA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.30543852,
+          28.47338359
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 18,
+        "parada_nombre": "Museo de la Ciencia",
+        "parada_descripcion": null,
+        "parada_latitud": 28.47636654,
+        "parada_longitud": -16.30921226,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/MCI"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.30921226,
+          28.47636654
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 19,
+        "parada_nombre": "Cruz de Piedra",
+        "parada_descripcion": null,
+        "parada_latitud": 28.4796278,
+        "parada_longitud": -16.31230388,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/CPI"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.31230388,
+          28.4796278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 20,
+        "parada_nombre": "Padre Anchieta",
+        "parada_descripcion": null,
+        "parada_latitud": 28.480847,
+        "parada_longitud": -16.316764,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/ANC"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.316764,
+          28.480847
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 21,
+        "parada_nombre": "La Trinidad",
+        "parada_descripcion": "Parada y Oficina Comercial del Metropolitano",
+        "parada_latitud": 28.48579349,
+        "parada_longitud": -16.31643223,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/TRI"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.31643223,
+          28.48579349
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 22,
+        "parada_nombre": "La Cuesta",
+        "parada_descripcion": "Parada Final",
+        "parada_latitud": 28.46707,
+        "parada_longitud": -16.28602,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/CUE"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.28602,
+          28.46707
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 23,
+        "parada_nombre": "Ingenieros",
+        "parada_descripcion": null,
+        "parada_latitud": 28.46235,
+        "parada_longitud": -16.29104,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/ING"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.29104,
+          28.46235
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 24,
+        "parada_nombre": "San Jeronimo",
+        "parada_descripcion": null,
+        "parada_latitud": 28.44787,
+        "parada_longitud": -16.29814,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/JER"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.29814,
+          28.44787
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "parada_id": 26,
+        "parada_nombre": "Tíncer",
+        "parada_descripcion": null,
+        "parada_latitud": 28.44376,
+        "parada_longitud": -16.30459,
+        "parada_url": "http://tranviaonline.metrotenerife.com/#paneles/TIN"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16.30459,
+          28.44376
+        ]
+      }
+    }
+  ]
+}

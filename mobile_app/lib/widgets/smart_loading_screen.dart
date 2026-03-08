@@ -1,0 +1,105 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import '../config/theme/app_colors.dart';
+
+class SmartLoadingScreen extends StatefulWidget {
+  const SmartLoadingScreen({super.key});
+
+  @override
+  State<SmartLoadingScreen> createState() => _SmartLoadingScreenState();
+}
+
+class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
+  bool _showDelayedMessage = false;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Arrancamos el cronómetro independiente de 5 segundos
+    _timer = Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() => _showDelayedMessage = true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Si la pantalla de carga desaparece antes de los 5s, matamos el cronómetro
+    _timer?.cancel();
+    super.dispose();
+  }
+
+ @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.terciary,
+              AppColors.cuaternary,
+            ],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Image.asset(
+                'assets/icons/icono_binario.png', 
+                width: 150,
+                height: 150,
+                fit: BoxFit.contain,
+                color: Colors.white,
+                errorBuilder: (context, error, stackTrace) => 
+                    const Icon(Icons.location_on, size: 100, color: Colors.white),
+              ),
+            ),
+            const SizedBox(height: 10),
+            
+            // --- Título ---
+            const Text(
+              "Tenerife LifeScore", 
+              style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold, letterSpacing: 1.2),
+            ),
+            const SizedBox(height: 40),
+            
+            // --- Rueda de carga ---
+            const CircularProgressIndicator(color: Colors.white),
+            const SizedBox(height: 30),
+
+            // --- Mensaje dinámico ---
+            AnimatedOpacity(
+              opacity: _showDelayedMessage ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 800),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  children: [
+                    const Text(
+                      "Despertando al servidor...",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      "Como usamos un servidor gratuito, el primer arranque del día tarda un poquito. ¡Gracias por la paciencia! 🦦",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
