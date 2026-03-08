@@ -105,10 +105,4 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  # Este es el icono principal (el azulito) que se usará en iOS y Android por defecto
   image_path: "assets/icons/icono_full.png"
-  
-  # Configuración especial para Android (Iconos Adaptativos)
-  # Ponemos un fondo azul (ajusta el código HEX a tu gusto) y tu icono transparente encima
-  # adaptive_icon_background: "#2B65F5" 
-  # adaptive_icon_foreground: "assets/icons/icono_binario.png"

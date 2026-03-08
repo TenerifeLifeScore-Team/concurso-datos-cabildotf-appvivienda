@@ -28,14 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool isLoading = true;
   String? errorMessage;
-  String? resumenIA; // Variable separada para el texto
-  bool isLoadingIA = false; // Estado de carga solo para el texto
+  String? resumenIA;
+  bool isLoadingIA = false;
   bool _mostrarAjustes = false;
 
   // --- DATOS DEL MAPA Y CONFIG ---
   Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
   List<Polygon> poligonosADibujar = [];
-  List<Map<String, dynamic>> propiedadesHexagonos = []; // NUEVO: Para guardar municipio y centroide
+  List<Map<String, dynamic>> propiedadesHexagonos = [];
   dynamic geojsonRaw;
   Map<String, double> scoresHexagonos = {};
   int _indexSeleccionado = -1;
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, double> sliderValues = {};
   Map<String, bool> checkValues = {};
 
-  // --- ESTADO RADAR (ZONA ESPECÍFICA) ---
+  // --- MI ZONA ---
   Map<String, dynamic>? datosPuntoEspecifico;
   bool isCalculandoPunto = false;
   LatLng? _ultimaPosicionMiZona;
@@ -65,11 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // --- ESCUCHADOR DE INTERNET ---
     _suscripcionInternet = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
       if (mounted) {
         setState(() {
-          // Comprobamos si el resultado es que NO hay ninguna conexión
           _hayInternet = !result.every((r) => r == ConnectivityResult.none);
         });
       }
@@ -110,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
         checkValues = inicialesChecks;
         String pestanaPorDefecto = "Servicios básicos"; 
         
-        // Comprobamos que existe por seguridad, y si no, pillamos cualquiera
         macroSeleccionada = datos.containsKey(pestanaPorDefecto) ? pestanaPorDefecto : datos.keys.first;
       });
 
@@ -122,20 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // --- APLICAR PERFIL DE USUARIO ---
   void _aplicarPerfil(UserProfile perfil) {
     setState(() {
-      // 1. Aplicamos los valores de los sliders
       perfil.sliders.forEach((key, value) {
         if (sliderValues.containsKey(key)) {
           sliderValues[key] = value;
         }
       });
 
-      // 2. Apagamos TODOS los checkboxes por defecto
       checkValues.updateAll((key, val) => false);
 
-      // 3. Encendemos SOLO los que dice el perfil
       for (var checkId in perfil.checksMarcados) {
         if (checkValues.containsKey(checkId)) {
           checkValues[checkId] = true;
@@ -145,10 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    // 4. Recalculamos el mapa con los nuevos filtros
     _actualizarMapa();
 
-    // 5. Le damos un aviso al usuario
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Cargando perfil: ${perfil.icono} ${perfil.nombre}...'),
@@ -158,15 +149,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // --- ABRIR MENÚ DE PERFILES ---
   void _abrirMenuPerfiles() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent, // Para poder hacer los bordes redondos
-      isScrollControlled: true, // Permite ajustar bien el tamaño
+      backgroundColor: Colors.transparent, 
+      isScrollControlled: true,
       builder: (context) {
         return Container(
-          // Ocupará la mitad de la pantalla
           height: MediaQuery.of(context).size.height * 0.5, 
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -174,7 +163,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: Column(
             children: [
-              // 1. Tirador gris (igual que en los ajustes)
               Container(
                 width: 40, 
                 height: 5,
@@ -185,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               
-              // 2. Título
               const Text(
                 "Elige tu perfil", 
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -208,21 +195,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 subtitle: const Text("Todos los filtros equilibrados", style: TextStyle(fontSize: 12)),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                 onTap: () {
-                  Navigator.pop(context); // Cerramos el panel
-                  _aplicarPerfilPorDefecto(); // Aplicamos el reseteo
+                  Navigator.pop(context); 
+                  _aplicarPerfilPorDefecto();
                 },
               ),
               
-              // Una línea separadora para distinguirlo de los demás
               const Divider(height: 1, indent: 25, endIndent: 25),
 
-              // 3. La lista de perfiles generada automáticamente
               Expanded(
                 child: ListView.separated(
                   itemCount: perfilesPredefinidos.length,
                   separatorBuilder: (context, index) => const Divider(height: 1, indent: 25, endIndent: 25,),
                   itemBuilder: (context, index) {
-                    // Sacamos el perfil de nuestro diccionario
                     String key = perfilesPredefinidos.keys.elementAt(index);
                     UserProfile perfil = perfilesPredefinidos[key]!;
                     
@@ -232,8 +216,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       title: Text(perfil.nombre, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                       trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
                       onTap: () {
-                        Navigator.pop(context); // 1. Cerramos el panel
-                        _aplicarPerfil(perfil); // 2. ¡Aplicamos la magia!
+                        Navigator.pop(context);
+                        _aplicarPerfil(perfil);
                       },
                     );
                   },
@@ -246,17 +230,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // --- APLICAR PERFIL POR DEFECTO ---
   void _aplicarPerfilPorDefecto() {
     setState(() {
-      // 1. Ponemos TODOS los sliders a 3.0
       sliderValues.updateAll((key, val) => 3.0);
       
-      // 2. Encendemos TODOS los checkboxes
       checkValues.updateAll((key, val) => true);
     });
 
-    // 3. Recalculamos el mapa
     _actualizarMapa();
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -316,12 +296,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // --- NUEVA FUNCIÓN PARA RESALTAR ---
   void _refrescarBordes() {
     if (poligonosADibujar.isEmpty) return;
 
     List<Polygon> poligonosRepintados = [];
-    Polygon? poligonoDestacado; // Creamos una variable para guardar el seleccionado
+    Polygon? poligonoDestacado;
 
     for (int i = 0; i < poligonosADibujar.length; i++) {
       final poly = poligonosADibujar[i];
@@ -329,13 +308,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
       final nuevoPoly = Polygon(
         points: poly.points,
-        color: poly.color, // Mantenemos el color que ya calculó la API
-        borderStrokeWidth: isSelected ? 3.0 : 0.5, // Borde ancho (3.0 queda más elegante)
-        borderColor: isSelected ? Colors.black : Colors.white24, // Borde negro
+        color: poly.color, 
+        borderStrokeWidth: isSelected ? 3.0 : 0.5, 
+        borderColor: isSelected ? Colors.black : Colors.white24,
         isFilled: true,
       );
 
-      // Si es el seleccionado, lo guardamos para el final. Si no, a la lista normal.
       if (isSelected) {
         poligonoDestacado = nuevoPoly;
       } else {
@@ -343,7 +321,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    // ¡EL TRUCO! Añadimos el seleccionado AL FINAL de la lista para que nadie lo pise
     if (poligonoDestacado != null) {
       poligonosRepintados.add(poligonoDestacado);
     }
@@ -353,7 +330,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // ¿El punto está en el polígono?
   bool _isPointInPolygon(LatLng point, List<LatLng> polygonPoints) {
     bool isInside = false;
     int j = polygonPoints.length - 1;
@@ -369,8 +345,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return isInside;
   }
 
-  // --- OBTENER BARRIO (NOMINATIM) ---
-  // --- OBTENER NOMBRE COMPLETO (Barrio + Municipio) ---
   Future<String> _obtenerNombreZona(double lat, double lon, {String? municipioGeoJson}) async {
     try {
       final url = Uri.parse('https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lon&format=json&zoom=14&addressdetails=1');
@@ -381,15 +355,12 @@ class _HomeScreenState extends State<HomeScreen> {
         final address = data['address'];
         
         if (address != null) {
-          // 1. Sacamos el Barrio
           String barrio = address['suburb'] ?? address['neighbourhood'] ?? address['quarter'] ?? address['village'] ?? "Zona";
           
-          // 2. Sacamos el Municipio (Si no viene del GeoJSON, lo saca de internet)
           String municipio = municipioGeoJson ?? address['city'] ?? address['town'] ?? address['municipality'] ?? "Tenerife";
           
-          // 3. Formateamos bonito
           if (barrio != "Zona" && barrio != municipio) {
-            return "$barrio ($municipio)"; // Ej: "Salud Bajo (Santa Cruz de Tenerife)"
+            return "$barrio ($municipio)";
           } else {
             return "Zona en $municipio";
           }
@@ -399,30 +370,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return "Zona seleccionada";
   }
 
-  // --- ANALIZAR HEXÁGONO (ACTUALIZADO) ---
   Future<void> _analizarHexagono(String hexId, String centroidString, String municipio) async {
     final partes = centroidString.split(',');
     final lat = double.parse(partes[0].trim());
     final lon = double.parse(partes[1].trim());
 
-    // 0. Hacemos zoom al hexágono
     double latAjustada = lat - 0.06; 
     
     _mapController.move(LatLng(latAjustada, lon), 11.5);
 
-    // 1. Obtenemos la nota que ya calculamos para ese hexágono
     double notaDelHexagono = scoresHexagonos[hexId] ?? 0.0;
 
     setState(() {
-      isLoading = false; // No bloqueamos toda la pantalla
-      // Mostramos la nota INMEDIATAMENTE
+      isLoading = false;
       datosPuntoEspecifico = {'score': notaDelHexagono}; 
       resumenIA = null;
-      isLoadingIA = true; // Empieza a pensar la IA
+      isLoadingIA = true;
       nombreZonaActual = "Buscando zona..."; 
     });
 
-    // 2. Buscamos el nombre del barrio
     final nombreFormateado = await _obtenerNombreZona(lat, lon, municipioGeoJson: municipio);
 
     if (mounted) {
@@ -431,7 +397,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    // 3. Llamamos SOLO a la IA (porque la nota ya la tenemos)
     try {
       final textoIA = await _apiService.getIaExplanation(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
@@ -452,7 +417,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // --- OBTENER SCORE GENERAL (API) ---
   Future<void> _obtenerScoreDePunto(double lat, double lon) async {
     setState(() {
       isCalculandoPunto = true;
@@ -491,19 +455,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // --- FUNCIONES DE UBICACIÓN Y BÚSQUEDA ---
   Future<void> _irAMiUbicacion() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // 1. Verificar si el GPS está encendido
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El GPS está desactivado')));
       return;
     }
 
-    // 2. Pedir permisos
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -512,7 +473,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (permission == LocationPermission.deniedForever) return;
 
-    // 3. Obtener posición y mover mapa
     Position position = await Geolocator.getCurrentPosition();
     _mapController.move(LatLng(position.latitude, position.longitude), 15.0);
     setState(() => mostrarBotonAnalizar = true);
@@ -521,7 +481,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _buscarDireccion(String query) async {
     if (query.isEmpty) return;
     
-    // 1. Limpiamos cualquier resultado anterior para que no tape el mapa
     _cerrarTarjeta(); 
     setState(() => mostrarBotonAnalizar = false);
     final queryFinal = "$query, Tenerife"; 
@@ -537,7 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
           
           _mapController.move(LatLng(lat, lon), 15.0);
           setState(() => mostrarBotonAnalizar = true);
-          FocusScope.of(context).unfocus(); // Cerrar teclado
+          FocusScope.of(context).unfocus();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Dirección no encontrada')));
         }
@@ -550,7 +509,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _analizarZonaActual() async {
     final centro = _mapController.camera.center;
     
-    // Al analizar manualmente, buscamos también el nombre de la calle/barrio
     setState(() {
       mostrarBotonAnalizar = false;
       nombreZonaActual = "Calculando...";
@@ -604,7 +562,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           errorMessage: errorMessage,
                           extraSetState: setModalState,
                           
-                          // LÓGICA DE ACTUALIZACIÓN
                           onMacroChanged: (val) => setState(() => macroSeleccionada = val),
                           onSliderChanged: (group, val) => setState(() => sliderValues[group] = val),
                           onSliderEnd: (val) {
@@ -651,7 +608,6 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_tabSeleccionada == 0)
             Positioned.fill(child: Container(color: const Color(0xFFF5F7FA))),
 
-          // Envolvemos el mapa en Semantics para accesibilidad (VoiceOver / TalkBack)
           Semantics(
             label: "Mapa interactivo de Tenerife. Mueve el mapa y pulsa en las zonas para ver su puntuación.",
             child: FlutterMap(
@@ -660,7 +616,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 initialCenter: const LatLng(28.2600, -16.5230), 
                 initialZoom: 9.4,
                 
-                // --- DETECCIÓN DE CLICK PARA HEXÁGONOS ---
                 onTap: (tapPosition, point) {
                   if (_tabSeleccionada == 0) {
                     int indexTocado = -1;
@@ -671,11 +626,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     }
                     if (indexTocado != -1) {
-                      // 1. Guardamos cuál se ha tocado y pintamos el borde negro
                       _indexSeleccionado = indexTocado;
                       _refrescarBordes(); 
                       
-                      // 2. Llamamos a tu función de siempre
                       final props = propiedadesHexagonos[indexTocado];
                       _analizarHexagono(props['hex_id'], props['centroide'], props['municipio']);
                     } else {
@@ -709,7 +662,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
                     subdomains: const ['a', 'b', 'c', 'd'],
                     userAgentPackageName: 'com.tenerifelifescore.app',
-                    tileDisplay: const TileDisplay.instantaneous(), // Sin efecto borroso
+                    tileDisplay: const TileDisplay.instantaneous(),
                   ),
                 
                 if (_tabSeleccionada == 0) 
@@ -717,25 +670,21 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          // ---------------------------------------------------------
-          // HEADER RESPONSIVE: Botones + Barra de Búsqueda
-          // ---------------------------------------------------------
           Positioned(
             top: 50,
             left: 15,
             right: 15,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center, // Alinea todo verticalmente al centro
+              crossAxisAlignment: CrossAxisAlignment.center, 
               children: [
                 
-                // --- 1. BOTÓN IZQUIERDO: PERFILES ---
                 FloatingActionButton(
                   heroTag: "btn_perfiles",
                   tooltip: "Abrir menú de perfiles de usuario",
                   backgroundColor: Colors.white,
                   elevation: 4,
                   onPressed: () {
-                    _cerrarTarjeta(); // Cerramos tarjeta si estaba abierta
+                    _cerrarTarjeta();
 
                     setState(() {
                       _mostrarAjustes = false; 
@@ -746,15 +695,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: const Icon(Icons.groups_3, color: AppColors.primary, size: 32),
                 ),
 
-                const SizedBox(width: 10), // Separación
+                const SizedBox(width: 10), 
 
-                // --- 2. BARRA DE BÚSQUEDA
                 Expanded(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
                     child: _tabSeleccionada == 1 
                     ? Card(
-                        key: const ValueKey("barra_busqueda"), // ¡La llave es obligatoria para animar!
+                        key: const ValueKey("barra_busqueda"), 
                         color: Colors.white,
                         surfaceTintColor: Colors.transparent,
                         elevation: 4,
@@ -790,13 +738,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       )
-                    : const SizedBox.shrink(key: ValueKey("hueco_vacio")), // Hueco vacío si estamos en la pestaña Explorar
+                    : const SizedBox.shrink(key: ValueKey("hueco_vacio")),
                   ),
                 ),
 
-                const SizedBox(width: 10), // Separación
+                const SizedBox(width: 10), 
 
-                // --- 3. BOTÓN DERECHO: AJUSTES ---
                 FloatingActionButton(
                   heroTag: "btn_ajustes",
                   tooltip: _mostrarAjustes ? "Cerrar ajustes" : "Abrir ajustes de filtros",
@@ -906,15 +853,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // ---------------------------------------------------------
-          // LEYENDA DE COLORES (Pestaña Explorar)
-          // ---------------------------------------------------------
           if (_tabSeleccionada == 0 && !_mostrarAjustes) 
             Positioned(
               bottom: 30,
               left: 15,
               right: 15,
-              child: Semantics( // <--- AQUÍ ESTÁ LA MAGIA PARA LA ACCESIBILIDAD
+              child: Semantics( 
                 label: "Puntuación LifeScore. Leyenda de puntuación: de 0 a 10. El 0 es rojo, indicando la puntuación más baja, y el 10 es azul, indicando la puntuación máxima.",
                 child: IgnorePointer( 
                   child: Container(
@@ -976,13 +920,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             top: 110, 
             right: 15,
-            child: FloatingActionButton.small( // Usamos .small para que no estorbe mucho
+            child: FloatingActionButton.small( 
               heroTag: "btn_info",
               tooltip: "Ver instrucciones y ayuda",
               backgroundColor: Colors.white,
               elevation: 4,
               onPressed: () {
-                // Navegamos a la pantalla de instrucciones
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const OnboardingScreen()),
@@ -992,15 +935,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // --- CAMBIO: La tarjeta ahora sale en AMBAS pestañas si hay datos ---
-          // --- TARJETA DE RESULTADO DINÁMICA ---
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             switchInCurve: Curves.easeOut,
             switchOutCurve: Curves.easeIn,
             child: datosPuntoEspecifico != null 
               ? ResultCard(
-                  key: const ValueKey("tarjeta_resultados"), // ¡La llave es obligatoria para animar!
+                  key: const ValueKey("tarjeta_resultados"),
                   placeName: nombreZonaActual,
                   score: datosPuntoEspecifico!['score'],
                   iaSummary: resumenIA,
@@ -1009,17 +950,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTunePressed: _abrirConfiguracionModal,
                   onClosePressed: _cerrarTarjeta,
                 )
-              : const SizedBox.shrink(key: ValueKey("tarjeta_vacia")), // Se vuelve un pixel invisible cuando no hay datos
+              : const SizedBox.shrink(key: ValueKey("tarjeta_vacia")), 
           ),
             
-          // ---------------------------------------------------------
-          // PANTALLA DE SIN CONEXIÓN (Bloquea la app)
-          // ---------------------------------------------------------
           if (!_hayInternet)
             Container(
               width: double.infinity,
               height: double.infinity,
-              color: Colors.white, // Tapa la app con un blanco casi sólido
+              color: Colors.white,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -1039,7 +977,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  // Un botón visual que anima al usuario a reintentar (aunque se quita solo al volver la red)
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
@@ -1047,7 +984,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     ),
-                    onPressed: () {}, // No hace falta código, el listener de arriba lo quita automáticamente
+                    onPressed: () {},
                     icon: const Icon(Icons.refresh),
                     label: const Text("Buscando red..."),
                   )
@@ -1061,12 +998,10 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _tabSeleccionada,
         selectedItemColor: AppColors.primary,
         onTap: (index) {          
-          // 1. Cambiamos de pestaña y APAGAMOS las calles temporalmente
           setState(() {
             _tabSeleccionada = index;
-            _callesListas = false; // ¡El truco!
-            
-            // Limpiamos resultados
+            _callesListas = false;
+
             datosPuntoEspecifico = null; 
             resumenIA = null;
             nombreZonaActual = null;
@@ -1074,7 +1009,6 @@ class _HomeScreenState extends State<HomeScreen> {
             if (index == 1) mostrarBotonAnalizar = true;
           });
           
-          // 2. Mantenemos TU lógica intacta de esperar 1 frame
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (index == 0) {
               _mapController.move(const LatLng(28.2600, -16.5230), 9.4);
@@ -1083,7 +1017,6 @@ class _HomeScreenState extends State<HomeScreen> {
               _mapController.move(destino, 13.0);
             }
 
-            // 3. La cámara ya saltó al zoom 13.0, ¡ahora sí encendemos las calles!
             if (mounted) {
               setState(() {
                 _callesListas = true;

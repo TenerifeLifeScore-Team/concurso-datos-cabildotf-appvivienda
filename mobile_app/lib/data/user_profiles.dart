@@ -1,8 +1,6 @@
-// Archivo: lib/data/user_profiles.dart
-
 class UserProfile {
   final String nombre;
-  final String icono; // Por si luego queremos ponerle un emoji o icono al menú
+  final String icono;
   final Map<String, double> sliders;
   final List<String> checksMarcados;
 
@@ -14,7 +12,6 @@ class UserProfile {
   });
 }
 
-// Aquí iremos añadiendo todos los perfiles que haga tu compañero
 final Map<String, UserProfile> perfilesPredefinidos = {
   "Estudiante Universitario": UserProfile(
     nombre: "Estudiante Universitario",

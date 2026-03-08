@@ -12,7 +12,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
     print("⚠️ ADVERTENCIA: No se encontró GROQ_API_KEY en el archivo .env")
 
-# 3. Inicializar el cliente de Groq (Esto sustituye al genai.configure)
+# 3. Inicializar el cliente de Groq
 client = Groq(api_key=GROQ_API_KEY)
 
 def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict, score: float) -> str:
@@ -58,13 +58,13 @@ def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict, score: float)
         Por favor, genera el micro-resumen ahora:
         """
 
-        # 4. Llamada a la API de Groq (LPU a velocidad luz)
+        # 4. Llamada a la API de Groq
         chat_completion = client.chat.completions.create(
             messages=[
                 {"role": "system", "content": mensaje_sistema.strip()},
                 {"role": "user", "content": mensaje_usuario.strip()}
             ],
-            model="llama-3.3-70b-versatile", # El modelo más rápido de Llama 3
+            model="llama-3.3-70b-versatile",
             temperature=0.7, # Creatividad balanceada
             max_tokens=150,  # Límite para que no se enrolle
         )

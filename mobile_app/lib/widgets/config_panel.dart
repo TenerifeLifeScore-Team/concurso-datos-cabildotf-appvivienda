@@ -11,13 +11,11 @@ class ConfigPanel extends StatelessWidget {
   final Map<String, bool> checkValues;
   final String? errorMessage;
   
-  // Callbacks
   final ValueChanged<String> onMacroChanged;
   final Function(String group, double value) onSliderChanged;
   final Function(double value) onSliderEnd;
   final Function(List<String> ids, bool value) onCheckChanged;
   
-  // Para la sincronización con el Modal
   final StateSetter? extraSetState;
 
   const ConfigPanel({
@@ -47,12 +45,10 @@ class ConfigPanel extends StatelessWidget {
       "Consumo y vida diaria",
     ];
 
-    // 2. Ordenamos las pestañas basándonos en tu lista manual
     final macros = arbolConfig!.keys.toList()
       ..sort((a, b) {
         int indexA = ordenDeseado.indexOf(a);
         int indexB = ordenDeseado.indexOf(b);
-        // Si hay una macro nueva que no está en la lista, se va al final
         if (indexA == -1) indexA = 999;
         if (indexB == -1) indexB = 999;
         return indexA.compareTo(indexB);
@@ -68,7 +64,6 @@ class ConfigPanel extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         
-        // Chips Horizontales
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -94,7 +89,6 @@ class ConfigPanel extends StatelessWidget {
         ),
         const Divider(height: 30, thickness: 1),
 
-        // Lista de Tarjetas
         if (macroSeleccionada != null)
           ..._buildGroupList(macroSeleccionada!),
 

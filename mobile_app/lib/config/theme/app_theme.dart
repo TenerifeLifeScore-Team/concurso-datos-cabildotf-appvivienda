@@ -18,7 +18,7 @@ class AppTheme {
         centerTitle: true,
         backgroundColor: AppColors.surface,
         elevation: 0,
-        scrolledUnderElevation: 0, // Evita cambio de color al hacer scroll
+        scrolledUnderElevation: 0,
         titleTextStyle: TextStyle(
           color: AppColors.textPrimary,
           fontSize: 20,
@@ -27,7 +27,7 @@ class AppTheme {
         iconTheme: IconThemeData(color: AppColors.textPrimary),
       ),
 
-      // Estilo de los Sliders (Importante para tu app)
+      // Estilo de los Sliders 
       sliderTheme: SliderThemeData(
         activeTrackColor: AppColors.primary,
         inactiveTrackColor: AppColors.primary.withOpacity(0.2),

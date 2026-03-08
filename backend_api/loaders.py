@@ -3,7 +3,6 @@ import pandas as pd
 import json
 import os
 
-# Ruta base donde están tus datos procesados
 DATA_PATH = "data-processed"
 
 def cargar_puntos_maestros():

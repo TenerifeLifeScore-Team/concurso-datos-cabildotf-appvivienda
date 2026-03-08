@@ -8,9 +8,8 @@ from pydantic import BaseModel
 from typing import Dict, List, Optional
 from llm_service import generar_resumen_ia
 
-# Importamos el motor (Añadimos calcular_lifescore_punto)
-from engine import calcular_lifescore, calcular_lifescore_punto # <--- NUEVO
-import loaders # <--- NUEVO (Necesario para cargar los puntos maestros)
+from engine import calcular_lifescore, calcular_lifescore_punto
+import loaders
 
 app = FastAPI(title="Tenerife LifeScore API")
 
@@ -32,12 +31,12 @@ FILE_DATA = DATA_DIR / "tabla_saturada_suavizada.geojson"
 # Variables en memoria (Cache)
 memoria_config = {}
 memoria_df = None
-gdf_puntos = None # <--- NUEVO (Variable para guardar el radar)
+gdf_puntos = None
 
 # --- CARGA AL INICIO ---
 @app.on_event("startup")
 async def load_data():
-    global memoria_config, memoria_df, gdf_puntos # <--- NUEVO (Añadimos gdf_puntos al global)
+    global memoria_config, memoria_df, gdf_puntos
     print("🚀 Iniciando Tenerife LifeScore API...")
     
     # 1. Cargar Configuración
@@ -61,7 +60,7 @@ async def load_data():
     except Exception as e:
         print(f"❌ Error cargando datos hexágonos: {e}")
 
-    # 3. Cargar Puntos Maestros (Radar) <--- BLOQUE NUEVO
+    # 3. Cargar Puntos Maestros (Radar)
     try:
         print("📡 Cargando sistema de radar...")
         gdf_puntos = loaders.cargar_puntos_maestros()
@@ -77,7 +76,7 @@ class UserPreferences(BaseModel):
     sliders: Dict[str, float]
     checks: Optional[Dict[str, bool]] = {}
 
-# Modelo nuevo para recibir coordenadas <--- NUEVO
+# Modelo nuevo para recibir coordenadas
 class PointPreferences(UserPreferences):
     lat: float
     lon: float
@@ -146,14 +145,12 @@ def calculate_map(prefs: UserPreferences):
         if s >= 5: return "#F1C40F" # Amarillo
         return "#E74C3C" # Rojo
 
-    # Si tu engine ya devuelve el color, perfecto. Si no, lo calculamos:
     if 'color' not in df_resultado.columns:
          df_resultado['color'] = df_resultado['score_final'].apply(get_color)
     
     return df_resultado[['hex_id', 'score_final', 'color']].to_dict(orient="records")
 
 
-# --- 1. ENDPOINT RÁPIDO (SOLO MATEMÁTICAS) ---
 @app.post("/calculate-point")
 def get_point_score(prefs: PointPreferences):
     """
@@ -168,7 +165,7 @@ def get_point_score(prefs: PointPreferences):
     
     return {
         "score": score,
-        "detalles": conteo_final # Lo enviamos porque la IA lo necesitará en el paso 2
+        "detalles": conteo_final
     }
 
 # --- 2. ENDPOINT LENTO (SOLO IA) ---

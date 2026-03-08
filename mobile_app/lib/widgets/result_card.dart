@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../config/theme/app_colors.dart';
 
 class ResultCard extends StatelessWidget {
-  final String? placeName; // <--- NUEVO: Para mostrar el nombre de la calle o barrio
+  final String? placeName;
   final double score; 
   final String? iaSummary; 
   final bool isLoadingIA; 
@@ -12,18 +12,17 @@ class ResultCard extends StatelessWidget {
 
   const ResultCard({
     super.key,
-    this.placeName, // Opcional, por si en algún momento no hay nombre
+    this.placeName,
     required this.score,
     required this.iaSummary,
     required this.isLoadingIA,
     required this.onTunePressed,
     required this.onClosePressed,
-    this.positionAlignment = Alignment.bottomCenter,  // Por defecto abajo
+    this.positionAlignment = Alignment.bottomCenter,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Definimos color según la nota para el círculo
     Color scoreColor;
     String scoreText;
     if (score <= 1.5) {
@@ -33,7 +32,7 @@ class ResultCard extends StatelessWidget {
       scoreColor = const Color.fromARGB(255, 255, 160, 0); // Naranja
       scoreText = "Zona Media";
     } else if (score <= 7.0) {
-      scoreColor = const Color.fromARGB(255, 230, 190, 0); 
+      scoreColor = const Color.fromARGB(255, 230, 190, 0); // Amarillo
       scoreText = "Zona Media-Alta";
     } else if (score <= 8.5) {
       scoreColor = const Color.fromARGB(255, 50, 200, 80); // Verde
@@ -44,9 +43,9 @@ class ResultCard extends StatelessWidget {
     }
 
     return Align(
-      alignment: positionAlignment, // <--- 1. Usamos la variable en lugar de dejarlo fijo
+      alignment: positionAlignment,
       child: Container(
-        margin: EdgeInsets.only( // <--- 2. Hacemos el margen dinámico
+        margin: EdgeInsets.only(
           left: 20, 
           right: 20, 
           top: positionAlignment == Alignment.topCenter ? 25 : 20, 
@@ -68,7 +67,6 @@ class ResultCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // --- 0. NOMBRE DE LA ZONA (NUEVO) ---
             if (placeName != null && placeName!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(bottom: 15, left: 5),
@@ -85,14 +83,13 @@ class ResultCard extends StatelessWidget {
                           color: Colors.black87,
                         ),
                         maxLines: 1,
-                        overflow: TextOverflow.ellipsis, // Si es muy largo, pone "..."
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
               ),
 
-            // --- 1. CABECERA (Score + Textos + Botones) ---
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -118,7 +115,6 @@ class ResultCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 15),
                 
-                // Texto Principal
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +131,6 @@ class ResultCard extends StatelessWidget {
                   ),
                 ),
 
-                // Botones de Acción
                 Row(
                   children: [
                     IconButton(
@@ -155,11 +150,10 @@ class ResultCard extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // --- 2. CAJA DE INTELIGENCIA ARTIFICIAL ---
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFF0F4FF), // Azul muy suave
+                color: const Color(0xFFF0F4FF),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: const Color(0xFFD6E4FF)),
               ),
@@ -183,7 +177,6 @@ class ResultCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   
-                  // CONTENIDO DINÁMICO (Cargando vs Texto)
                   if (isLoadingIA)
                     Row(
                       children: [

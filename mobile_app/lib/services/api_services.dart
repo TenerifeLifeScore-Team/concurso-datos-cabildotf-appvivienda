@@ -3,11 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  // CONFIGURACIÓN DE LA IP (Render)
-  // Declaramos la variable _baseUrl con tu URL de la nube
   final String _baseUrl = "https://tenerife-lifescore-api.onrender.com";
 
-  /// Pide la configuración de categorías al Backend Python
   Future<Map<String, Map<String, List<ConfigItem>>>> getCategories() async {
     try {
       final url = Uri.parse('$_baseUrl/config');
@@ -23,7 +20,7 @@ class ApiService {
           final Map<String, List<ConfigItem>> gruposTyped = {};
           
           (gruposMap as Map<String, dynamic>).forEach((grupoKey, itemsList) {
-            // Mapeamos la lista de JSONs a lista de objetos ConfigItem
+            
             final List<ConfigItem> items = (itemsList as List)
                 .map((item) => ConfigItem.fromJson(item))
                 .toList();
@@ -42,7 +39,7 @@ class ApiService {
       rethrow; 
     }
   }
-  /// Envía las preferencias y recibe la lista de [hex_id, score, color]
+
   Future<List<Map<String, dynamic>>> calculateScores(
     Map<String, double> sliders, 
     Map<String, bool> checks
@@ -98,7 +95,6 @@ class ApiService {
     }
   }
   
-  // Nuevo método solo para pedir el texto a la IA
   Future<String> getIaExplanation({
     required double lat,
     required double lon,

@@ -33,7 +33,6 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
 
  @override
   Widget build(BuildContext context) {
-    // CAMBIO: Quitamos Positioned.fill y usamos Scaffold para que sea una pantalla real
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -51,7 +50,6 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // --- Logo o Icono ---
             Container(
               padding: const EdgeInsets.all(20),
               child: Image.asset(
@@ -60,7 +58,6 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
                 height: 150,
                 fit: BoxFit.contain,
                 color: Colors.white,
-                // Añadimos esto por si acaso la imagen tarda un pelo en cargar
                 errorBuilder: (context, error, stackTrace) => 
                     const Icon(Icons.location_on, size: 100, color: Colors.white),
               ),
@@ -78,7 +75,7 @@ class _SmartLoadingScreenState extends State<SmartLoadingScreen> {
             const CircularProgressIndicator(color: Colors.white),
             const SizedBox(height: 30),
 
-            // --- MENSAJE DINÁMICO ---
+            // --- Mensaje dinámico ---
             AnimatedOpacity(
               opacity: _showDelayedMessage ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 800),
