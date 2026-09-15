@@ -67,6 +67,7 @@ def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict, score: float)
             model="openai/gpt-oss-120b",
             temperature=0.7, # Creatividad balanceada
             max_tokens=150,  # Límite para que no se enrolle
+            stop=["\n\n"]    # Obliga a parar si intenta hacer párrafos largos
         )
         
         # 5. Extraemos el texto de la respuesta
