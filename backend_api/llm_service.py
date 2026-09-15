@@ -64,7 +64,7 @@ def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict, score: float)
                 {"role": "system", "content": mensaje_sistema.strip()},
                 {"role": "user", "content": mensaje_usuario.strip()}
             ],
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             temperature=0.7, # Creatividad balanceada
             max_tokens=150,  # Límite para que no se enrolle
         )
