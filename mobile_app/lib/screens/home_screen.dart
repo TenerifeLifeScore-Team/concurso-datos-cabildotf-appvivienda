@@ -418,23 +418,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _obtenerScoreDePunto(double lat, double lon) async {
-    setState(() {
-      isCalculandoPunto = true;
-      isLoadingIA = false;
-      datosPuntoEspecifico = null;
-      resumenIA = null;
-    });
+    if (mounted) {
+      setState(() {
+        isCalculandoPunto = true;
+        isLoadingIA = false;
+        datosPuntoEspecifico = null;
+        resumenIA = null;
+      });
+    }
 
     try {
       final resultado = await _apiService.calculatePointScore(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      setState(() {
-        datosPuntoEspecifico = resultado;
-        isCalculandoPunto = false; 
-        isLoadingIA = true;
-      });
+      if (mounted) {
+        setState(() {
+          datosPuntoEspecifico = resultado;
+          isCalculandoPunto = false; 
+          isLoadingIA = true;
+        });
+      }
 
       final textoIA = await _apiService.getIaExplanation(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
@@ -447,10 +451,13 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     } catch (e) {
-      setState(() {
-        isCalculandoPunto = false;
-        isLoadingIA = false;
-      });
+      if (mounted) {
+        setState(() {
+          isCalculandoPunto = false;
+          isLoadingIA = false;
+          resumenIA = "No se pudo conectar con el asesor virtual.";
+        });
+      }
       print("Error: $e");
     }
   }
@@ -643,8 +650,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (_tabSeleccionada == 1) {
                     _ultimaPosicionMiZona = pos.center;
                   }
-                  if (hasGesture) {
-                    if (!mostrarBotonAnalizar) {
+                if (hasGesture) {
+                    if (!mostrarBotonAnalizar && !isLoadingIA) {
                       setState(() {
                         mostrarBotonAnalizar = true;
                         datosPuntoEspecifico = null; 

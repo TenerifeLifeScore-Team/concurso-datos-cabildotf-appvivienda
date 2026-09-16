@@ -110,7 +110,7 @@ class ApiService {
         "lat": lat,
         "lon": lon,
       }),
-    ).timeout(const Duration(seconds: 15));
+    ).timeout(const Duration(seconds: 25));
 
     if (response.statusCode == 200) {
       return json.decode(utf8.decode(response.bodyBytes))['resumen_ia'];
