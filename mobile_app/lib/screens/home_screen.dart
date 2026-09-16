@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // --- MI ZONA ---
   Map<String, dynamic>? datosPuntoEspecifico;
   bool isCalculandoPunto = false;
+  int _iaRequestId = 0;
   LatLng? _ultimaPosicionMiZona;
   String? nombreZonaActual;
   bool _callesListas = false;
@@ -375,6 +376,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final lat = double.parse(partes[0].trim());
     final lon = double.parse(partes[1].trim());
 
+    final int miRequestId = ++_iaRequestId;
+    
     double latAjustada = lat - 0.06; 
     
     _mapController.move(LatLng(latAjustada, lon), 11.5);
@@ -391,7 +394,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final nombreFormateado = await _obtenerNombreZona(lat, lon, municipioGeoJson: municipio);
 
-    if (mounted) {
+    if (mounted && miRequestId == _iaRequestId) {
       setState(() {
         nombreZonaActual = nombreFormateado;
       });
@@ -401,14 +404,14 @@ class _HomeScreenState extends State<HomeScreen> {
       final textoIA = await _apiService.getIaExplanation(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
-      if (mounted) {
+      if (mounted && miRequestId == _iaRequestId) {
         setState(() {
           resumenIA = textoIA;
           isLoadingIA = false;
         });
       }
     } catch (e) {
-      if (mounted) {
+      if (mounted && miRequestId == _iaRequestId) {
         setState(() {
           resumenIA = "No se pudo conectar con el asesor virtual.";
           isLoadingIA = false;
@@ -418,39 +421,48 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _obtenerScoreDePunto(double lat, double lon) async {
-    setState(() {
-      isCalculandoPunto = true;
-      isLoadingIA = false;
-      datosPuntoEspecifico = null;
-      resumenIA = null;
-    });
+    final int miRequestId = ++_iaRequestId;
+
+    if (mounted) {
+      setState(() {
+        isCalculandoPunto = true;
+        isLoadingIA = false;
+        datosPuntoEspecifico = null;
+        resumenIA = null;
+      });
+    }
 
     try {
       final resultado = await _apiService.calculatePointScore(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      setState(() {
-        datosPuntoEspecifico = resultado;
-        isCalculandoPunto = false; 
-        isLoadingIA = true;
-      });
+      if (mounted && miRequestId == _iaRequestId) {
+        setState(() {
+          datosPuntoEspecifico = resultado;
+          isCalculandoPunto = false; 
+          isLoadingIA = true;
+        });
+      }
 
       final textoIA = await _apiService.getIaExplanation(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      if (mounted) {
+      if (mounted && miRequestId == _iaRequestId) {
         setState(() {
           resumenIA = textoIA;
           isLoadingIA = false;
         });
       }
     } catch (e) {
-      setState(() {
-        isCalculandoPunto = false;
-        isLoadingIA = false;
-      });
+      if (mounted && miRequestId == _iaRequestId) {
+        setState(() {
+          isCalculandoPunto = false;
+          isLoadingIA = false;
+          resumenIA = "No se pudo conectar con el asesor virtual.";
+        });
+      }
       print("Error: $e");
     }
   }
@@ -644,7 +656,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _ultimaPosicionMiZona = pos.center;
                   }
                   if (hasGesture) {
-                    if (!mostrarBotonAnalizar) {
+                    if (!mostrarBotonAnalizar && !isLoadingIA) {
                       setState(() {
                         mostrarBotonAnalizar = true;
                         datosPuntoEspecifico = null; 
