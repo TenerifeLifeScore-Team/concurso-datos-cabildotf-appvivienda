@@ -174,9 +174,6 @@ def explain_point_score(prefs: PointPreferences):
     """
     Recalcula los datos y se los pasa a la IA. Tarda 2-3 segundos.
     """
-    if gdf_puntos is None:
-        return {"resumen_ia": "Los datos del radar no están disponibles todavía."}
-
     # Recalculamos los datos (es muy rápido, no importa hacerlo 2 veces)
     score, conteo_final = calcular_lifescore_punto(
         prefs.lat, prefs.lon, gdf_puntos, memoria_config, prefs.sliders, prefs.checks

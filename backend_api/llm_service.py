@@ -71,10 +71,7 @@ def generar_resumen_ia(detalles_zona: dict, sliders_usuario: dict, score: float)
         )
         
         # 5. Extraemos el texto de la respuesta
-        texto = chat_completion.choices[0].message.content
-        if not texto or texto.strip() == "":
-            return "Esta zona tiene características interesantes que la hacen única."
-        return texto.strip()
+        return chat_completion.choices[0].message.content.strip()
         
     except Exception as e:
         print(f"❌ Error IA (Groq): {e}")
