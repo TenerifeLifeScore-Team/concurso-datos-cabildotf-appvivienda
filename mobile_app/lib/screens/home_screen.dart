@@ -377,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Future<void> _analizarHexagono(String hexId, String centroidString, String municipio) async {
     _peticionActual++;
-    final int idPeticion = _peticionActual; // Guardamos el ID de ESTA ejecución
+    final int idPeticion = _peticionActual;
 
     final partes = centroidString.split(',');
     final lat = double.parse(partes[0].trim());
@@ -385,16 +385,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _mapController.move(LatLng(lat, lon), 11.5);
 
-    final resultado = await _apiService.calculatePointScore(
-      lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
-    );
-
-    // Si el usuario ha tocado otra zona mientras esperábamos, abortamos
     if (!mounted || _peticionActual != idPeticion) return;
+
+    final double notaHexagono = scoresHexagonos[hexId] ?? 0.0;
 
     setState(() {
       isLoading = false;
-      datosPuntoEspecifico = {'score': resultado['score'] as num};
+      datosPuntoEspecifico = {'score': notaHexagono};
       resumenIA = null;
       isLoadingIA = true;
       nombreZonaActual = "Buscando zona...";
