@@ -63,6 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _hayInternet = true;
   StreamSubscription? _suscripcionInternet;
 
+  // Controlar las condiciones de carrera
+  int _peticionActual = 0;
+
   @override
   void initState() {
     _suscripcionInternet = Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
@@ -370,7 +373,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return "Zona seleccionada";
   }
 
-  Future<void> _analizarHexagono(String hexId, String centroidString, String municipio) async {
+    Future<void> _analizarHexagono(String hexId, String centroidString, String municipio) async {
+    _peticionActual++;
+    final int idPeticion = _peticionActual; // Guardamos el ID de ESTA ejecución
+
     final partes = centroidString.split(',');
     final lat = double.parse(partes[0].trim());
     final lon = double.parse(partes[1].trim());
@@ -380,6 +386,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final resultado = await _apiService.calculatePointScore(
       lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
     );
+
+    // Si el usuario ha tocado otra zona mientras esperábamos, abortamos
+    if (!mounted || _peticionActual != idPeticion) return;
 
     setState(() {
       isLoading = false;
@@ -391,33 +400,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final nombreFormateado = await _obtenerNombreZona(lat, lon, municipioGeoJson: municipio);
 
-    if (mounted) {
-      setState(() {
-        nombreZonaActual = nombreFormateado;
-      });
-    }
+    if (!mounted || _peticionActual != idPeticion) return;
+
+    setState(() {
+      nombreZonaActual = nombreFormateado;
+    });
 
     try {
       final textoIA = await _apiService.getIaExplanation(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
-      if (mounted) {
-        setState(() {
-          resumenIA = textoIA;
-          isLoadingIA = false;
-        });
-      }
+      
+      if (!mounted || _peticionActual != idPeticion) return;
+
+      setState(() {
+        resumenIA = textoIA;
+        isLoadingIA = false;
+      });
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          resumenIA = "No se pudo conectar con el asesor virtual.";
-          isLoadingIA = false;
-        });
-      }
+      if (!mounted || _peticionActual != idPeticion) return;
+
+      setState(() {
+        resumenIA = "No se pudo conectar con el asesor virtual.";
+        isLoadingIA = false;
+      });
     }
   }
 
-  Future<void> _obtenerScoreDePunto(double lat, double lon) async {
+    Future<void> _obtenerScoreDePunto(double lat, double lon) async {
+    _peticionActual++;
+    final int idPeticion = _peticionActual;
+
     if (mounted) {
       setState(() {
         isCalculandoPunto = true;
@@ -432,32 +445,32 @@ class _HomeScreenState extends State<HomeScreen> {
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      if (mounted) {
-        setState(() {
-          datosPuntoEspecifico = resultado;
-          isCalculandoPunto = false;
-          isLoadingIA = true;
-        });
-      }
+      if (!mounted || _peticionActual != idPeticion) return;
+
+      setState(() {
+        datosPuntoEspecifico = resultado;
+        isCalculandoPunto = false;
+        isLoadingIA = true;
+      });
 
       final textoIA = await _apiService.getIaExplanation(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      if (mounted) {
-        setState(() {
-          resumenIA = textoIA;
-          isLoadingIA = false;
-        });
-      }
+      if (!mounted || _peticionActual != idPeticion) return;
+
+      setState(() {
+        resumenIA = textoIA;
+        isLoadingIA = false;
+      });
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          isCalculandoPunto = false;
-          isLoadingIA = false;
-          resumenIA = "No se pudo conectar con el asesor virtual.";
-        });
-      }
+      if (!mounted || _peticionActual != idPeticion) return;
+
+      setState(() {
+        isCalculandoPunto = false;
+        isLoadingIA = false;
+        resumenIA = "No se pudo conectar con el asesor virtual.";
+      });
       print("Error: $e");
     }
   }
@@ -538,6 +551,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   
   void _cerrarTarjeta() {
+    _peticionActual++;
+
     setState(() {
       _indexSeleccionado = -1;
       datosPuntoEspecifico = null;
