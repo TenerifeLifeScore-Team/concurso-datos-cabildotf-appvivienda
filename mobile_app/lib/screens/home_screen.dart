@@ -482,7 +482,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Position position = await Geolocator.getCurrentPosition();
     _mapController.move(LatLng(position.latitude, position.longitude), 15.0);
-    setState(() => mostrarBotonAnalizar = true);
+    setState(() {
+      mostrarBotonAnalizar = true;
+      datosPuntoEspecifico = null;
+      resumenIA = null;
+      nombreZonaActual = null;
+    });
   }
 
   Future<void> _buscarDireccion(String query) async {
