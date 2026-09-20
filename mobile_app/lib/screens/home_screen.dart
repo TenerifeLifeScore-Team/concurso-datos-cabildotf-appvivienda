@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // --- DATOS DEL MAPA Y CONFIG ---
   Map<String, Map<String, List<ConfigItem>>>? arbolConfig;
+  List<Polygon> poligonosBase = [];
   List<Polygon> poligonosADibujar = [];
   List<Map<String, dynamic>> propiedadesHexagonos = [];
   dynamic geojsonRaw;
@@ -290,7 +291,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       setState(() {
-        poligonosADibujar = nuevosPoligonos;
+        poligonosBase = nuevosPoligonos;
+        poligonosADibujar = List.from(nuevosPoligonos);
         propiedadesHexagonos = nuevasPropiedades;
         scoresHexagonos = nuevosScores;
       });
@@ -300,13 +302,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _refrescarBordes() {
-    if (poligonosADibujar.isEmpty) return;
+    if (poligonosBase.isEmpty) return;
 
     List<Polygon> poligonosRepintados = [];
     Polygon? poligonoDestacado;
 
-    for (int i = 0; i < poligonosADibujar.length; i++) {
-      final poly = poligonosADibujar[i];
+    for (int i = 0; i < poligonosBase.length; i++) {
+      final poly = poligonosBase[i];
       final bool isSelected = (i == _indexSeleccionado);
 
       final nuevoPoly = Polygon(
@@ -325,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (poligonoDestacado != null) {
-      poligonosRepintados.add(poligonoDestacado);
+      poligonosRepintados.add(poligonoDestacado); // Lo mandamos al final SOLO en la visual
     }
 
     setState(() {
@@ -651,8 +653,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: (tapPosition, point) {
                   if (_tabSeleccionada == 0) {
                     int indexTocado = -1;
-                    for (int i = 0; i < poligonosADibujar.length; i++) {
-                      if (_isPointInPolygon(point, poligonosADibujar[i].points)) {
+                    for (int i = 0; i < poligonosBase.length; i++) {
+                      if (_isPointInPolygon(point, poligonosBase[i].points)) {
                         indexTocado = i;
                         break;
                       }
@@ -667,7 +669,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _cerrarTarjeta();
                     }
                   } else {
-                     _cerrarTarjeta();
+                    _cerrarTarjeta();
                   }
                 },
 
