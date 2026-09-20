@@ -49,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // --- MI ZONA ---
   Map<String, dynamic>? datosPuntoEspecifico;
   bool isCalculandoPunto = false;
-  int _iaRequestId = 0;
   LatLng? _ultimaPosicionMiZona;
   String? nombreZonaActual;
   bool _callesListas = false;
@@ -376,25 +375,23 @@ class _HomeScreenState extends State<HomeScreen> {
     final lat = double.parse(partes[0].trim());
     final lon = double.parse(partes[1].trim());
 
-    final int miRequestId = ++_iaRequestId;
-    
-    double latAjustada = lat - 0.06; 
-    
-    _mapController.move(LatLng(latAjustada, lon), 11.5);
+    _mapController.move(LatLng(lat, lon), 11.5);
 
-    double notaDelHexagono = scoresHexagonos[hexId] ?? 0.0;
+    final resultado = await _apiService.calculatePointScore(
+      lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
+    );
 
     setState(() {
       isLoading = false;
-      datosPuntoEspecifico = {'score': notaDelHexagono}; 
+      datosPuntoEspecifico = {'score': resultado['score'] as num};
       resumenIA = null;
       isLoadingIA = true;
-      nombreZonaActual = "Buscando zona..."; 
+      nombreZonaActual = "Buscando zona...";
     });
 
     final nombreFormateado = await _obtenerNombreZona(lat, lon, municipioGeoJson: municipio);
 
-    if (mounted && miRequestId == _iaRequestId) {
+    if (mounted) {
       setState(() {
         nombreZonaActual = nombreFormateado;
       });
@@ -404,14 +401,14 @@ class _HomeScreenState extends State<HomeScreen> {
       final textoIA = await _apiService.getIaExplanation(
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
-      if (mounted && miRequestId == _iaRequestId) {
+      if (mounted) {
         setState(() {
           resumenIA = textoIA;
           isLoadingIA = false;
         });
       }
     } catch (e) {
-      if (mounted && miRequestId == _iaRequestId) {
+      if (mounted) {
         setState(() {
           resumenIA = "No se pudo conectar con el asesor virtual.";
           isLoadingIA = false;
@@ -421,8 +418,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _obtenerScoreDePunto(double lat, double lon) async {
-    final int miRequestId = ++_iaRequestId;
-
     if (mounted) {
       setState(() {
         isCalculandoPunto = true;
@@ -437,10 +432,10 @@ class _HomeScreenState extends State<HomeScreen> {
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      if (mounted && miRequestId == _iaRequestId) {
+      if (mounted) {
         setState(() {
           datosPuntoEspecifico = resultado;
-          isCalculandoPunto = false; 
+          isCalculandoPunto = false;
           isLoadingIA = true;
         });
       }
@@ -449,14 +444,14 @@ class _HomeScreenState extends State<HomeScreen> {
         lat: lat, lon: lon, sliders: sliderValues, checks: checkValues,
       );
 
-      if (mounted && miRequestId == _iaRequestId) {
+      if (mounted) {
         setState(() {
           resumenIA = textoIA;
           isLoadingIA = false;
         });
       }
     } catch (e) {
-      if (mounted && miRequestId == _iaRequestId) {
+      if (mounted) {
         setState(() {
           isCalculandoPunto = false;
           isLoadingIA = false;
@@ -507,7 +502,12 @@ class _HomeScreenState extends State<HomeScreen> {
           final lon = double.parse(data[0]['lon']);
           
           _mapController.move(LatLng(lat, lon), 15.0);
-          setState(() => mostrarBotonAnalizar = true);
+    setState(() {
+      mostrarBotonAnalizar = true;
+      datosPuntoEspecifico = null;
+      resumenIA = null;
+      nombreZonaActual = null;
+    });
           FocusScope.of(context).unfocus();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Dirección no encontrada')));
